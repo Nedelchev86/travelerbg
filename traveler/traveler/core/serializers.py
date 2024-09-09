@@ -1,9 +1,10 @@
 from rest_framework import serializers
 
+from traveler.core.models import Tag
 from traveler.destinations.models import Destination
 
 
-class DestinationSerializer(serializers.ModelSerializer):
+class TagSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Destination
-        fields = '__all__'  # Include all fields, or you can specify fields explicitly
+        model = Tag
+        fields = ['id', 'name']

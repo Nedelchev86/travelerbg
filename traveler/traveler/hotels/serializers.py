@@ -1,25 +1,26 @@
 from rest_framework import serializers
 
-from traveler.activities.models import Activities
+
 from traveler.core.models import Tag
 from traveler.core.serializers import TagSerializer
 from traveler.destinations.models import Destination
+from traveler.hotels.models import Hotel
 
 
-class ActivitiesSerializer(serializers.ModelSerializer):
+class HotelSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True, required=False)
 
     class Meta:
-        model = Activities
+        model = Hotel
         fields = '__all__'
 
     def create(self, validated_data):
         tags_data = validated_data.pop('tags', [])
-        activities = Activities.objects.create(**validated_data)
+        hotel = Hotel.objects.create(**validated_data)
         for tag_data in tags_data:
             tag, created = Tag.objects.get_or_create(name=tag_data['name'])
-            activities.tags.add(tag)
-        return activities
+            hotel.tags.add(tag)
+        return hotel
 
     def update(self, instance, validated_data):
         tags_data = validated_data.pop('tags', [])
