@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from traveler.travelers.models import Traveler
+from backend.travelers.models import Traveler
 
 
 class TravelerSerializer(serializers.ModelSerializer):

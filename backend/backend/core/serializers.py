@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from traveler.core.models import Tag
-from traveler.destinations.models import Destination
+from backend.core.models import Tag
+from backend.destinations.models import Destination
 
 
 class TagSerializer(serializers.ModelSerializer):

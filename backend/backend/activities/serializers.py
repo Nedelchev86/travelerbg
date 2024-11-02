@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
-from traveler.activities.models import Activities
-from traveler.core.models import Tag
-from traveler.core.serializers import TagSerializer
-from traveler.destinations.models import Destination
+from backend.activities.models import Activities
+from backend.core.models import Tag
+from backend.core.serializers import TagSerializer
+from backend.destinations.models import Destination
 
 
 class ActivitiesSerializer(serializers.ModelSerializer):

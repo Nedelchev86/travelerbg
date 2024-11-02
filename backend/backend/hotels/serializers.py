@@ -1,10 +1,10 @@
 from rest_framework import serializers
 
 
-from traveler.core.models import Tag
-from traveler.core.serializers import TagSerializer
-from traveler.destinations.models import Destination
-from traveler.hotels.models import Hotel
+from backend.core.models import Tag
+from backend.core.serializers import TagSerializer
+from backend.destinations.models import Destination
+from backend.hotels.models import Hotel
 
 
 class HotelSerializer(serializers.ModelSerializer):

@@ -1,8 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from traveler.business.models import BusinessProfile
-from traveler.travelers.models import Traveler
+from backend.business.models import BusinessProfile
+from backend.travelers.models import Traveler
 
 userModel = get_user_model()
 

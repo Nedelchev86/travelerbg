@@ -1,7 +1,7 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from traveler.business.models import BusinessProfile
+from backend.business.models import BusinessProfile
 
 
 @receiver(post_save, sender=BusinessProfile)

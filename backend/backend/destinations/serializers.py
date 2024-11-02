@@ -1,12 +1,12 @@
 from rest_framework import serializers
 
-from traveler.activities.models import Activities
-from traveler.activities.serializers import ActivitiesSerializer
-from traveler.core.models import Tag
-from traveler.core.serializers import TagSerializer
-from traveler.destinations.models import Destination
-from traveler.hotels.models import Hotel
-from traveler.hotels.serializers import HotelSerializer
+from backend.activities.models import Activities
+from backend.activities.serializers import ActivitiesSerializer
+from backend.core.models import Tag
+from backend.core.serializers import TagSerializer
+from backend.destinations.models import Destination
+from backend.hotels.models import Hotel
+from backend.hotels.serializers import HotelSerializer
 
 
 class DestinationSerializer(serializers.ModelSerializer):

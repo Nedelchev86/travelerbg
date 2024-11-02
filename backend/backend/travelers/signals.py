@@ -1,7 +1,7 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from traveler.travelers.models import Traveler
+from backend.travelers.models import Traveler
 
 
 @receiver(post_save, sender=Traveler)
