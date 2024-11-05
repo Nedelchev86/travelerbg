@@ -1,0 +1,218 @@
+<div class="th-checkout-wrapper space-extra-bottom">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <form
+          [formGroup]="profileForm"
+          (ngSubmit)="onSubmit()"
+          class="woocommerce-form-login"
+        >
+          <div class="form-group">
+            <label>First Name *</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="first_name"
+              placeholder="First Name"
+            />
+            <div
+              *ngIf="
+                profileForm.get('first_name')?.invalid &&
+                profileForm.get('first_name')?.touched
+              "
+              class="text-danger"
+            >
+              <small *ngIf="profileForm.get('first_name')?.errors?.['required']"
+                >First Name is required.</small
+              >
+              <small *ngIf="profileForm.get('first_name')?.errors?.['pattern']"
+                >First Name must start with an uppercase and contains only
+                letters.</small
+              >
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Last Name *</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="last_name"
+              placeholder="Last Name"
+            />
+            <div
+              *ngIf="
+                profileForm.get('last_name')?.invalid &&
+                profileForm.get('last_name')?.touched
+              "
+              class="text-danger"
+            >
+              <small *ngIf="profileForm.get('last_name')?.errors?.['required']"
+                >Last Name is required.</small
+              >
+              <small *ngIf="profileForm.get('last_name')?.errors?.['pattern']"
+                >Last name must start with an uppercase and contains only
+                letters</small
+              >
+            </div>
+          </div>
+          <div class="form-group">
+            <label>City *</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="city"
+              placeholder="City"
+            />
+            <div
+              *ngIf="
+                profileForm.get('city')?.invalid &&
+                profileForm.get('city')?.touched
+              "
+              class="text-danger"
+            >
+              <small *ngIf="profileForm.get('city')?.errors?.['required']"
+                >City is required.</small
+              >
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Nationality *</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="nationality"
+              placeholder="Nationality"
+            />
+            <div
+              *ngIf="
+                profileForm.get('nationality')?.invalid &&
+                profileForm.get('nationality')?.touched
+              "
+              class="text-danger"
+            >
+              <small
+                *ngIf="profileForm.get('nationality')?.errors?.['required']"
+                >Nationality is required.</small
+              >
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Occupation *</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="occupation"
+              placeholder="Occupation"
+            />
+            <div
+              *ngIf="
+                profileForm.get('occupation')?.invalid &&
+                profileForm.get('occupation')?.touched
+              "
+              class="text-danger"
+            >
+              <small *ngIf="profileForm.get('occupation')?.errors?.['required']"
+                >Occupation is required.</small
+              >
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Website</label>
+            <input
+              type="url"
+              class="form-control"
+              formControlName="website"
+              placeholder="Website"
+            />
+          </div>
+          <div class="form-group">
+            <label>LinkedIn</label>
+            <input
+              type="url"
+              class="form-control"
+              formControlName="linkedin"
+              placeholder="LinkedIn"
+            />
+          </div>
+          <div class="form-group">
+            <label>Facebook</label>
+            <input
+              type="url"
+              class="form-control"
+              formControlName="facebook"
+              placeholder="Facebook"
+            />
+          </div>
+          <div class="form-group">
+            <label>GitHub</label>
+            <input
+              type="url"
+              class="form-control"
+              formControlName="github"
+              placeholder="GitHub"
+            />
+          </div>
+          <div class="form-group">
+            <label>About *</label>
+            <textarea
+              class="form-control"
+              formControlName="about"
+              placeholder="About"
+            ></textarea>
+            <div
+              *ngIf="
+                profileForm.get('about')?.invalid &&
+                profileForm.get('about')?.touched
+              "
+              class="text-danger"
+            >
+              <small *ngIf="profileForm.get('about')?.errors?.['required']"
+                >About is required.</small
+              >
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="phone_number"
+              placeholder="Phone Number"
+            />
+            <div
+              *ngIf="
+                profileForm.get('phone_number')?.invalid &&
+                profileForm.get('phone_number')?.touched
+              "
+              class="text-danger"
+            >
+              <small
+                *ngIf="profileForm.get('phone_number')?.errors?.['pattern']"
+                >Phone Number must be between 10 and 15 digits.</small
+              >
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Profile Picture</label>
+            <input
+              type="file"
+              class="form-control"
+              (change)="onFileChange($event, 'profile_picture')"
+            />
+          </div>
+          <div class="form-group">
+            <label>Cover</label>
+            <input
+              type="file"
+              class="form-control"
+              (change)="onFileChange($event, 'cover')"
+            />
+          </div>
+          <div class="form-group">
+            <button type="submit" class="th-btn">Update Profile</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

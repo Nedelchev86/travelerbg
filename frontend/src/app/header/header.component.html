@@ -37,9 +37,7 @@ Sidemenu
     <div class="widget">
       <div class="th-widget-about">
         <div class="about-logo">
-          <a href="home-travel.html"
-            ><img src="/assets/img/logo2.svg" alt="Tourm"
-          /></a>
+          <a routerLink="/"><img src="/assets/img/logo2.svg" alt="Tourm" /></a>
         </div>
         <p class="about-text">
           Rapidiously myocardinate cross-platform intellectual capital model.
@@ -248,56 +246,6 @@ Sidemenu
   Header Area
   ==============================-->
 <header class="th-header header-layout1">
-  <div class="header-top">
-    <div class="container th-container">
-      <div
-        class="row justify-content-center justify-content-xl-between align-items-center"
-      >
-        <div class="col-auto d-none d-md-block">
-          <div class="header-links">
-            <ul>
-              <li class="d-none d-xl-inline-block">
-                <i class="fa-sharp fa-regular fa-location-dot"></i>
-                <span>45 New Eskaton Road, Austria</span>
-              </li>
-              <li class="d-none d-xl-inline-block">
-                <i class="fa-regular fa-clock"></i>
-                <span>Sun to Friday: 8.00 am - 7.00 pm</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="col-auto">
-          <div class="header-right">
-            <div class="currency-menu">
-              <img src="/assets/img/icon/dollar.svg" alt="" />
-              <select class="form-select nice-select">
-                <option selected="">USD</option>
-                <option>CNY</option>
-                <option>EUR</option>
-                <option>AUD</option>
-              </select>
-            </div>
-            <div class="header-links">
-              <ul>
-                <li class="d-none d-md-inline-block">
-                  <a href="faq.html">FAQ</a>
-                </li>
-                <li class="d-none d-md-inline-block">
-                  <a href="contact.html">Support</a>
-                </li>
-                <li>
-                  <a routerLink="/login" class="popup-content"
-                    >Sign In / Register<i class="fa-regular fa-user"></i
-                  ></a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
   <div class="sticky-wrapper">
     <!-- Main Menu Area -->
     <div class="menu-area">
@@ -305,7 +253,7 @@ Sidemenu
         <div class="row align-items-center justify-content-between">
           <div class="col-auto">
             <div class="header-logo">
-              <a href="home-travel.html"
+              <a routerLink="/"
                 ><img src="/assets/img/logo.png" alt="Tourm"
               /></a>
             </div>
@@ -314,16 +262,27 @@ Sidemenu
             <nav class="main-menu d-none d-xl-inline-block">
               <ul>
                 <li class="menu-item-has-children">
-                  <a class="active" routerLink="/">Home</a>
+                  <a
+                    routerLink="/"
+                    routerLinkActive="active"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                    >Home</a
+                  >
                   <!-- <ul class="sub-menu"> -->
                   <!-- <li><a routerLink="/">Home Travel</a></li> -->
                   <!-- <li><a href="home-tour.html">Home Tour</a></li>
                       <li><a href="home-agency.html">Home Agency</a></li> -->
                   <!-- </ul> -->
                 </li>
-                <li><a routerLink="/travelers">Travelers</a></li>
+                <li>
+                  <a routerLink="/travelers" routerLinkActive="active"
+                    >Travelers</a
+                  >
+                </li>
                 <li class="menu-item-has-children">
-                  <a routerLink="/destinations">Destination</a>
+                  <a routerLink="destinations" routerLinkActive="active"
+                    >Destination</a
+                  >
                   <!-- <ul class="sub-menu"> -->
                   <!-- <li> -->
                   <!-- <a routerLink="/destinations"> Destination</a>
@@ -338,21 +297,23 @@ Sidemenu
                   <!-- </ul> -->
                 </li>
                 <li class="menu-item-has-children">
-                  <a routerLink="/hotels">Hotels</a>
+                  <a routerLink="/hotels" routerLinkActive="active">Hotels</a>
                   <!-- <ul class="sub-menu">
                       <li><a href="service.html">Services</a></li>
                       <li><a href="service-details.html">Service Details</a></li>
                     </ul> -->
                 </li>
                 <li class="menu-item-has-children">
-                  <a routerLink="/activities">Activities</a>
+                  <a routerLink="/activities" routerLinkActive="active"
+                    >Activities</a
+                  >
                   <!-- <ul class="sub-menu">
                       <li><a href="activities.html">activities</a></li>
                       <li>
                         <a href="activities-details.html">activities Details</a>
                       </li>
                     </ul> -->
-                </li>
+                  <!-- </li>
                 <li class="menu-item-has-children">
                   <a href="#">Pages</a>
                   <ul class="sub-menu">
@@ -388,6 +349,7 @@ Sidemenu
                 </li>
                 <li>
                   <a href="contact.html">Contact us</a>
+                </li> -->
                 </li>
               </ul>
             </nav>
@@ -395,94 +357,55 @@ Sidemenu
               <i class="far fa-bars"></i>
             </button>
           </div>
+
+          @if (authService.currentUser()) {
+          @if(authService.currentUser()?.user?.profile_picture) {
+          <a routerLink="/profile" class="col-auto d-none d-xl-block"
+            ><img
+              class="square"
+              src="https://res.cloudinary.com/drjgddl0y/{{
+                authService.currentUser()?.user?.profile_picture
+              }}"
+              alt=""
+              width="200px"
+          /></a>
+          }@else {
+          <div class="circle style3">
+            <a routerLink="/profile" class="circle-inner">{{
+              authService.currentUser()?.email?.charAt(0)?.toUpperCase()
+            }}</a>
+          </div>
+          }
           <div class="col-auto d-none d-xl-block">
             <div class="header-button">
-              <a href="contact.html" class="th-btn style3 th-icon">Book Now</a>
+              <button (click)="logout()" class="th-btn style3">
+                Logout <i class="fa-regular fa-user"></i>
+              </button>
             </div>
           </div>
+          }@else {
+          <div class="col-auto d-none d-xl-block">
+            <div class="header-button">
+              <button (click)="openLoginRegisterPopup()" class="th-btn style3">
+                Sign In / Register <i class="fa-regular fa-user"></i>
+              </button>
+            </div>
+            <div *ngIf="isLoginRegisterPopupVisible" class="modal-backdrop">
+              <div class="modal-content">
+                <button
+                  (click)="closeLoginRegisterPopup()"
+                  class="close-button"
+                >
+                  X
+                </button>
+                <app-login-register></app-login-register>
+              </div>
+            </div>
+          </div>
+          }
         </div>
       </div>
       <!-- <div class="logo-bg" data-mask-src="/assets/img/logo_bg_mask.png"></div> -->
     </div>
   </div>
 </header>
-<!-- <ng-template #content let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
-
-    <button
-      type="button"
-      class="btn-close"
-      aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
-    ></button>
-  </div>
-  <div class="modal-body">
-    <form action="mail.php" method="POST" class="login-form ajax-contact">
-      <div class="row">
-        <div class="form-group col-12">
-          <label>Username or email</label>
-          <input
-            type="text"
-            class="form-control"
-            name="email"
-            id="email"
-            required="required"
-          />
-        </div>
-        <div class="form-group col-12">
-          <label>Password</label>
-          <input
-            type="password"
-            class="form-control"
-            name="pasword"
-            id="pasword"
-            required="required"
-          />
-        </div>
-
-        <div class="form-btn mb-20 col-12">
-          <button class="th-btn btn-fw th-radius2">Send Message</button>
-        </div>
-      </div>
-      <div id="forgot_url">
-        <a href="my-account.html">Forgot password?</a>
-      </div>
-      <p class="form-messages mb-0 mt-3"></p>
-    </form>
-    <form>
-        <div class="mb-3">
-          <label for="dateOfBirth">Date of birth</label>
-          <div class="input-group">
-            <input
-              id="dateOfBirth"
-              class="form-control"
-              placeholder="yyyy-mm-dd"
-              name="dp"
-              ngbDatepicker
-              #dp="ngbDatepicker"
-            />
-            <button
-              class="btn btn-outline-secondary bi bi-calendar3"
-              (click)="dp.toggle()"
-              type="button"
-            ></button>
-          </div>
-        </div>
-      </form>
-  </div>
-  <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-outline-secondary"
-      (click)="modal.close('Save click')"
-    >
-      Save
-    </button>
-  </div>
-</ng-template> -->
-
-<!-- <button class="btn btn-lg btn-outline-primary" (click)="open(content)">
-  Launch demo modal
-</button> -->
-<!-- <pre>{{ closeResult }}</pre> -->

@@ -1,0 +1,7 @@
+.tour-box_img img {
+  width: 100%;
+  min-height: 320px;
+  border-radius: 16px 16px 0 0;
+  -webkit-transition: 1.3s all ease;
+  transition: 1.3s all ease;
+}

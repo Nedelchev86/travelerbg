@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from rest_framework import permissions, viewsets
+from rest_framework import permissions, viewsets, generics
+from rest_framework.permissions import IsAuthenticated
 
 from backend.travelers.models import Traveler
 from backend.travelers.serializers import TravelerSerializer
@@ -28,3 +29,15 @@ class TravelerkerViewSet(viewsets.ModelViewSet):
 
             # queryset = queryset.filter(skills=skill)
         return queryset
+
+
+
+
+class TravelerkerUpdateAPIView(generics.RetrieveUpdateAPIView):
+    queryset = Traveler.objects.all()
+    serializer_class = TravelerSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        # Retrieve the JobSeeker instance of the current user
+        return Traveler.objects.get(user=self.request.user)

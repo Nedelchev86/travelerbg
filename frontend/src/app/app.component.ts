@@ -6,19 +6,26 @@ import { MainComponent } from './main/main.component';
 import { TraleversComponent } from './travelers/travelers.component';
 import { DestinationsComponent } from './destinations/destinations.component';
 import { DestinationDetailsComponent } from './destination-details/destination-details.component';
+import { ActivitiesComponent } from './activities/activities.component';
+import { LoginRegisterComponent } from './login-register/login-register.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     RouterOutlet,
+    RouterLink,
     HeaderComponent,
     FooterComponent,
     MainComponent,
     TraleversComponent,
-    RouterLink,
+
     DestinationsComponent,
     DestinationDetailsComponent,
+    ActivitiesComponent,
+    LoginRegisterComponent,
+    ProfileComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './app.component.html',

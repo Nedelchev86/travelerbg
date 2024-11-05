@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
+import { SetBgImageDirective } from '../set-bg-image.directive';
 
 @Component({
   selector: 'app-activities',
   standalone: true,
-  imports: [],
+  imports: [SetBgImageDirective],
   templateUrl: './activities.component.html',
   styleUrl: './activities.component.css'
 })

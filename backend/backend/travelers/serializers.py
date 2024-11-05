@@ -17,5 +17,9 @@ class TravelerSerializer(serializers.ModelSerializer):
         model = Traveler
         # exclude = [ 'activated']
         fields = '__all__'
+        extra_kwargs = {
+            'user': {'read_only': True}
+        }
+
 
 

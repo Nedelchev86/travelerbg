@@ -1,9 +1,10 @@
 from rest_framework import serializers
 
+from backend.business.models import BusinessProfile
 from backend.travelers.models import Traveler
 
 
-class TravelerSerializer(serializers.ModelSerializer):
+class BusinessSerializer(serializers.ModelSerializer):
     # skills = serializers.SlugRelatedField(
     #     queryset=Skills.objects.all(),
     #     many=True,  # Allow multiple skills
@@ -14,7 +15,7 @@ class TravelerSerializer(serializers.ModelSerializer):
     #     slug_field='name'
     # )
     class Meta:
-        model = Traveler
+        model = BusinessProfile
         # exclude = [ 'activated']
         fields = '__all__'
 

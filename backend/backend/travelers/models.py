@@ -13,15 +13,13 @@ class Traveler(models.Model):
     city = models.CharField(max_length=50, blank=False, null=False)
     nationality = models.CharField(max_length=50, blank=False, null=False)
     occupation = models.CharField(max_length=50, blank=False, null=False)
-    # seniority = models.ForeignKey(Seniority, on_delete=models.DO_NOTHING, blank=False, null=False, default=1 )
+
     website = models.URLField(max_length=70, blank=True, null=True)
     linkedin = models.URLField(blank=True, null=True, max_length=50)
     facebook = models.URLField(blank=True, null=True, max_length=50)
     github = models.URLField(blank=True, null=True, max_length=50)
     about = models.TextField(blank=False, null=False)
     phone_number = models.CharField(max_length=50, blank=True, null=True, validators=[validate_phone_number])
-    # profile_picture = models.ImageField(
-    #     blank=True, null=True, upload_to='images/profile')
     profile_picture = CloudinaryField('image', blank=True, null=True)
     cover = CloudinaryField('image', blank=True, null=True)
     # gender = models.CharField(blank=False, null=False,

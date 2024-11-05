@@ -1,0 +1,11 @@
+.tab-pane {
+  transition: opacity 0.5s ease-in-out;
+}
+
+.tab-pane.fade {
+  opacity: 0;
+}
+
+.tab-pane.fade.show {
+  opacity: 1;
+}
