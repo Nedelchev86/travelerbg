@@ -40,6 +40,10 @@
   border-radius: 50%;
 }
 
+.square:hover {
+  outline-style: solid;
+}
+
 .circle {
   display: inline-block;
   width: 54px;
@@ -49,16 +53,26 @@
   border-radius: 50%;
 }
 
+.circle:hover {
+  outline-style: solid;
+  background-color: #fff;
+  color: #113d48;
+}
+
 .circle-inner {
   color: white;
   display: table-cell;
   vertical-align: middle;
   text-align: center;
   text-decoration: none;
-  height: 42px;
-  width: 42px;
+  height: 54px;
+  width: 54px;
   font-size: 26px;
   padding-top: 3px;
+}
+
+.circle-inner:hover {
+  color: #113d48;
 }
 
 .active2 {

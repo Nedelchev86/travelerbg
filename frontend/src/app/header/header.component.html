@@ -351,6 +351,15 @@ Sidemenu
                   <a href="contact.html">Contact us</a>
                 </li> -->
                 </li>
+                <li class="menu-item-has-children">
+                  <a routerLink="/contact-us" routerLinkActive="active"
+                    >Contact Us</a
+                  >
+                  <!-- <ul class="sub-menu">
+                      <li><a href="service.html">Services</a></li>
+                      <li><a href="service-details.html">Service Details</a></li>
+                    </ul> -->
+                </li>
               </ul>
             </nav>
             <button type="button" class="th-menu-toggle d-block d-xl-none">
@@ -370,7 +379,7 @@ Sidemenu
               width="200px"
           /></a>
           }@else {
-          <div class="circle style3">
+          <div class="circle">
             <a routerLink="/profile" class="circle-inner">{{
               authService.currentUser()?.email?.charAt(0)?.toUpperCase()
             }}</a>
