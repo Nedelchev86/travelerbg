@@ -9,6 +9,9 @@ import { ActivitiesComponent } from './activities/activities.component';
 import { ProfileComponent } from './profile/profile.component';
 import { EditProfileComponent } from './editprofile/editprofile.component';
 import { ProfileLayoutComponent } from './profile-layout/profile-layout.component';
+import { AddDestinationComponent } from './add-destination/add-destination.component';
+import { MyDestinationsComponent } from './my-destinations/my-destinations.component';
+import { ContactComponent } from './contact/contact.component';
 
 export const routes: Routes = [
   { path: '', component: MainComponent },
@@ -44,9 +47,16 @@ export const routes: Routes = [
     children: [
       { path: '', component: ProfileComponent },
       { path: 'edit', component: EditProfileComponent },
+      { path: 'add-destination', component: AddDestinationComponent },
+      { path: 'my-destinations', component: MyDestinationsComponent },
     ],
   },
 
+  {
+    path: 'contact-us',
+    title: 'Contact Us',
+    component: ContactComponent,
+  },
   {
     path: '**',
     redirectTo: '',

@@ -9,10 +9,12 @@ import { DestinationDetailsComponent } from './destination-details/destination-d
 import { ActivitiesComponent } from './activities/activities.component';
 import { LoginRegisterComponent } from './login-register/login-register.component';
 import { ProfileComponent } from './profile/profile.component';
+import { AddDestinationComponent } from './add-destination/add-destination.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
+
   imports: [
     RouterOutlet,
     RouterLink,
@@ -20,12 +22,12 @@ import { ProfileComponent } from './profile/profile.component';
     FooterComponent,
     MainComponent,
     TraleversComponent,
-
     DestinationsComponent,
     DestinationDetailsComponent,
     ActivitiesComponent,
     LoginRegisterComponent,
     ProfileComponent,
+    AddDestinationComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './app.component.html',

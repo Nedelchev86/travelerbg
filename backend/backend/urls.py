@@ -5,7 +5,7 @@ from rest_framework.routers import DefaultRouter
 
 from backend.accounts.views import UserRegistrationAPIView, MyTokenObtainPairView, MyTokenRefreshView, UserProfileView
 from backend.activities.views import ActivitiesViewSet
-from backend.destinations.views import DestinationViewSet
+from backend.destinations.views import DestinationViewSet, DestinationCategory
 from backend.hotels.views import HotelViewSet
 from backend.travelers.views import TravelerkerViewSet, TravelerkerUpdateAPIView
 
@@ -24,4 +24,5 @@ urlpatterns = [
     path('api/token/refresh/', MyTokenRefreshView.as_view(), name='token_refresh'),
     path('api/user/', UserProfileView.as_view(), name='user-profile'),
     path('api/traveler/update/', TravelerkerUpdateAPIView.as_view(), name='traveler-update'),
+    path('api/categories/', DestinationCategory.as_view(), name='destination-category'),
 ]

@@ -1,0 +1,184 @@
+::file-selector-button {
+  display: none;
+}
+
+.file-button {
+  background-color: black;
+}
+
+.hidden-file-input {
+  display: none;
+}
+
+.th-btn {
+  width: 100%;
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  vertical-align: middle;
+  text-align: center;
+  background-color: var(--theme-color);
+  color: var(--white-color);
+  font-family: var(--body-font);
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  text-transform: capitalize;
+  border: none;
+  font-size: 16px;
+  font-weight: 400;
+  padding: 18.8px 35px;
+  border-radius: 48px;
+  -webkit-transition: all 0.3s 0s ease-out;
+  transition: all 0.3s 0s ease-out;
+  gap: 8px;
+}
+
+.th-btn.th-icon:after {
+  content: "";
+  position: relative;
+
+  background-repeat: no-repeat;
+  background-size: cover;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: auto;
+  mask-size: auto;
+  background-color: var(--white-color);
+  width: 24px;
+  height: 24px;
+  display: block;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.th-btn:before {
+  content: "";
+  width: 0;
+  height: 100%;
+  border-radius: 30em;
+  position: absolute;
+  top: 0;
+  left: -5%;
+  background-color: var(--title-color);
+  -webkit-transition: 0.5s ease;
+  transition: 0.5s ease;
+  display: block;
+  z-index: -1;
+}
+
+.th-btn:hover,
+.th-btn.active {
+  cursor: pointer;
+  color: var(--white-color);
+  box-shadow: none;
+}
+
+.th-btn:hover.th-icon i,
+.th-btn.active.th-icon i {
+  -webkit-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  transform: rotate(0deg);
+}
+
+.th-btn:hover:before,
+.th-btn.active:before {
+  width: 110%;
+}
+
+.th-btn.style1:before,
+.th-btn.style1:after {
+  background-color: var(--white-color);
+}
+
+.th-btn.style1:hover {
+  color: var(--title-color);
+}
+
+.th-btn.style1:hover:before,
+.th-btn.style1:hover:after {
+  background-color: var(--white-color);
+}
+
+.th-btn.style2 {
+  background-color: transparent;
+  color: var(--white-color);
+  border: 1px solid var(--white-color);
+}
+
+.th-btn.style2:hover {
+  color: var(--black-color2);
+  border: 1px solid var(--white-color);
+}
+
+.th-btn.style2:hover:after {
+  background-color: var(--title-color);
+}
+
+.th-btn.style2:before {
+  background-color: var(--white-color);
+}
+
+.th-btn.style3 {
+  background-color: var(--title-color);
+  color: var(--white-color);
+  box-shadow: none;
+  border: none;
+}
+
+.th-btn.style3:before {
+  background-color: var(--theme-color);
+}
+
+.th-btn.style4 {
+  background-color: transparent;
+  color: var(--title-color);
+  border: 1px solid var(--title-color);
+  padding: 14px 25px;
+}
+
+.th-btn.style4.th-icon:after {
+  background-color: var(--title-color);
+}
+
+.th-btn.style4:hover {
+  color: var(--white-color);
+  border: 1px solid var(--theme-color);
+}
+
+.th-btn.style4:hover.th-icon:after {
+  background-color: var(--white-color);
+}
+
+.th-btn.style4:before {
+  background-color: var(--theme-color);
+}
+
+.th-btn.white-btn {
+  background-color: var(--white-color);
+  color: var(--black-color2);
+}
+
+.th-btn.th-radius {
+  border-radius: 0;
+}
+
+.th-btn.th-radius2 {
+  border-radius: 8px;
+}
+
+.th-btn.btn-fw {
+  width: 100%;
+  padding: 18px 30px;
+}
