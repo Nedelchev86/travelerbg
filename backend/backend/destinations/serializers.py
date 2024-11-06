@@ -4,7 +4,7 @@ from backend.activities.models import Activities
 from backend.activities.serializers import ActivitiesSerializer
 from backend.core.models import Tag
 from backend.core.serializers import TagSerializer
-from backend.destinations.models import Destination
+from backend.destinations.models import Destination, Category
 from backend.hotels.models import Hotel
 from backend.hotels.serializers import HotelSerializer
 
@@ -22,6 +22,9 @@ class DestinationSerializer(serializers.ModelSerializer):
             'vacancy', 'location', 'cost', 'is_published', 'created_at', 'modified_at',
             'tags', 'related_activities', 'related_hotels'
         ]
+        extra_kwargs = {
+            'user': {'read_only': True}
+        }
 
     def get_related_activities(self, obj):
         tags = obj.tags.all()  # Get all tags related to the destination
@@ -35,6 +38,9 @@ class DestinationSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         tags_data = validated_data.pop('tags', [])
+        request = self.context.get('request', None)
+        if request and hasattr(request, 'user'):
+            validated_data['user'] = request.user
         destination = Destination.objects.create(**validated_data)
         for tag_data in tags_data:
             tag, created = Tag.objects.get_or_create(name=tag_data['name'])
@@ -50,3 +56,56 @@ class DestinationSerializer(serializers.ModelSerializer):
             tag, created = Tag.objects.get_or_create(name=tag_data['name'])
             instance.tags.add(tag)
         return instance
+
+# class DestinationSerializer(serializers.ModelSerializer):
+#     tags = TagSerializer(many=True, required=False)
+#     related_activities = serializers.SerializerMethodField()
+#     related_hotels = serializers.SerializerMethodField()
+#
+#     class Meta:
+#         model = Destination
+#         fields = [
+#             'id', 'user', 'title', 'category', 'basic_information', 'responsibilities',
+#             'benefits', 'image', 'image2', 'image3', 'image4', 'image5', 'image6',
+#             'vacancy', 'location', 'cost', 'is_published', 'created_at', 'modified_at',
+#             'tags', 'related_activities', 'related_hotels'
+#         ]
+#         extra_kwargs = {
+#             'user': {'read_only': True}
+#         }
+#
+#     def get_related_activities(self, obj):
+#         tags = obj.tags.all()  # Get all tags related to the destination
+#         related_activities = Activities.objects.filter(tags__in=tags).distinct()
+#         return ActivitiesSerializer(related_activities, many=True).data
+#
+#     def get_related_hotels(self, obj):
+#         tags = obj.tags.all()  # Get all tags related to the destination
+#         related_hotels = Hotel.objects.filter(tags__in=tags).distinct()
+#         return HotelSerializer(related_hotels, many=True).data
+#
+#     def create(self, validated_data):
+#         tags_data = validated_data.pop('tags', [])
+#         destination = Destination.objects.create(**validated_data)
+#         for tag_data in tags_data:
+#             tag, created = Tag.objects.get_or_create(name=tag_data['name'])
+#             destination.tags.add(tag)
+#         return destination
+#
+#     def update(self, instance, validated_data):
+#         tags_data = validated_data.pop('tags', [])
+#         instance = super().update(instance, validated_data)
+#
+#         instance.tags.clear()  # Clear existing tags
+#         for tag_data in tags_data:
+#             tag, created = Tag.objects.get_or_create(name=tag_data['name'])
+#             instance.tags.add(tag)
+#         return instance
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['id', 'name', 'slug', 'created_at', 'modified_at']
+        extra_kwargs = {
+            'slug': {'read_only': True}
+        }

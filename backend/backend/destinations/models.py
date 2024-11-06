@@ -22,6 +22,8 @@ class Category(models.Model):
         if self.slug:
             self.slug = slugify(self.name, allow_unicode=True)
         return super().save(*args, **kwargs)
+
+
 class Destination(models.Model):
     user = models.ForeignKey(UserModel,  on_delete=models.CASCADE)
     title = models.CharField(max_length=300)
@@ -32,7 +34,7 @@ class Destination(models.Model):
     responsibilities = models.TextField(null=False, blank=False)
     benefits = models.TextField(null=True, blank=True)
     # job_image = models.ImageField(null=True, blank=True, upload_to="jobs/image", default="images/default/default.jpg")
-    image = CloudinaryField('image', blank=True, null=True)
+    image = CloudinaryField('image', blank=False, null=False)
     image2 = CloudinaryField('image', blank=True, null=True)
     image3 = CloudinaryField('image', blank=True, null=True)
     image4 = CloudinaryField('image', blank=True, null=True)

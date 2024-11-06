@@ -11,11 +11,13 @@ import { LoginResponse, UserInterface } from '../user-interface';
 import { catchError, of, switchMap } from 'rxjs';
 import { AuthService } from '../auth.service';
 import { passwordMatchValidator } from '../validators/password-match.validator';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login-register',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
+  providers: [ToastrService],
   templateUrl: './login-register.component.html',
   styleUrl: './login-register.component.css',
 })
@@ -25,6 +27,7 @@ export class LoginRegisterComponent {
   fb = inject(FormBuilder);
   http = inject(HttpClient);
   authService = inject(AuthService);
+  toastr = inject(ToastrService);
   // constructor(private fb: FormBuilder) {
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -87,6 +90,14 @@ export class LoginRegisterComponent {
                 'User data from auth:',
                 this.authService.currentUser()
               );
+              console.log('test');
+              this.toastr.success('Login successful', 'Welcome!', {
+                positionClass: 'toast-bottom-right',
+                progressBar: true,
+                timeOut: 5000,
+                progressAnimation: 'decreasing',
+                closeButton: true,
+              });
 
               // Handle user data here
             }
@@ -117,6 +128,7 @@ export class LoginRegisterComponent {
           (response) => {
             console.log('Register form submitted', response);
             this.registerError = null;
+            this.selectTab('login');
           },
           (error) => {
             console.error('Registration failed', error);
