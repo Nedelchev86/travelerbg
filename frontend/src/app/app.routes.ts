@@ -12,6 +12,8 @@ import { ProfileLayoutComponent } from './profile-layout/profile-layout.componen
 import { AddDestinationComponent } from './add-destination/add-destination.component';
 import { MyDestinationsComponent } from './my-destinations/my-destinations.component';
 import { ContactComponent } from './contact/contact.component';
+import { EditDestinationComponent } from './edit-destination/edit-destination.component';
+import { AuthGuard } from './auth.guard';
 
 export const routes: Routes = [
   { path: '', component: MainComponent },
@@ -44,11 +46,13 @@ export const routes: Routes = [
     path: 'profile',
     title: 'Profile',
     component: ProfileLayoutComponent,
+    canActivate: [AuthGuard],
     children: [
       { path: '', component: ProfileComponent },
       { path: 'edit', component: EditProfileComponent },
       { path: 'add-destination', component: AddDestinationComponent },
       { path: 'my-destinations', component: MyDestinationsComponent },
+      { path: 'edit-destination/:id', component: EditDestinationComponent },
     ],
   },
 
