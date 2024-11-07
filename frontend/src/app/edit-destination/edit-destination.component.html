@@ -1,0 +1,223 @@
+<div class="th-checkout-wrapper space-extra-bottom">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <form
+          class="woocommerce-form-login"
+          [formGroup]="editDestinationForm"
+          (ngSubmit)="onSubmit()"
+        >
+          <div class="form-group">
+            <label for="title">Title</label>
+            <input
+              class="form-control"
+              id="title"
+              formControlName="title"
+              type="text"
+            />
+            <div
+              *ngIf="
+                editDestinationForm.get('title')?.touched &&
+                editDestinationForm.get('title')?.invalid
+              "
+              class="text-danger"
+            >
+              Title is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="tags">Tags</label>
+            <input
+              class="form-control"
+              id="tags"
+              formControlName="tags"
+              type="text"
+            />
+            <div
+              *ngIf="
+                editDestinationForm.get('tags')?.touched &&
+                editDestinationForm.get('tags')?.invalid
+              "
+              class="text-danger"
+            >
+              Tags are required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="category">Category</label>
+            <select
+              class="form-control"
+              id="category"
+              formControlName="category"
+            >
+              <option *ngFor="let category of categories" [value]="category.id">
+                {{ category.name }}
+              </option>
+            </select>
+            <div
+              *ngIf="
+                editDestinationForm.get('category')?.touched &&
+                editDestinationForm.get('category')?.invalid
+              "
+              class="text-danger"
+            >
+              Category is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="basic_information">Basic Information</label>
+            <textarea
+              class="form-control"
+              id="basic_information"
+              formControlName="basic_information"
+            ></textarea>
+            <div
+              *ngIf="
+                editDestinationForm.get('basic_information')?.touched &&
+                editDestinationForm.get('basic_information')?.invalid
+              "
+              class="text-danger"
+            >
+              Basic Information is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="responsibilities">Responsibilities</label>
+            <textarea
+              class="form-control"
+              id="responsibilities"
+              formControlName="responsibilities"
+            ></textarea>
+            <div
+              *ngIf="
+                editDestinationForm.get('responsibilities')?.touched &&
+                editDestinationForm.get('responsibilities')?.invalid
+              "
+              class="text-danger"
+            >
+              Responsibilities are required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="benefits">Benefits</label>
+            <textarea
+              class="form-control"
+              id="benefits"
+              formControlName="benefits"
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label for="image">Image 1</label>
+            <input
+              class="form-control th-btn style4"
+              id="image"
+              type="file"
+              (change)="onFileChange($event, 'image')"
+            />
+
+            <div
+              *ngIf="
+                editDestinationForm.get('image')?.touched &&
+                editDestinationForm.get('image')?.invalid
+              "
+              class="text-danger"
+            >
+              Image is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="image2">Image 2</label>
+            <input
+              class="form-control th-btn style4"
+              id="image2"
+              type="file"
+              (change)="onFileChange($event, 'image2')"
+            />
+          </div>
+          <div class="form-group">
+            <label for="image3">Image 3</label>
+            <input
+              class="form-control th-btn style4"
+              id="image3"
+              type="file"
+              (change)="onFileChange($event, 'image3')"
+            />
+          </div>
+          <div class="form-group">
+            <label for="image4">Image 4</label>
+            <input
+              class="form-control th-btn style4"
+              id="image4"
+              type="file"
+              (change)="onFileChange($event, 'image4')"
+            />
+          </div>
+          <div class="form-group">
+            <label for="image5">Image 5</label>
+            <input
+              class="form-control th-btn style4"
+              id="image5"
+              type="file"
+              (change)="onFileChange($event, 'image5')"
+            />
+          </div>
+          <div class="form-group">
+            <label for="image6">Image 6</label>
+            <input
+              class="form-control th-btn style4"
+              id="image6"
+              type="file"
+              (change)="onFileChange($event, 'image6')"
+            />
+          </div>
+          <div class="form-group">
+            <label for="vacancy">Vacancy</label>
+            <input
+              class="form-control"
+              id="vacancy"
+              formControlName="vacancy"
+              type="number"
+            />
+          </div>
+          <div class="form-group">
+            <label for="location">Location</label>
+            <input
+              class="form-control"
+              id="location"
+              formControlName="location"
+              type="text"
+            />
+            <div
+              *ngIf="
+                editDestinationForm.get('location')?.touched &&
+                editDestinationForm.get('location')?.invalid
+              "
+              class="text-danger"
+            >
+              Location is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="cost">Cost</label>
+            <input
+              class="form-control"
+              id="cost"
+              formControlName="cost"
+              type="text"
+            />
+          </div>
+          <div class="form-group">
+            <label for="is_published">Is Published</label>
+            <input
+              class="form-control"
+              id="is_published"
+              formControlName="is_published"
+              type="checkbox"
+            />
+          </div>
+          <button class="th-btn" type="submit">Add Destination</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
