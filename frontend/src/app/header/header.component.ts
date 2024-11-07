@@ -17,6 +17,7 @@ export class HeaderComponent {
   isLoginRegisterPopupVisible = false;
   http = inject(HttpClient);
   authService = inject(AuthService);
+  router = inject(Router);
 
   ngOnInit(): void {
     if (localStorage.getItem('token')) {
@@ -44,5 +45,6 @@ export class HeaderComponent {
   logout() {
     localStorage.removeItem('token');
     this.authService.currentUser.set(null);
+    this.router.navigate(['/']);
   }
 }
