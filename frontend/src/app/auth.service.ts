@@ -21,4 +21,8 @@ export class AuthService {
       this.currentUser.set(updatedUser);
     }
   }
+
+  isLoggedIn(): boolean {
+    return this.currentUser() !== null && this.currentUser() !== undefined;
+  }
 }
