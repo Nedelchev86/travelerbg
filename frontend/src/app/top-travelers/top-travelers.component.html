@@ -1,0 +1,67 @@
+<section
+  class="bg-smoke space"
+  [appSetBgImage]="'./assets/img/bg/team_bg_1.png'"
+>
+  <div class="container z-index-common">
+    <div class="title-area text-center">
+      <span class="sub-title">Meet with Guide</span>
+      <h2 class="sec-title">Tour Guide</h2>
+    </div>
+    <div class="slider-area">
+      <!-- <div
+        class="swiper th-slider teamSlider1 has-shadow"
+        id="teamSlider1"
+        data-slider-options='{"breakpoints":{"0":{"slidesPerView":1},"576":{"slidesPerView":"1"},"768":{"slidesPerView":"2"},"992":{"slidesPerView":"3"},"1200":{"slidesPerView":"4"}}}'
+      > -->
+      <div class="swiper th-slider teamSlider1 has-shadow" id="teamSlider1">
+        <!-- <div class="swiper-wrapper"> -->
+        <swiper-container
+          class="swiper-wrapper"
+          slides-per-view="4"
+          navigation="true"
+          space-between="30"
+        >
+          @for (traveler of top_travelers; track traveler.user) {
+          <swiper-slide class="swiper-slide">
+            <div class="th-team team-box">
+              <div class="team-img">
+                <img
+                  src="https://res.cloudinary.com/drjgddl0y/{{
+                    traveler.profile_picture
+                  }}"
+                  alt="Team"
+                />
+              </div>
+              <div class="team-content">
+                <div class="media-body">
+                  <h3 class="box-title">
+                    <a href="tour-guider-details.html"
+                      >{{ traveler.first_name }} {{ traveler.last_name }}</a
+                    >
+                  </h3>
+                  <span class="team-desig">Tourist Guide</span>
+                  <div class="th-social">
+                    <a target="_blank" href="https://facebook.com/"
+                      ><i class="fab fa-facebook-f"></i
+                    ></a>
+                    <a target="_blank" href="https://twitter.com/"
+                      ><i class="fab fa-twitter"></i
+                    ></a>
+                    <a target="_blank" href="https://instagram.com/"
+                      ><i class="fab fa-instagram"></i
+                    ></a>
+                    <a target="_blank" href="https://linkedin.com/"
+                      ><i class="fab fa-linkedin-in"></i
+                    ></a>
+                  </div>
+                </div>
+              </div>
+            </div> </swiper-slide
+          >}
+        </swiper-container>
+        <!-- </div> -->
+        <div class="slider-pagination"></div>
+      </div>
+    </div>
+  </div>
+</section>
