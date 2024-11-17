@@ -18,6 +18,7 @@ import {
   MapAdvancedMarker,
   MapGeocoder,
 } from '@angular/google-maps';
+import { CloudinaryuploadService } from '../shared/services/cloudinaryupload.service';
 
 export interface Highlight {
   id: number;
@@ -254,7 +255,8 @@ export class AddHotelComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private cloudinaryuploadService: CloudinaryuploadService
   ) {
     this.addHotelForm = this.fb.group({
       name: ['', Validators.required],
@@ -325,23 +327,23 @@ export class AddHotelComponent implements OnInit {
   //     });
   //   }
   // }
-  uploadImage(file: File): Observable<any> {
-    const cloudName = 'dzpgrtewh';
-    const uploadPreset = 'travelerbg';
-    const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', uploadPreset);
+  // uploadImage(file: File): Observable<any> {
+  //   const cloudName = 'dzpgrtewh';
+  //   const uploadPreset = 'travelerbg';
+  //   const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+  //   const formData = new FormData();
+  //   formData.append('file', file);
+  //   formData.append('upload_preset', uploadPreset);
 
-    console.log('Uploading image to Cloudinary:', file);
-    return this.http.post(url, formData);
-  }
+  //   console.log('Uploading image to Cloudinary:', file);
+  //   return this.http.post(url, formData);
+  // }
 
   onFileChange(event: any, field: string): void {
     console.log('changed');
     const file = event.target.files[0];
     if (file) {
-      this.uploadImage(file).subscribe(
+      this.cloudinaryuploadService.uploadImage(file).subscribe(
         (response) => {
           console.log('Image uploaded successfully:', response);
           this.addHotelForm.patchValue({

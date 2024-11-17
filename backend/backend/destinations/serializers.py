@@ -21,7 +21,7 @@ class DestinationSerializer(serializers.ModelSerializer):
         model = Destination
         fields = [
             'id', 'user', 'title', 'category', 'basic_information', 'responsibilities',
-            'benefits', 'image', 'image2', 'image3', 'image4', 'image5', 'image6',
+            'benefits', 'image', 'image2', 'image3', 'image4', 'image5',
             'vacancy', 'location', 'cost', 'is_published', 'created_at', 'modified_at',
             'tags', 'average_rating', 'number_of_votes',
         ]
@@ -64,9 +64,10 @@ class DestinationSerializer(serializers.ModelSerializer):
         if request and hasattr(request, 'user'):
             validated_data['user'] = request.user
         destination = Destination.objects.create(**validated_data)
-        for tag_data in tags_data:
-            tag, created = Tag.objects.get_or_create(name=tag_data['name'])
-            destination.tags.add(tag)
+        destination.tags.set(tags_data)
+        # for tag_data in tags_data:
+        #     tag, created = Tag.objects.get_or_create(name=tag_data['name'])
+        #     destination.tags.add(tag)
         return destination
 
     def update(self, instance, validated_data):
@@ -74,9 +75,7 @@ class DestinationSerializer(serializers.ModelSerializer):
         instance = super().update(instance, validated_data)
 
         instance.tags.clear()  # Clear existing tags
-        for tag_data in tags_data:
-            tag, created = Tag.objects.get_or_create(name=tag_data['name'])
-            instance.tags.add(tag)
+        instance.tags.set(tags_data)
         return instance
 
 # class DestinationSerializer(serializers.ModelSerializer):
