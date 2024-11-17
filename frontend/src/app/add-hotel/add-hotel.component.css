@@ -1,0 +1,61 @@
+.custom-checkbox {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.single-tag {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+
+  border-radius: 5px;
+
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.tags-container {
+  margin-bottom: 10px;
+}
+
+.tag-checkbox {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.added-tags {
+  margin-top: 10px;
+}
+
+.tag-box {
+  display: inline-block;
+  background-color: #e0e0e0;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.tag-box span {
+  margin-right: 5px;
+}
+
+.tag-box button {
+  background: none;
+  border: none;
+  color: red;
+  cursor: pointer;
+}
+
+
+.text-style{
+  white-space: pre-wrap
+}
