@@ -6,7 +6,7 @@ from backend.business.serializers import BusinessSerializer
 from backend.core.models import Tag
 from backend.core.serializers import TagSerializer
 from backend.destinations.models import Destination
-from backend.hotels.models import Hotel, Category, Highlights, HotelComment
+from backend.hotels.models import Hotel, Category, Highlights, HotelComment, HotelRating
 from backend.travelers.serializers import TravelerSerializer
 
 
@@ -43,15 +43,23 @@ class HighlightsSerializer(serializers.ModelSerializer):
 class HotelSerializer(serializers.ModelSerializer):
     # tags = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True, required=False)
     tags = TagSerializer(many=True, required=False)
+    average_rating = serializers.SerializerMethodField()
+    number_of_votes = serializers.SerializerMethodField()
     highlights = HighlightsSerializer(many=True, required=False)
+    pagination_class = 10
 
     class Meta:
         model = Hotel
-        fields = ["id", "user", "name", "description", "location", "highlights", "website", "lat", "lng", "image", "image2", "image3", "price", "tags", "created_at", "modified_at"]
+        fields = ["id", "user", "name", "description", "location", "highlights", "website", "lat", "lng", "image", "image2", "image3", "price", "tags", "created_at", "modified_at", 'average_rating', 'number_of_votes']
         extra_kwargs = {
             'user': {'read_only': True}
         }
 
+    def get_average_rating(self, obj):
+            return obj.average_rating()
+
+    def get_number_of_votes(self, obj):
+            return obj.number_of_votes()
 
     def create(self, validated_data):
         tags_data = validated_data.pop('tags', [])
@@ -172,3 +180,11 @@ class HotelCommentSerializer(serializers.ModelSerializer):
         elif obj.user.role == 'business':
             return BusinessSerializer(obj.user.business).data
         return UserSerializer(obj.user).data
+
+class RatingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HotelRating
+        fields = ['id', 'user', 'hotel', "rating", 'created_at', 'modified_at']
+        extra_kwargs = {
+            'user': {'read_only': True},
+            'hotel': {'read_only': True}}

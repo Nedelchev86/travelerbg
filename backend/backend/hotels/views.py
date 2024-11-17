@@ -1,3 +1,4 @@
+from django.db.models import Avg
 from django.shortcuts import render
 from rest_framework import viewsets, generics
 from rest_framework.decorators import action
@@ -5,8 +6,9 @@ from rest_framework.generics import ListAPIView, get_object_or_404
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
+from backend.hotels.pagination import HotelsPagination
 from backend.hotels.serializers import CategorySerializer, HighlightsSerializer, HotelCommentSerializer
-from backend.hotels.models import Hotel, Category, Highlights, HotelComment
+from backend.hotels.models import Hotel, Category, Highlights, HotelComment, HotelRating
 from backend.hotels.serializers import HotelSerializer
 
 
@@ -15,6 +17,21 @@ class HotelViewSet(viewsets.ModelViewSet):
     queryset = Hotel.objects.all()
     serializer_class = HotelSerializer
     permission_classes = []  # Allows re
+    pagination_class = HotelsPagination
+
+    def get_queryset(self):
+        queryset = Hotel.objects.all()
+        name = self.request.GET.get('name', None)
+        category = self.request.GET.get('category', None)
+
+
+        if name:
+            queryset = queryset.filter(name__icontains=name)
+        if category:
+            queryset = queryset.filter(category__name__icontains=category)
+
+
+        return queryset
 
 
     def perform_create(self, serializer):
@@ -25,6 +42,29 @@ class HotelViewSet(viewsets.ModelViewSet):
         user = request.user
         hotels = Hotel.objects.filter(user=user)
         serializer = self.get_serializer(hotels, many=True)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    def rate(self, request, pk=None):
+        hotel = self.get_object()
+        user = request.user
+        rating_value = request.data.get('rating')
+
+        if rating_value is None:
+            return Response({'error': 'Rating value is required.'}, status=400)
+
+        rating, created = HotelRating.objects.update_or_create(
+            user=user,
+            hotel=hotel,
+            defaults={'rating': rating_value}
+        )
+
+        return Response({'status': 'rating set', 'rating': rating_value})
+
+    @action(detail=False, methods=['get'], url_path='top-rated')
+    def top_rated(self, request):
+        top_hotels = Hotel.objects.annotate(avg_rating=Avg('hotel_ratings__rating')).order_by('-avg_rating')[:5]
+        serializer = self.get_serializer(top_hotels, many=True)
         return Response(serializer.data)
 
 
@@ -52,6 +92,7 @@ class HotelCommentListView(generics.ListAPIView):
 class HotelCommentCreateView(generics.CreateAPIView):
     serializer_class = HotelCommentSerializer
     permission_classes = [AllowAny]
+
 
     def perform_create(self, serializer):
         hotel_id = self.kwargs['hotel_id']

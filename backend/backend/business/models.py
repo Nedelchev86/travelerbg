@@ -13,15 +13,9 @@ class BusinessProfile(models.Model):
     description = models.TextField(null=False, blank=False)
     location = models.CharField(max_length=40, null=False, blank=False)
     phone = models.CharField(max_length=20, null=True, blank=True, validators=[validate_phone_number])
-    address = models.CharField(null=False, blank=False, max_length=200)
-    email = models.EmailField(max_length=254, null=False, blank=False)
-    image = CloudinaryField('image', blank=True, null=True)
-    website_url = models.URLField(max_length=200, null=True, blank=True)
+    image = models.CharField(max_length=200, blank=False, null=False)
     linkedin_url = models.URLField(max_length=200, null=True, blank=True)
     facebook_url = models.URLField(max_length=200, null=True, blank=True)
-    employees = models.PositiveIntegerField(null=False, blank=False, default=0)
-    foundation_year = models.PositiveIntegerField(null=False, blank=False, default=0)
-    # skills = models.ManyToManyField(Skills, related_name="technologies", verbose_name="Technologies")
     activated = models.BooleanField(default=False)
 
     def __str__(self):

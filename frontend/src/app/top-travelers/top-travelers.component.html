@@ -35,9 +35,9 @@
               <div class="team-content">
                 <div class="media-body">
                   <h3 class="box-title">
-                    <a href="tour-guider-details.html"
-                      >{{ traveler.first_name }} {{ traveler.last_name }}</a
-                    >
+                    <a [routerLink]="['/travelers', traveler.user]"
+                      >{{ traveler.name }}
+                    </a>
                   </h3>
                   <span class="team-desig">Tourist Guide</span>
                   <div class="th-social">

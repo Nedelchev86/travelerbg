@@ -3,6 +3,8 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { SetBgImageDirective } from '../set-bg-image.directive';
 import { HttpClient } from '@angular/common/http';
 import { TopTravelersComponent } from '../top-travelers/top-travelers.component';
+import { TopHotelsComponent } from '../top-hotels/top-hotels.component';
+import { TopRatedDestinationsComponent } from '../top-rated-destinations/top-rated-destinations.component';
 
 @Component({
   selector: 'app-destinations-layout',
@@ -12,7 +14,8 @@ import { TopTravelersComponent } from '../top-travelers/top-travelers.component'
     RouterLink,
     RouterLinkActive,
     SetBgImageDirective,
-    TopTravelersComponent,
+    TopHotelsComponent,
+    TopRatedDestinationsComponent,
   ],
   templateUrl: './destinations-layout.component.html',
   styleUrl: './destinations-layout.component.css',

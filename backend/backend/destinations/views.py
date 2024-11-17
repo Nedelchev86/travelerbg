@@ -1,3 +1,4 @@
+from django.db.models import Avg
 from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -82,6 +83,12 @@ class DestinationViewSet(viewsets.ModelViewSet):
         )
 
         return Response({'status': 'rating set', 'rating': rating_value})
+
+    @action(detail=False, methods=['get'], url_path='top-rated')
+    def top_rated(self, request):
+        top_destinations = Destination.objects.annotate(avg_rating=Avg('destination_ratings__rating')).order_by('-avg_rating')[:5]
+        serializer = self.get_serializer(top_destinations, many=True)
+        return Response(serializer.data)
 
 class DestinationCategory(ListAPIView):
     queryset = Category.objects.all()

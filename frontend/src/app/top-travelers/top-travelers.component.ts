@@ -6,11 +6,12 @@ import {
 } from '@angular/core';
 import { SetBgImageDirective } from '../set-bg-image.directive';
 import { HttpClient } from '@angular/common/http';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-top-travelers',
   standalone: true,
-  imports: [SetBgImageDirective],
+  imports: [SetBgImageDirective, RouterLink],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './top-travelers.component.html',
   styleUrl: './top-travelers.component.css',

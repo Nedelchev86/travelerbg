@@ -5,6 +5,7 @@ from rest_framework.routers import DefaultRouter
 
 from backend.accounts.views import UserRegistrationAPIView, MyTokenObtainPairView, MyTokenRefreshView, UserProfileView
 from backend.activities.views import ActivitiesViewSet
+from backend.business.views import BusinessProfileViewSet
 from backend.core.views import TagViewSet
 from backend.destinations.views import DestinationViewSet, DestinationCategory
 from backend.hotels.models import Highlights
@@ -20,6 +21,8 @@ router.register(r'api/activities', ActivitiesViewSet)
 router.register(r'api/hotels', HotelViewSet)
 router.register(r'api/tags', TagViewSet)
 router.register(r'api/highlights', HighlightsViewSet)
+router.register(r'api/business', BusinessProfileViewSet)
+
 
 
 

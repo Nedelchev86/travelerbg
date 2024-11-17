@@ -25,7 +25,7 @@ export class TopHotelsComponent implements OnInit {
   ngOnInit() {
     this.http.get('http://localhost:8000/api/hotels/').subscribe({
       next: (data: any) => {
-        this.hotels = data;
+        this.hotels = data.results;
         console.log(data);
         this.loading = false;
       },

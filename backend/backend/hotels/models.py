@@ -1,5 +1,6 @@
 from cloudinary.models import CloudinaryField
 from django.contrib.auth import get_user_model
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils.text import slugify
 
@@ -48,7 +49,16 @@ class Hotel(models.Model):
     tags = models.ManyToManyField(Tag, related_name="hotels", blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
-    # Other fields...
+
+    def average_rating(self):
+        ratings = self.hotel_ratings.all()
+        if ratings.exists():
+            return ratings.aggregate(models.Avg('rating'))['rating__avg']
+        return 0
+
+    def number_of_votes(self):
+        return self.hotel_ratings.count()
+
     def __str__(self):
         return self.name
 
@@ -80,3 +90,13 @@ class HotelComment(models.Model):
 
     def __str__(self):
         return self.text
+
+class HotelRating(models.Model):
+    user = models.ForeignKey(UserModel, on_delete=models.CASCADE)
+    hotel = models.ForeignKey('Hotel', related_name='hotel_ratings', on_delete=models.CASCADE)
+    rating = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('user', 'hotel')

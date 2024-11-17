@@ -19,6 +19,8 @@ import { AddHotelComponent } from './add-hotel/add-hotel.component';
 import { MyHotelComponent } from './my-hotel/my-hotel.component';
 import { HotelEditComponent } from './hotel-edit/hotel-edit.component';
 import { HotelDetailsComponent } from './hotel-details/hotel-details.component';
+import { HotelsLayoutComponent } from './hotels-layout/hotels-layout.component';
+import { EditBusinessProfileComponent } from './edit-business-profile/edit-business-profile.component';
 
 export const routes: Routes = [
   { path: '', component: MainComponent },
@@ -40,7 +42,7 @@ export const routes: Routes = [
   {
     path: 'hotels',
     title: 'Hotels',
-    // component: HotelsComponent,
+    component: HotelsLayoutComponent,
     children: [
       { path: '', component: HotelsComponent },
       { path: ':hotelId', component: HotelDetailsComponent },
@@ -65,6 +67,7 @@ export const routes: Routes = [
       { path: 'edit-destination/:id', component: EditDestinationComponent },
       { path: 'add-hotel', component: AddHotelComponent },
       { path: 'edit-hotel/:id', component: HotelEditComponent },
+      { path: 'edit-profile', component: EditBusinessProfileComponent },
     ],
   },
 

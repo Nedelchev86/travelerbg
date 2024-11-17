@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ShapeMockupDirective } from '../shape-mockup.directive';
 import {
@@ -9,6 +9,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { AuthService } from '../auth.service';
+import { ToastrService } from 'ngx-toastr';
+import { RatingComponent } from '../rating/rating.component';
+import { CommonModule } from '@angular/common';
 
 export interface Comment {
   created_at: String;
@@ -24,7 +27,12 @@ export interface Comment {
 @Component({
   selector: 'app-hotel-details',
   standalone: true,
-  imports: [ShapeMockupDirective, ReactiveFormsModule],
+  imports: [
+    ShapeMockupDirective,
+    ReactiveFormsModule,
+    RatingComponent,
+    CommonModule,
+  ],
   templateUrl: './hotel-details.component.html',
   styleUrl: './hotel-details.component.css',
 })
@@ -39,6 +47,7 @@ export class HotelDetailsComponent {
   private route = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
   public authService = inject(AuthService);
+  private toast = inject(ToastrService);
 
   constructor() {
     this.commentForm = this.fb.group({
@@ -136,6 +145,51 @@ export class HotelDetailsComponent {
             console.error('Error posting comment:', error);
           }
         );
+    }
+  }
+
+  rateTHotel(rating: number): void {
+    if (!this.authService.isLoggedIn()) {
+      this.toast.error('Please login to rate travelers', 'Login required');
+      return;
+    }
+
+    this.http
+      .post(`http://localhost:8000/api/hotels/${this.hotelId}/rate/`, {
+        rating,
+      })
+      .subscribe({
+        next: (response) => {
+          console.log('Rating submitted successfully', response);
+          this.updateTravelerRating(rating);
+          this.toast.success('Rating submitted successfully');
+        },
+        error: (err) => {
+          console.log('Failed to submit rating', err),
+            this.toast.error(
+              'Please login to rate travelers',
+              'Login required'
+            );
+        },
+      });
+  }
+  updateTravelerRating(rating: number): void {
+    {
+      this.http
+        .get(`http://localhost:8000/api/hotels/${this.hotelId}`)
+        .subscribe({
+          next: (data: any) => {
+            this.hotel.average_rating = data.average_rating;
+            this.hotel.users_rated = data.users_rated;
+          },
+          error: (err) => {
+            console.log(err);
+            this.toast.error(
+              'Error fetching travelers data',
+              'Cannot connect to server'
+            );
+          },
+        });
     }
   }
 }

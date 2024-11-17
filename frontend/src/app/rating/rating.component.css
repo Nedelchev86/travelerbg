@@ -3,7 +3,7 @@
 }
 .rating span {
   cursor: pointer;
-  font-size: 24px;
+  font-size: 18px;
 }
 .full-star {
   color: gold;
@@ -25,8 +25,8 @@
 }
 
 .rating .rating-text {
-  font-size: 18px;
-  color: #777;
-  margin-top: 5px;
+  font-size: 16px;
+  color: black;
+  /* margin-top: 5px; */
   margin-left: 20px;
 }
