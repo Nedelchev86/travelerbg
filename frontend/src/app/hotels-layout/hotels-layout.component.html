@@ -1,0 +1,200 @@
+<!--==============================
+Breadcumb
+============================== -->
+<div
+  class="breadcumb-wrapper"
+  [appSetBgImage]="'./assets/img/bg/breadcumb-bg.jpg'"
+>
+  <div class="container">
+    <div class="breadcumb-content">
+      <h1 class="breadcumb-title">Destination</h1>
+      <ul class="breadcumb-menu">
+        <li><a href="home-travel.html">Home</a></li>
+        <li>Destination</li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!--==============================
+Product Area
+==============================-->
+<section class="space">
+  <div class="container">
+    <div class="th-sort-bar">
+      <div class="row justify-content-between align-items-center">
+        <div class="col-md-4">
+          <div class="search-form-area" (input)="onSearch($event)">
+            <form class="search-form">
+              <input
+                type="text"
+                placeholder="Search"
+                [(ngModel)]="searchQuery"
+                name="search"
+              />
+              <button type="submit">
+                <i class="fa-light fa-magnifying-glass"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <div class="col-md-auto">
+          <div class="sorting-filter-wrap">
+            <div class="nav" role="tablist">
+              <a
+                class="active"
+                href="#"
+                id="tab-destination-grid"
+                data-bs-toggle="tab"
+                data-bs-target="#tab-grid"
+                role="tab"
+                aria-controls="tab-grid"
+                aria-selected="true"
+                ><i class="fa-light fa-grid-2"></i
+              ></a>
+
+              <a
+                href="#"
+                id="tab-destination-list"
+                data-bs-toggle="tab"
+                data-bs-target="#tab-list"
+                role="tab"
+                aria-controls="tab-list"
+                aria-selected="false"
+                class=""
+                ><i class="fa-solid fa-list"></i
+              ></a>
+            </div>
+            <form class="woocommerce-ordering" method="get">
+              <select
+                name="orderby"
+                class="orderby"
+                aria-label="destination order"
+              >
+                <option value="menu_order" selected="selected">
+                  Default Sorting
+                </option>
+                <option value="popularity">Sort by popularity</option>
+                <option value="rating">Sort by average rating</option>
+                <option value="date">Sort by latest</option>
+                <option value="price">Sort by price: low to high</option>
+                <option value="price-desc">Sort by price: high to low</option>
+              </select>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xxl-9 col-lg-8">
+        <div class="tab-content" id="nav-tabContent">
+          <div
+            class="tab-pane fade active show"
+            id="tab-grid"
+            role="tabpanel"
+            aria-labelledby="tab-destination-grid"
+          >
+            <router-outlet></router-outlet>
+          </div>
+
+          <div
+            class="tab-pane fade"
+            id="tab-list"
+            role="tabpanel"
+            aria-labelledby="tab-destination-list"
+          ></div>
+        </div>
+      </div>
+      <div class="col-xxl-3 col-lg-4">
+        <aside class="sidebar-area style2">
+          <div class="widget widget_categories">
+            <h3 class="widget_title">Categories</h3>
+            <ul>
+              <li>
+                <a href="blog.html"
+                  ><img src="./assets/img/theme-img/map.svg" alt="" />City
+                  Tour</a
+                >
+                <span>(8)</span>
+              </li>
+              <li>
+                <a href="blog.html"
+                  ><img src="./assets/img/theme-img/map.svg" alt="" />Beach
+                  Tours</a
+                >
+                <span>(6)</span>
+              </li>
+              <li>
+                <a href="blog.html"
+                  ><img src="./assets/img/theme-img/map.svg" alt="" />Wildlife
+                  Tours</a
+                >
+                <span>(2)</span>
+              </li>
+              <li>
+                <a href="blog.html"
+                  ><img src="./assets/img/theme-img/map.svg" alt="" />News &
+                  Tips</a
+                >
+                <span>(7)</span>
+              </li>
+              <li>
+                <a href="blog.html"
+                  ><img src="./assets/img/theme-img/map.svg" alt="" />Adventure
+                  Tours</a
+                >
+                <span>(9)</span>
+              </li>
+              <li>
+                <a href="blog.html"
+                  ><img src="./assets/img/theme-img/map.svg" alt="" />Mountain
+                  Tours</a
+                >
+                <span>(10)</span>
+              </li>
+            </ul>
+          </div>
+          <app-top-rated-destinations></app-top-rated-destinations>
+
+          <div class="widget widget_tag_cloud">
+            <h3 class="widget_title">Popular Tags</h3>
+            <div class="tagcloud">
+              <a href="blog.html">Tour</a>
+              <a href="blog.html">Adventure</a>
+              <a href="blog.html">Rent</a>
+              <a href="blog.html">Innovate</a>
+              <a href="blog.html">Hotel</a>
+              <a href="blog.html">Modern</a>
+              <a href="blog.html">Luxury</a>
+              <a href="blog.html">Travel</a>
+            </div>
+          </div>
+          <div
+            class="widget widget_offer"
+            [appSetBgImage]="'./assets/img/bg/widget_bg_1.jpg'"
+          >
+            >
+            <div class="offer-banner">
+              <div class="offer">
+                <h6 class="box-title">Need Help? We Are Here To Help You</h6>
+                <div class="banner-logo">
+                  <img src="./assets/img/logo.png" alt="Tourm" />
+                </div>
+                <div class="offer">
+                  <h6 class="offer-title">You Get Online support</h6>
+                  <a class="offter-num" routerLink="/contact-us"
+                    >+359 888 888</a
+                  >
+                </div>
+                <a routerLink="/contact-us" class="th-btn style2 th-icon"
+                  >Read More</a
+                >
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</section>
+<app-top-travelers></app-top-travelers>
