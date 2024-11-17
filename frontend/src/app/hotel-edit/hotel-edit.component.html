@@ -1,0 +1,139 @@
+<div class="th-checkout-wrapper space-extra-bottom">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <form
+          class="woocommerce-form-login"
+          [formGroup]="editHotelForm"
+          (ngSubmit)="onSubmit()"
+        >
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input
+              class="form-control"
+              id="name"
+              formControlName="name"
+              type="text"
+            />
+            <div
+              *ngIf="
+                editHotelForm.get('name')?.touched &&
+                editHotelForm.get('name')?.invalid
+              "
+              class="text-danger"
+            >
+              Name is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea
+              class="form-control"
+              id="description"
+              formControlName="description"
+            ></textarea>
+            <div
+              *ngIf="
+                editHotelForm.get('description')?.touched &&
+                editHotelForm.get('description')?.invalid
+              "
+              class="text-danger"
+            >
+              Description is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="location">Location</label>
+            <input
+              class="form-control"
+              id="location"
+              formControlName="location"
+              type="text"
+            />
+            <div
+              *ngIf="
+                editHotelForm.get('location')?.touched &&
+                editHotelForm.get('location')?.invalid
+              "
+              class="text-danger"
+            >
+              Location is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="price">Price</label>
+            <input
+              class="form-control"
+              id="price"
+              formControlName="price"
+              type="number"
+              step="0.01"
+            />
+            <div
+              *ngIf="
+                editHotelForm.get('price')?.touched &&
+                editHotelForm.get('price')?.invalid
+              "
+              class="text-danger"
+            >
+              Price is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Tags</label>
+            <div class="tags-container">
+              <div class="tag-checkbox" *ngFor="let tag of tags">
+                <input
+                  type="checkbox"
+                  [value]="tag.id"
+                  (change)="onTagChange($event)"
+                  id="tag-{{ tag.id }}"
+                  [checked]="editHotelForm.get('tags')?.value.includes(tag.id)"
+                />
+                <label for="tag-{{ tag.id }}">{{ tag.name }}</label>
+              </div>
+            </div>
+
+            <div *ngIf="editHotelForm.get('tags')?.invalid" class="text-danger">
+              Tags are required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="image">Image 1</label>
+            <input
+              class="form-control th-btn style4"
+              id="image"
+              type="file"
+              (change)="onFileChange($event, 'image')"
+            />
+          </div>
+          <div class="form-group">
+            <label for="image2">Image 2</label>
+            <input
+              class="form-control th-btn style4"
+              id="image2"
+              type="file"
+              (change)="onFileChange($event, 'image2')"
+            />
+          </div>
+          <div class="form-group">
+            <label for="image3">Image 3</label>
+            <input
+              class="form-control th-btn style4"
+              id="image3"
+              type="file"
+              (change)="onFileChange($event, 'image3')"
+            />
+          </div>
+          <button
+            class="th-btn"
+            type="submit"
+            [disabled]="editHotelForm.invalid"
+          >
+            Update Hotel
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
