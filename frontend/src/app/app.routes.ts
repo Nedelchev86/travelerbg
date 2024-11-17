@@ -14,6 +14,11 @@ import { MyDestinationsComponent } from './my-destinations/my-destinations.compo
 import { ContactComponent } from './contact/contact.component';
 import { EditDestinationComponent } from './edit-destination/edit-destination.component';
 import { AuthGuard } from './auth.guard';
+import { DestinationsLayoutComponent } from './destinations-layout/destinations-layout.component';
+import { AddHotelComponent } from './add-hotel/add-hotel.component';
+import { MyHotelComponent } from './my-hotel/my-hotel.component';
+import { HotelEditComponent } from './hotel-edit/hotel-edit.component';
+import { HotelDetailsComponent } from './hotel-details/hotel-details.component';
 
 export const routes: Routes = [
   { path: '', component: MainComponent },
@@ -26,6 +31,7 @@ export const routes: Routes = [
   {
     path: 'destinations',
     title: 'Destinations',
+    component: DestinationsLayoutComponent,
     children: [
       { path: '', component: DestinationsComponent },
       { path: ':destinationId', component: DestinationDetailsComponent },
@@ -34,8 +40,11 @@ export const routes: Routes = [
   {
     path: 'hotels',
     title: 'Hotels',
-    component: HotelsComponent,
-    // children: [{ path: 'post', component: PostHotelComponent }],
+    // component: HotelsComponent,
+    children: [
+      { path: '', component: HotelsComponent },
+      { path: ':hotelId', component: HotelDetailsComponent },
+    ],
   },
   {
     path: 'activities',
@@ -52,7 +61,10 @@ export const routes: Routes = [
       { path: 'edit', component: EditProfileComponent },
       { path: 'add-destination', component: AddDestinationComponent },
       { path: 'my-destinations', component: MyDestinationsComponent },
+      { path: 'my-hotels', component: MyHotelComponent },
       { path: 'edit-destination/:id', component: EditDestinationComponent },
+      { path: 'add-hotel', component: AddHotelComponent },
+      { path: 'edit-hotel/:id', component: HotelEditComponent },
     ],
   },
 

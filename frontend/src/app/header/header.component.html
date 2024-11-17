@@ -4,29 +4,6 @@
 </div> -->
 
 <!--==============================
-Preloader
-==============================-->
-<!-- <div id="preloader" class="preloader">
-  <button class="th-btn preloaderCls">Cancel Preloader</button>
-  <div class="preloader-inner">
-    <img src="/assets/img/logo.png" alt="" />
-  </div>
-
-  <div id="loader" class="th-preloader">
-    <div class="animation-preloader">
-      <div class="txt-loading">
-        <span preloader-text="L" class="characters">L </span>
-        <span preloader-text="O" class="characters">O </span>
-        <span preloader-text="A" class="characters">A </span>
-        <span preloader-text="D" class="characters">D </span>
-        <span preloader-text="I" class="characters">I </span>
-        <span preloader-text="N" class="characters">N </span>
-        <span preloader-text="G" class="characters">G </span>
-      </div>
-    </div>
-  </div>
-</div> -->
-<!--==============================
 Sidemenu
 ============================== -->
 <div class="sidemenu-wrapper sidemenu-info">
@@ -159,9 +136,14 @@ Sidemenu
 <!--==============================
   Mobile Menu
   ============================== -->
-<div class="th-menu-wrapper onepage-nav">
+<div
+  class="th-menu-wrapper onepage-nav"
+  [ngClass]="{ 'th-body-visible': isBodyVisible }"
+>
   <div class="th-menu-area text-center">
-    <button class="th-menu-toggle"><i class="fal fa-times"></i></button>
+    <button class="th-menu-toggle" (click)="toggleMobileMenu()">
+      <i class="fal fa-times"></i>
+    </button>
     <div class="mobile-logo">
       <a href="home-travel.html"
         ><img src="/assets/img/logo2.svg" alt="Tourm"
@@ -362,22 +344,28 @@ Sidemenu
                 </li>
               </ul>
             </nav>
-            <button type="button" class="th-menu-toggle d-block d-xl-none">
+            <button
+              type="button"
+              class="th-menu-toggle d-block d-xl-none"
+              (click)="toggleMobileMenu()"
+            >
               <i class="far fa-bars"></i>
             </button>
           </div>
 
           @if (authService.currentUser()) {
           @if(authService.currentUser()?.user?.profile_picture) {
-          <a routerLink="/profile" class="col-auto d-none d-xl-block"
-            ><img
-              class="square"
-              src="https://res.cloudinary.com/drjgddl0y/{{
-                authService.currentUser()?.user?.profile_picture
-              }}"
-              alt=""
-              width="200px"
-          /></a>
+          <div class="inline-block">
+            <a routerLink="/profile" class="col-auto d-xl-block"
+              ><img
+                class="square"
+                src="https://res.cloudinary.com/drjgddl0y/{{
+                  authService.currentUser()?.user?.profile_picture
+                }}"
+                alt=""
+                width="40px"
+            /></a>
+          </div>
           }@else {
           <div class="circle">
             <a routerLink="/profile" class="circle-inner">{{
@@ -385,7 +373,8 @@ Sidemenu
             }}</a>
           </div>
           }
-          <div class="col-auto d-none d-xl-block">
+
+          <div class="col-auto d-xl-block">
             <div class="header-button">
               <button (click)="logout()" class="th-btn style3">
                 Logout <i class="fa-regular fa-user"></i>

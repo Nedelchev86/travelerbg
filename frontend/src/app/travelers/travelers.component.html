@@ -3,7 +3,7 @@
 ============================== -->
 <div
   class="breadcumb-wrapper"
-  [appSetBgImage]="'assets/img/bg/breadcumb-bg.jpg'"
+  [appSetBgImage]="'assets/img/hero/breadcum2.jpg'"
 >
   <div class="container">
     <div class="breadcumb-content">
@@ -36,6 +36,9 @@ Team Area
   <img src="assets/img/shape/shape_2.png" alt="shape" />
 </div>
 
+@if (loading) {
+<app-loader></app-loader>
+}@else {
 <section class="space" id="team-sec">
   <div class="container">
     <div class="row gy-4 gx-30">
@@ -61,8 +64,13 @@ Team Area
             <div class="media-body">
               <h3 class="box-title">
                 <a routerLink="/travelers/{{ traveler.user }}"
-                  >{{ traveler.first_name }} {{ traveler.last_name }}</a
-                >
+                  >{{ traveler.name }}
+                </a>
+                <app-rating
+                  [rating]="traveler.average_rating"
+                  [data]="traveler"
+                  (rated)="rateTraveler(traveler.user, $event)"
+                ></app-rating>
               </h3>
               <span class="team-desig">Tourist Guide</span>
 
@@ -92,3 +100,6 @@ Team Area
     </div>
   </div>
 </section>
+
+}
+<app-top-destination></app-top-destination>

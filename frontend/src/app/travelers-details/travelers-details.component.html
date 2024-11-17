@@ -29,6 +29,11 @@
                     {{ travelerDetails?.last_name }}</a
                   >
                 </h3>
+                <app-rating
+                  [rating]="travelerDetails.average_rating"
+                  [data]="travelerDetails"
+                  (rated)="rateTraveler(travelerDetails.user, $event)"
+                ></app-rating>
                 <span class="team-desig">Tourist Guide</span>
 
                 <div class="th-social">
@@ -102,6 +107,9 @@
                 <span class="counter-box_title">Total Event</span>
               </div>
             </div>
+            <app-destinations-by-user
+              [user]="travelerDetails.user"
+            ></app-destinations-by-user>
           </div>
         </div>
       </div>
@@ -159,4 +167,5 @@
     </div>
   </div>
 </section>
+
 }

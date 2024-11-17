@@ -4,8 +4,17 @@
 }
 .th-team .team-img img {
   width: 100%;
-  height: 200px;
+  height: 300px;
   -webkit-transition: 0.4s ease-in-out;
   transition: 0.4s ease-in-out;
 }
 
+.rating-text {
+  font-size: 14px;
+  color: #777;
+  margin-top: 5px;
+}
+
+.team-grid .team-img2 img {
+  min-height: 276px;
+}

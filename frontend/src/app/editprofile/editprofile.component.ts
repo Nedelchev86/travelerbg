@@ -27,14 +27,8 @@ export class EditProfileComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private http: HttpClient) {
     this.profileForm = this.fb.group({
-      first_name: [
-        '',
-        [Validators.required, Validators.pattern('^[A-Z][a-z]*$')],
-      ],
-      last_name: [
-        '',
-        [Validators.required, Validators.pattern('^[A-Z][a-z]*$')],
-      ],
+      name: ['', [Validators.required, Validators.pattern('^[A-Z][a-z]*$')]],
+
       city: ['', Validators.required],
       nationality: ['', Validators.required],
       occupation: ['', Validators.required],
@@ -71,8 +65,7 @@ export class EditProfileComponent implements OnInit {
   onSubmit(): void {
     if (this.profileForm.valid) {
       const formData = new FormData();
-      formData.append('first_name', this.profileForm.value.first_name);
-      formData.append('last_name', this.profileForm.value.last_name);
+      formData.append('name', this.profileForm.value.name);
       formData.append('city', this.profileForm.value.city);
       formData.append('nationality', this.profileForm.value.nationality);
       formData.append('occupation', this.profileForm.value.occupation);
@@ -94,12 +87,15 @@ export class EditProfileComponent implements OnInit {
       }
 
       this.http
-        .put<UserDetails>('http://localhost:8000/api/traveler/update/', formData)
+        .put<UserDetails>(
+          'http://localhost:8000/api/traveler/update/',
+          formData
+        )
         .subscribe(
-          (response ) => {
+          (response) => {
             console.log('Profile updated successfully', response);
 
-            this.authService.updateUserDetails(response as UserDetails );
+            this.authService.updateUserDetails(response as UserDetails);
             this.router.navigate(['/profile']);
           },
           (error) => {

@@ -5,3 +5,12 @@
   -webkit-transition: 1.3s all ease;
   transition: 1.3s all ease;
 }
+
+.space,
+.space-top {
+  padding-top: 0px;
+}
+
+.disabled:hover {
+  cursor: not-allowed;
+}

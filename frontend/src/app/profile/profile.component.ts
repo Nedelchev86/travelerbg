@@ -1,6 +1,13 @@
-import { Component, inject } from '@angular/core';
+import {
+  AfterContentInit,
+  AfterViewInit,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { AuthService } from '../auth.service';
 import { RouterLink } from '@angular/router';
+import { LoaderComponent } from '../shared/loader/loader.component';
 
 @Component({
   selector: 'app-profile',
@@ -11,4 +18,5 @@ import { RouterLink } from '@angular/router';
 })
 export class ProfileComponent {
   authService = inject(AuthService);
+  role = JSON.parse(localStorage.getItem('currentUser') || '{}');
 }

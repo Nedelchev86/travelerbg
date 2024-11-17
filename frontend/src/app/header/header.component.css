@@ -15,7 +15,7 @@
 /* Modal content box */
 .modal-content {
   background: #fff;
-  padding: 20px;
+  padding: 28px;
   border-radius: 8px;
   width: 600px;
   max-width: 90%;
@@ -78,4 +78,20 @@
 .active2 {
   background-color: #113d48;
   color: #113d48;
+}
+
+.inline-block {
+  display: inline-block;
+  width: 80px;
+  height: 54px;
+
+  margin: 10px;
+}
+
+@media (max-width: 1299px) {
+  .header-button .th-btn {
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
 }

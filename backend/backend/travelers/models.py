@@ -1,5 +1,6 @@
 from cloudinary.models import CloudinaryField
 from django.contrib.auth import get_user_model
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 from backend.core.validators import validate_start_with_upper, validate_phone_number
@@ -8,8 +9,7 @@ UserModel = get_user_model()
 # Create your models here.
 class Traveler(models.Model):
     user = models.OneToOneField(UserModel, on_delete=models.CASCADE, primary_key=True)
-    first_name = models.CharField(max_length=50, blank=False, null=False, validators=[validate_start_with_upper], verbose_name="First Name")
-    last_name = models.CharField(max_length=50, blank=False, null=False, validators=[validate_start_with_upper])
+    name = models.CharField(max_length=50, blank=False, null=False, validators=[validate_start_with_upper], verbose_name="First Name")
     city = models.CharField(max_length=50, blank=False, null=False)
     nationality = models.CharField(max_length=50, blank=False, null=False)
     occupation = models.CharField(max_length=50, blank=False, null=False)
@@ -27,6 +27,14 @@ class Traveler(models.Model):
     # skills = models.ManyToManyField(Skills, related_name="skills")
     activated = models.BooleanField(default=False)
 
+    def average_rating(self):
+        ratings = self.ratings.all()
+        if ratings.exists():
+            return ratings.aggregate(models.Avg('rating'))['rating__avg']
+        return 0
+
+    def number_of_votes(self):
+        return self.ratings.count()
     # @property
     # def get_user_all_applicant(self):
     #     return Applicant.objects.filter(user=self.user).count()
@@ -39,3 +47,14 @@ class Traveler(models.Model):
 
     class Meta:
         ordering = ['-pk']
+
+
+class Rating(models.Model):
+    user = models.ForeignKey(UserModel, on_delete=models.CASCADE)
+    traveler = models.ForeignKey('Traveler', related_name='ratings', on_delete=models.CASCADE)
+    rating = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('user', 'traveler')

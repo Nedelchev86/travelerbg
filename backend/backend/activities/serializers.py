@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from backend.activities.models import Activities
+from backend.activities.models import Activities, ActivityCategory
 from backend.core.models import Tag
 from backend.core.serializers import TagSerializer
 from backend.destinations.models import Destination
@@ -30,3 +30,15 @@ class ActivitiesSerializer(serializers.ModelSerializer):
             tag, created = Tag.objects.get_or_create(name=tag_data['name'])
             instance.tags.add(tag)
         return instance
+
+class ActivityCategorySerializer(serializers.ModelSerializer):
+    number_of_activity = serializers.SerializerMethodField()
+    class Meta:
+        model = ActivityCategory
+        fields = ['id', 'name', 'slug', 'created_at', 'modified_at', 'number_of_activity']
+        extra_kwargs = {
+            'slug': {'read_only': True}}
+
+    def get_number_of_activity(self, obj):
+        return obj.get_number_of_activity()
+

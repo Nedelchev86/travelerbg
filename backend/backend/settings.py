@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'backend.activities',
     'backend.hotels',
     'rest_framework',
+
 ]
 
 MIDDLEWARE = [

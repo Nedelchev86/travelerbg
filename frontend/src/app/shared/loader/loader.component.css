@@ -1,0 +1,114 @@
+/* loader.component.css */
+.preloader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--white-color);
+  flex-direction: column;
+  padding-top: 120px;
+}
+
+.preloader-inner {
+  text-align: center;
+  line-height: 1;
+}
+
+.preloader-inner img {
+  display: block;
+  margin: 0 auto 30px auto;
+  max-width: 200px;
+}
+
+.th-preloader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.th-preloader .animation-preloader {
+  position: relative;
+  z-index: 100;
+}
+
+.th-preloader .animation-preloader .txt-loading {
+  font-family: var(--title-font);
+  font-size: 32px;
+  line-height: 26px;
+  font-weight: 700;
+  text-align: center;
+  user-select: none;
+}
+
+.th-preloader .animation-preloader .txt-loading p {
+  display: inline-block;
+}
+
+.th-preloader .animation-preloader .txt-loading .characters {
+  color: rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.th-preloader .animation-preloader .txt-loading .characters:before {
+  animation: characters 4s infinite;
+  color: var(--theme-color);
+  content: attr(preloader-text);
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  top: 10px;
+  transform: rotateY(-90deg);
+}
+
+.th-preloader
+  .animation-preloader
+  .txt-loading
+  .characters:nth-child(2):before {
+  animation-delay: 0.2s;
+}
+
+.th-preloader
+  .animation-preloader
+  .txt-loading
+  .characters:nth-child(3):before {
+  animation-delay: 0.4s;
+}
+
+.th-preloader
+  .animation-preloader
+  .txt-loading
+  .characters:nth-child(4):before {
+  animation-delay: 0.6s;
+}
+
+.th-preloader
+  .animation-preloader
+  .txt-loading
+  .characters:nth-child(5):before {
+  animation-delay: 0.8s;
+}
+
+.th-preloader
+  .animation-preloader
+  .txt-loading
+  .characters:nth-child(6):before {
+  animation-delay: 1s;
+}
+
+/* Animation of letters loading from the preloader */
+@keyframes characters {
+  0%,
+  75%,
+  100% {
+    opacity: 0;
+    transform: rotateY(-90deg);
+  }
+  25%,
+  50% {
+    opacity: 1;
+    transform: rotateY(0deg);
+  }
+}

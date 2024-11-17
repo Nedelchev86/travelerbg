@@ -1,10 +1,14 @@
 from cloudinary.models import CloudinaryField
 from django.contrib.auth import get_user_model
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.db.models import Count
 from django.utils.crypto import get_random_string
 from django.utils.text import slugify
 
+from backend.activities.models import Activities
 from backend.core.models import Tag
+from backend.hotels.models import Hotel
 
 UserModel = get_user_model()
 
@@ -22,6 +26,9 @@ class Category(models.Model):
         if self.slug:
             self.slug = slugify(self.name, allow_unicode=True)
         return super().save(*args, **kwargs)
+
+    def get_number_of_destinations(self):
+        return self.destination_set.count()
 
 
 class Destination(models.Model):
@@ -52,6 +59,32 @@ class Destination(models.Model):
     modified_at = models.DateTimeField(auto_now=True)
     # needed_skills = models.ManyToManyField(Skills, related_name="needed_skills")
 
+    def average_rating(self):
+        ratings = self.destination_ratings.all()
+        if ratings.exists():
+            return ratings.aggregate(models.Avg('rating'))['rating__avg']
+        return 0
+
+    def related_hotels(self):
+        return Hotel.objects.filter(tags__in=self.tags.all()) \
+            .annotate(num_shared_tags=Count('tags')) \
+            .order_by('-num_shared_tags').distinct()
+
+    def related_activities(self):
+        return Activities.objects.filter(tags__in=self.tags.all()) \
+            .annotate(num_shared_tags=Count('tags')) \
+            .order_by('-num_shared_tags').distinct()[:8]
+
+
+    # def related_activities(self):
+    #     return Activities.objects.filter(tags__in=self.tags.all()) \
+    #         .annotate(num_shared_tags=Count('tags')) \
+    #         .order_by('-num_shared_tags').distinct()[:8]
+
+
+    def number_of_votes(self):
+        return self.destination_ratings.count()
+
     def __str__(self):
         return self.title
 
@@ -63,3 +96,12 @@ class Destination(models.Model):
     class Meta:
         ordering = ['-created_at']
 
+class DestinationRating(models.Model):
+    user = models.ForeignKey(UserModel, on_delete=models.CASCADE)
+    destination = models.ForeignKey('Destination', related_name='destination_ratings', on_delete=models.CASCADE)
+    rating = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('user', 'destination')

@@ -8,7 +8,7 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [SetBgImageDirective, RouterLink],
   templateUrl: './hotels.component.html',
-  styleUrl: './hotels.component.css'
+  styleUrl: './hotels.component.css',
 })
 export class HotelsComponent {
   httpClient = inject(HttpClient);

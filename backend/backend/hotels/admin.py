@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from django.contrib import admin
-from .models import Hotel, Tag  # Ensure correct import paths
+from .models import Hotel, Tag, Category, Highlights  # Ensure correct import paths
 from cloudinary.models import CloudinaryField
 from django.utils.html import format_html
 
@@ -91,3 +91,13 @@ class HotelAdmin(admin.ModelAdmin):
         return "No Image"
 
     image3_preview.short_description = 'Image 3 Preview'
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    prepopulated_fields = {'slug': ('name',)}
+
+
+@admin.register(Highlights)
+class HighlightsAdmin(admin.ModelAdmin):
+    list_display = ('name',)

@@ -1,8 +1,11 @@
+from django.db.models import Avg
 from django.shortcuts import render
 from rest_framework import permissions, viewsets, generics
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
-from backend.travelers.models import Traveler
+from backend.travelers.models import Traveler, Rating
 from backend.travelers.serializers import TravelerSerializer
 
 
@@ -29,6 +32,30 @@ class TravelerkerViewSet(viewsets.ModelViewSet):
 
             # queryset = queryset.filter(skills=skill)
         return queryset
+
+    @action(detail=False, methods=['get'], url_path='top-rated', permission_classes=[permissions.AllowAny])
+    def top_rated(self, request):
+        top_travelers = Traveler.objects.filter(activated=True).annotate(avg_rating=Avg('ratings__rating')).order_by(
+            '-avg_rating')[:8]
+        serializer = self.get_serializer(top_travelers, many=True)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    def rate(self, request, pk=None):
+        traveler = self.get_object()
+        user = request.user
+        rating_value = request.data.get('rating')
+
+        if rating_value is None:
+            return Response({'error': 'Rating value is required.'}, status=400)
+
+        rating, created = Rating.objects.update_or_create(
+            user=user,
+            traveler=traveler,
+            defaults={'rating': rating_value}
+        )
+
+        return Response({'status': 'rating set', 'rating': rating_value})
 
 
 

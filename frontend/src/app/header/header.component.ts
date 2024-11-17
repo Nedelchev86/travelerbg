@@ -5,11 +5,19 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth.service';
 import { HttpClient } from '@angular/common/http';
 import { UserInterface } from '../user-interface';
+import { faFontAwesome, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, LoginRegisterComponent, CommonModule],
+  imports: [
+    RouterLink,
+    RouterLinkActive,
+    LoginRegisterComponent,
+    CommonModule,
+    FontAwesomeModule,
+  ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
@@ -18,6 +26,8 @@ export class HeaderComponent {
   http = inject(HttpClient);
   authService = inject(AuthService);
   router = inject(Router);
+  faTimes = faTimes;
+  isBodyVisible = false;
 
   ngOnInit(): void {
     if (localStorage.getItem('token')) {
@@ -44,7 +54,13 @@ export class HeaderComponent {
 
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('currentUser');
     this.authService.currentUser.set(null);
+    this.authService.token.set(null);
     this.router.navigate(['/']);
+  }
+
+  toggleMobileMenu(): void {
+    this.isBodyVisible = !this.isBodyVisible;
   }
 }
