@@ -1,0 +1,27 @@
+.added-tags {
+  margin-top: 10px;
+}
+
+.tag-box {
+  display: inline-block;
+  background-color: #e0e0e0;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.tag-box span {
+  margin-right: 5px;
+}
+
+.tag-box button {
+  background: none;
+  border: none;
+  color: red;
+  cursor: pointer;
+}
+
+.text-style {
+  white-space: pre-wrap;
+}

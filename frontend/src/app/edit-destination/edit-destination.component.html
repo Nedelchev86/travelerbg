@@ -25,7 +25,7 @@
               Title is required.
             </div>
           </div>
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label for="tags">Tags</label>
             <input
               class="form-control"
@@ -41,6 +41,47 @@
               class="text-danger"
             >
               Tags are required.
+            </div>
+          </div> -->
+         
+          <div class="form-group">
+            <label>Tags</label>
+            <div class="added-tags">
+              <div
+                class="tag-box"
+                *ngFor="let tag of tags.controls; let i = index"
+              >
+                <span>{{ tag.value }}</span>
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  (click)="removeTag(i)"
+                >
+                  x
+                </button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="newTag">Add New Tag</label>
+              <input
+                class="form-control"
+                id="newTag"
+                formControlName="newTag"
+                type="text"
+              />
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="addNewTag()"
+              >
+                Add Tag
+              </button>
+            </div>
+            <div
+              *ngIf="editDestinationForm.get('tags')?.invalid"
+              class="text-danger"
+            >
+              At least one tag is required.
             </div>
           </div>
           <div class="form-group">
@@ -179,7 +220,7 @@
               type="number"
             />
           </div>
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label for="location">Location</label>
             <input
               class="form-control"
@@ -196,6 +237,58 @@
             >
               Location is required.
             </div>
+          </div> -->
+
+          <div class="form-group">
+            <label for="location">Location</label>
+            <input
+              class="form-control"
+              id="location"
+              formControlName="location"
+              type="text"
+              (change)="onLocationChange()"
+            />
+            <div
+              *ngIf="
+                editDestinationForm.get('location')?.touched &&
+                editDestinationForm.get('location')?.invalid
+              "
+              class="text-danger"
+            >
+              Location is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="lat">Latitude</label>
+            <input
+              class="form-control"
+              id="lat"
+              formControlName="lat"
+              type="text"
+              readonly
+            />
+          </div>
+          <div class="form-group">
+            <label for="lng">Longitude</label>
+            <input
+              class="form-control"
+              id="lng"
+              formControlName="lng"
+              type="text"
+              readonly
+            />
+          </div>
+          <div style="height: 500px; width: 100%">
+            <google-map
+              height="100%"
+              width="100%"
+              [center]="center"
+              [zoom]="zoom"
+              [options]="mapOptions"
+              (mapClick)="onMapClick($event)"
+            >
+              <map-advanced-marker [position]="markerPosition"></map-advanced-marker>
+            </google-map>
           </div>
           <div class="form-group">
             <label for="cost">Cost</label>
