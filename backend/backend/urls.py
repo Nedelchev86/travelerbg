@@ -10,7 +10,7 @@ from backend.core.views import TagViewSet
 from backend.destinations.views import DestinationViewSet, DestinationCategory
 from backend.hotels.models import Highlights
 from backend.hotels.views import HotelViewSet, HighlightsViewSet, HotelCommentListView, \
-    HotelCommentCreateView
+    HotelCommentCreateView, HotelsCategory
 from backend.travelers.views import TravelerkerViewSet, TravelerkerUpdateAPIView
 
 router = DefaultRouter()
@@ -37,6 +37,8 @@ urlpatterns = [
     path('api/user/', UserProfileView.as_view(), name='user-profile'),
     path('api/traveler/update/', TravelerkerUpdateAPIView.as_view(), name='traveler-update'),
     path('api/categories/', DestinationCategory.as_view(), name='destination-category'),
+
+    path('api/categories/hotels/', HotelsCategory.as_view(), name='hotel-category'),
     path('api/hotels/<int:hotel_id>/comments/', HotelCommentListView.as_view(), name='hotel-comment-list'),
     path('api/hotels/<int:hotel_id>/comments/add/', HotelCommentCreateView.as_view(), name='hotel-comment-add'),
 

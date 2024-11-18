@@ -24,34 +24,33 @@
             <div class="team-content">
               <div class="media-body">
                 <h3 class="box-title">
-                  <a href="team-details.html"
-                    >{{ travelerDetails?.first_name }}
-                    {{ travelerDetails?.last_name }}</a
-                  >
+                  <a>{{ travelerDetails.name }} </a>
                 </h3>
                 <app-rating
                   [rating]="travelerDetails.average_rating"
                   [data]="travelerDetails"
                   (rated)="rateTraveler(travelerDetails.user, $event)"
                 ></app-rating>
-                <span class="team-desig">Tourist Guide</span>
+                <span class="team-desig">{{ travelerDetails.occupation }}</span>
 
                 <div class="th-social">
-                  <a target="_blank" href="https://facebook.com/"
+                  @if(travelerDetails.facebook){
+                  <a target="_blank" href="{{ travelerDetails.facebook }}"
                     ><i class="fab fa-facebook-f"></i
                   ></a>
-                  <a target="_blank" href="https://twitter.com/"
-                    ><i class="fab fa-twitter"></i
-                  ></a>
-                  <a target="_blank" href="https://linkedin.com/"
-                    ><i class="fab fa-linkedin-in"></i
-                  ></a>
-                  <a target="_blank" href="https://youtube.com/"
-                    ><i class="fab fa-youtube"></i
-                  ></a>
-                  <a target="_blank" href="https://instagram.com/"
-                    ><i class="fab fa-instagram"></i
-                  ></a>
+                  } @if(travelerDetails.website){
+                  <a target="_blank" href="{{ travelerDetails.website }}"
+                    ><i class="fab fa-link"></i></a
+                  >} @if(travelerDetails.linkedin){
+                  <a target="_blank" href="{{ travelerDetails.linkedin }}"
+                    ><i class="fab fa-linkedin-in"></i></a
+                  >} @if(travelerDetails.youtube){
+                  <a target="_blank" href="{{ travelerDetails.youtube }}"
+                    ><i class="fab fa-youtube"></i></a
+                  >} @if(travelerDetails.instagram){
+                  <a target="_blank" href="{{ travelerDetails.instagram }}"
+                    ><i class="fab fa-instagram"></i></a
+                  >}
                 </div>
               </div>
             </div>
@@ -61,52 +60,54 @@
           <div class="team-about">
             <h2 class="team-about_title">About Me</h2>
             <p class="team-about_text mb-25">
-              Venenatis purus egestas lorem aenean enim bibendum. Ac pharetra
-              egestas eget gravida turpis senectus. Sed blandit ipsum orci odio
-              egestas egestas sed bibendum. Rhoncus est proin euismod
-              condimentum eget a tristique integer viverra. Enim sed nunc magna
-              consequat consectetur vestibulum odio posuere. Mattis nisl aenean
-              auctor morbi suspendisse diam adipiscing. Tellus egestas amet
-              tellus phasellus.
+              {{ travelerDetails.about }}
             </p>
-            <p class="team-about_text mb-25">
-              Ornare aliquam ac a pellentesque ante. Morbi maecenas odio integer
-              adipiscing ridiculus mauris. Ornare in sit et tortor orci massa eu
-              ultricies. Sit fermentum faucibu.
-            </p>
-            <h5 class="box-title">5 Years of Experiences</h5>
-            <p class="team-about_text mb-25">
-              Venenatis purus egestas lorem aenean enim bibendum. Ac pharetra
-              egestas eget gravida turpis senectus. Sed blandit ipsum orci odio
-              egestas egestas sed bibendum. Rhoncus est proin euismod
-              condimentum eget a tristique integer viverra.
-            </p>
-            <div class="counter-box-wrap">
-              <div class="counter-box">
-                <h2 class="counter-box_number">
-                  <span class="counter-number">2</span>K+
-                </h2>
-                <span class="counter-box_title">Total Guide</span>
-              </div>
-              <div class="counter-box">
-                <h2 class="counter-box_number">
-                  <span class="counter-number">65</span>+
-                </h2>
-                <span class="counter-box_title">Total Services</span>
-              </div>
-              <div class="counter-box">
-                <h2 class="counter-box_number">
-                  <span class="counter-number">79</span>+
-                </h2>
-                <span class="counter-box_title">Award Won</span>
-              </div>
-              <div class="counter-box">
-                <h2 class="counter-box_number">
-                  <span class="counter-number">120</span>+
-                </h2>
-                <span class="counter-box_title">Total Event</span>
+            <div class="counter-area space">
+              <div class="container">
+                <div class="row">
+                  <!-- <div class="col-sm-6 col-xl-3 counter-card-wrap">
+                    <div class="counter-card">
+                      <div class="counter-shape"><span></span></div>
+                      <div class="media-body">
+                        <h3 class="box-number">
+                          <span class="counter-number">12</span>
+                        </h3>
+                        <h6 class="counter-title">Years Experience</h6>
+                      </div>
+                    </div>
+                  </div> -->
+
+                  <div class="col-sm-6 col-xl-3 counter-card-wrap">
+                    <div class="counter-card">
+                      <div class="counter-shape"><span></span></div>
+                      <div class="media-body">
+                        <h3 class="box-number">
+                          <span class="counter-number">{{
+                            travelerDetails.published_destinations_count
+                          }}</span>
+                        </h3>
+                        <h6 class="counter-title">Destinations</h6>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-6 col-xl-3 counter-card-wrap">
+                    <div class="counter-card">
+                      <div class="counter-shape"><span></span></div>
+                      <div class="media-body">
+                        <h3 class="box-number">
+                          <span class="counter-number">{{
+                            travelerDetails.published_destinations_count
+                          }}</span>
+                        </h3>
+                        <h6 class="counter-title">Activities</h6>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
+
             <app-destinations-by-user
               [user]="travelerDetails.user"
             ></app-destinations-by-user>
@@ -122,10 +123,10 @@
             </div>
             <div class="about-contact-details">
               <h6 class="box-title">Our Address</h6>
+
               <p class="about-contact-details-text">
-                2690 Hiltona Street Victoria
+                {{ travelerDetails.city }}
               </p>
-              <p class="about-contact-details-text">Road, New York, Canada</p>
             </div>
           </div>
         </div>
@@ -137,10 +138,7 @@
             <div class="about-contact-details">
               <h6 class="box-title">Phone Number</h6>
               <p class="about-contact-details-text">
-                <a href="tel:01234567890">+01 234 567 890</a>
-              </p>
-              <p class="about-contact-details-text">
-                <a href="tel:01234567890">+09 876 543 210</a>
+                <a href="tel:01234567890">{{ travelerDetails.phone_number }}</a>
               </p>
             </div>
           </div>
@@ -153,12 +151,7 @@
             <div class="about-contact-details">
               <h6 class="box-title">Email Address</h6>
               <p class="about-contact-details-text">
-                <a href="mailto:mailinfo00@tourm.com"
-                  >mailinfo00 at tourm.com</a
-                >
-              </p>
-              <p class="about-contact-details-text">
-                <a href="mailto:support24@tourm.com">support24 at tourm.com</a>
+                <a>{{ travelerDetails.email }}</a>
               </p>
             </div>
           </div>

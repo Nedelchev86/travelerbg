@@ -1,0 +1,19 @@
+.counter-card-wrap:nth-child(even) .counter-card {
+  margin-left: 200px;
+  margin-top: 0px;
+}
+
+.counter-card-wrap:nth-child(odd) .counter-card {
+  margin-left: 10px;
+  margin-top: 0px;
+}
+
+.space,
+.space-top {
+  padding-top: 20px;
+}
+
+.space,
+.space-bottom {
+  padding-bottom: 0px;
+}
