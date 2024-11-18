@@ -268,11 +268,18 @@
           </div>
           <div class="form-group">
             <label for="basic_information">Basic Information</label>
-            <textarea
+            <!-- <textarea
               class="form-control"
               id="basic_information"
               formControlName="basic_information"
-            ></textarea>
+            ></textarea> -->
+            <ckeditor
+              id="basic_information"
+              formControlName="basic_information"
+              [editor]="Editor"
+              [config]="config"
+              id="description"
+            ></ckeditor>
             <div
               *ngIf="
                 addDestinationForm.get('basic_information')?.touched &&
@@ -283,30 +290,15 @@
               Basic Information is required.
             </div>
           </div>
+
           <div class="form-group">
-            <label for="responsibilities">Responsibilities</label>
-            <textarea
+            <label for="cost">Time</label>
+            <input
               class="form-control"
-              id="responsibilities"
-              formControlName="responsibilities"
-            ></textarea>
-            <div
-              *ngIf="
-                addDestinationForm.get('responsibilities')?.touched &&
-                addDestinationForm.get('responsibilities')?.invalid
-              "
-              class="text-danger"
-            >
-              Responsibilities are required.
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="benefits">Benefits</label>
-            <textarea
-              class="form-control"
-              id="benefits"
-              formControlName="benefits"
-            ></textarea>
+              id="time"
+              formControlName="time"
+              type="number"
+            />
           </div>
           <div class="form-group">
             <label for="image">Image 1</label>
@@ -364,15 +356,6 @@
             />
           </div>
 
-          <div class="form-group">
-            <label for="vacancy">Vacancy</label>
-            <input
-              class="form-control"
-              id="vacancy"
-              formControlName="vacancy"
-              type="number"
-            />
-          </div>
           <!-- <div class="form-group">
             <label for="location">Location</label>
             <input
@@ -423,24 +406,6 @@
                 [position]="markerPosition"
               ></map-advanced-marker>
             </google-map>
-          </div>
-          <div class="form-group">
-            <label for="cost">Cost</label>
-            <input
-              class="form-control"
-              id="cost"
-              formControlName="cost"
-              type="text"
-            />
-          </div>
-          <div class="form-group">
-            <label for="is_published">Is Published</label>
-            <input
-              class="form-control"
-              id="is_published"
-              formControlName="is_published"
-              type="checkbox"
-            />
           </div>
           <button class="th-btn" type="submit">Add Destination</button>
         </form>

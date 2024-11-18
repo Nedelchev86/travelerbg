@@ -18,10 +18,32 @@ import {
   GoogleMap,
 } from '@angular/google-maps';
 
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import {
+  ClassicEditor,
+  Bold,
+  Essentials,
+  Italic,
+  Mention,
+  Paragraph,
+  Undo,
+  Image,
+  Link,
+  List,
+  TodoList,
+  BlockQuote,
+} from 'ckeditor5';
+
 @Component({
   selector: 'app-add-destination',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, GoogleMap, MapAdvancedMarker],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    GoogleMap,
+    MapAdvancedMarker,
+    CKEditorModule,
+  ],
   templateUrl: './add-destination.component.html',
   styleUrl: './add-destination.component.css',
 })
@@ -52,16 +74,13 @@ export class AddDestinationComponent {
       title: [''],
       category: [''],
       basic_information: [''],
-      responsibilities: [''],
-      benefits: [''],
       image: ['', Validators.required],
       image2: [''],
       image3: [''],
       image4: [''],
       image5: [''],
-      vacancy: [''],
       location: [''],
-      cost: [''],
+      time: [''],
       lat: [''], // Add lat control
       lng: [''], // Add lng control
       is_published: [true],
@@ -70,6 +89,59 @@ export class AddDestinationComponent {
     });
     this.tags = this.addDestinationForm.get('tags') as FormArray;
   }
+
+  public Editor = ClassicEditor;
+
+  public config = {
+    height: '800px',
+    toolbar: {
+      items: [
+        'undo',
+        'redo',
+        '|',
+        'heading',
+        '|',
+        'fontfamily',
+        'fontsize',
+        'fontColor',
+        'fontBackgroundColor',
+        '|',
+        'bold',
+        'italic',
+        'strikethrough',
+        'subscript',
+        'superscript',
+        'code',
+        '|',
+        'link',
+        'Image',
+        'blockQuote',
+        'codeBlock',
+        '|',
+        'bulletedList',
+        'numberedList',
+        'todoList',
+        'outdent',
+        'indent',
+        'Link',
+        'List',
+      ],
+      shouldNotGroupWhenFull: false,
+    },
+    plugins: [
+      Bold,
+      Essentials,
+      Italic,
+      Mention,
+      Paragraph,
+      Undo,
+      BlockQuote,
+      Link,
+      List,
+      TodoList,
+      Image,
+    ],
+  };
 
   ngOnInit(): void {
     this.fetchCategories();
