@@ -330,12 +330,39 @@
             </div>
           </div>
           <div class="form-group">
+            <label for="category">Category</label>
+            <select
+              class="form-control"
+              id="category"
+              formControlName="category"
+            >
+              <option *ngFor="let category of categories" [value]="category.id">
+                {{ category.name }}
+              </option>
+            </select>
+            <div
+              *ngIf="
+                addHotelForm.get('category')?.touched &&
+                addHotelForm.get('category')?.invalid
+              "
+              class="text-danger"
+            >
+              Category is required.
+            </div>
+          </div>
+          <div class="form-group">
             <label for="description">Description</label>
-            <textarea
+            <!-- <textarea
               class="form-control"
               id="description"
               formControlName="description"
-            ></textarea>
+            ></textarea> -->
+            <ckeditor
+              [editor]="Editor"
+              [config]="config"
+              id="description"
+              formControlName="description"
+            ></ckeditor>
             <div
               *ngIf="
                 addHotelForm.get('description')?.touched &&

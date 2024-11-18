@@ -55,7 +55,10 @@ button:disabled {
   cursor: pointer;
 }
 
+.text-style {
+  white-space: pre-wrap;
+}
 
-.text-style{
-  white-space: pre-wrap
+.ck-editor__editable {
+  height: 500px !important;
 }

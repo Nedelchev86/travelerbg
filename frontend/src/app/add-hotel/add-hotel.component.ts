@@ -19,6 +19,22 @@ import {
   MapGeocoder,
 } from '@angular/google-maps';
 import { CloudinaryuploadService } from '../shared/services/cloudinaryupload.service';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import {
+  ClassicEditor,
+  Bold,
+  Essentials,
+  Italic,
+  Mention,
+  Paragraph,
+  Undo,
+  Image,
+  ImageUpload,
+  Link,
+  List,
+  TodoList,
+  BlockQuote,
+} from 'ckeditor5';
 
 export interface Highlight {
   id: number;
@@ -28,7 +44,13 @@ export interface Highlight {
 @Component({
   selector: 'app-add-hotel',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, GoogleMap, MapAdvancedMarker],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    GoogleMap,
+    MapAdvancedMarker,
+    CKEditorModule,
+  ],
   templateUrl: './add-hotel.component.html',
   styleUrl: './add-hotel.component.css',
 })
@@ -252,6 +274,60 @@ export class AddHotelComponent implements OnInit {
   };
   geocoder = inject(MapGeocoder);
 
+  categories: any = Array<any>();
+
+  public Editor = ClassicEditor;
+
+  public config = {
+    height: '800px',
+    toolbar: {
+      items: [
+        'undo',
+        'redo',
+        '|',
+        'heading',
+        '|',
+        'fontfamily',
+        'fontsize',
+        'fontColor',
+        'fontBackgroundColor',
+        '|',
+        'bold',
+        'italic',
+        'strikethrough',
+        'subscript',
+        'superscript',
+        'code',
+        '|',
+        'link',
+
+        'blockQuote',
+        'codeBlock',
+        '|',
+        'bulletedList',
+        'numberedList',
+        'todoList',
+        'outdent',
+        'indent',
+        'Link',
+        'List',
+      ],
+      shouldNotGroupWhenFull: false,
+    },
+    plugins: [
+      Bold,
+      Essentials,
+      Italic,
+      Mention,
+      Paragraph,
+      Undo,
+      BlockQuote,
+      Link,
+      List,
+      TodoList,
+    ],
+  };
+
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
@@ -260,6 +336,7 @@ export class AddHotelComponent implements OnInit {
   ) {
     this.addHotelForm = this.fb.group({
       name: ['', Validators.required],
+      category: [''],
       description: ['', Validators.required],
       location: ['', Validators.required],
       website: ['', Validators.pattern('https?://.+')],
@@ -288,6 +365,17 @@ export class AddHotelComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchHighlights();
+    this.fetchCategories();
+  }
+
+  fetchCategories(): void {
+    this.http.get('http://localhost:8000/api/categories/hotels/').subscribe({
+      next: (data: any) => {
+        this.categories = data;
+        console.log(this.categories);
+      },
+      error: (err) => console.log(err),
+    });
   }
 
   fetchHighlights(): void {
