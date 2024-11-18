@@ -50,7 +50,7 @@ class HotelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Hotel
-        fields = ["id", "user", "name", "description", "location", "highlights", "website", "lat", "lng", "image", "image2", "image3", "price", "tags", "created_at", "modified_at", 'average_rating', 'number_of_votes']
+        fields = ["id", "user", "name", "category", "description", "location", "highlights", "website", "lat", "lng", "image", "image2", "image3", "price", "tags", "created_at", "modified_at", 'average_rating', 'number_of_votes']
         extra_kwargs = {
             'user': {'read_only': True}
         }
@@ -151,16 +151,16 @@ class HotelSerializer(serializers.ModelSerializer):
     #     return instance
 
 class CategorySerializer(serializers.ModelSerializer):
-    number_of_destinations = serializers.SerializerMethodField()
+    number_of_hotels = serializers.SerializerMethodField()
 
     class Meta:
         model = Category
-        fields = ['id', 'name', 'slug', 'created_at', 'modified_at', 'number_of_destinations', ]
+        fields = ['id', 'name', 'slug', 'created_at', 'modified_at', 'number_of_hotels', ]
         extra_kwargs = {
             'slug': {'read_only': True}}
 
-    def get_number_of_destinations(self, obj):
-        return obj.get_number_of_destinations()
+    def get_number_of_hotels(self, obj):
+        return obj.get_number_of_hotels()
 
 
 class HotelCommentSerializer(serializers.ModelSerializer):

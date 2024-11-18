@@ -3,6 +3,7 @@ import {
   CUSTOM_ELEMENTS_SCHEMA,
   inject,
   OnInit,
+  ViewEncapsulation,
 } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './header/header.component';
@@ -23,12 +24,23 @@ import { AuthService } from './auth.service';
 import { UserInterface } from './user-interface';
 import { CloudinaryModule } from '@cloudinary/ng';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import {
+  ClassicEditor,
+  Bold,
+  Essentials,
+  Italic,
+  Mention,
+  Paragraph,
+  Undo,
+} from 'ckeditor5';
 
 @Component({
   selector: 'app-root',
   standalone: true,
 
   imports: [
+    CKEditorModule,
     RouterOutlet,
     RouterLink,
     HeaderComponent,
@@ -49,12 +61,23 @@ import { GoogleMapsModule } from '@angular/google-maps';
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './app.component.html',
+  encapsulation: ViewEncapsulation.None,
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
   title = 'frontend';
   http = inject(HttpClient);
   authService = inject(AuthService);
+
+  public Editor = ClassicEditor;
+  public config = {
+    toolbar: ['undo', 'redo', '|', 'bold', 'italic'],
+    plugins: [Bold, Essentials, Italic, Mention, Paragraph, Undo],
+    licenseKey: '<YOUR_LICENSE_KEY>',
+    // mention: {
+    //     Mention configuration
+    // }
+  };
 
   ngOnInit() {
     this.http.get<UserInterface>('http://localhost:8000/api/user/').subscribe({

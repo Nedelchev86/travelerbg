@@ -27,12 +27,7 @@ export interface Comment {
 @Component({
   selector: 'app-hotel-details',
   standalone: true,
-  imports: [
-    ShapeMockupDirective,
-    ReactiveFormsModule,
-    RatingComponent,
-    CommonModule,
-  ],
+  imports: [ReactiveFormsModule, RatingComponent, CommonModule],
   templateUrl: './hotel-details.component.html',
   styleUrl: './hotel-details.component.css',
 })

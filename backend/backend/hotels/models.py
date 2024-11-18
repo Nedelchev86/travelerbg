@@ -23,8 +23,8 @@ class Category(models.Model):
             self.slug = slugify(self.name, allow_unicode=True)
         return super().save(*args, **kwargs)
 
-    def get_number_of_destinations(self):
-        return self.destination_set.count()
+    def get_number_of_hotels(self):
+        return self.hotel_set.count()
 
 
 # Create your models here.
@@ -32,10 +32,11 @@ class Category(models.Model):
 class Hotel(models.Model):
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE)
     name = models.CharField(max_length=300)
-    # category = models.ForeignKey(Category,  on_delete=models.CASCADE)
+    category = models.ForeignKey(Category,  on_delete=models.CASCADE)
     description = models.TextField()
     location = models.CharField(max_length=255)
     website = models.URLField(blank=True, null=True)
+    # category = models.ForeignKey(Category,  on_delete=models.CASCADE)
     # image = CloudinaryField('image', blank=True, null=True)
     # image2 = CloudinaryField('image', blank=True, null=True)
     # image3 = CloudinaryField('image', blank=True, null=True)
@@ -59,8 +60,12 @@ class Hotel(models.Model):
     def number_of_votes(self):
         return self.hotel_ratings.count()
 
+
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ['-created_at']
 
 class Highlights(models.Model):
     name = models.CharField(max_length=300, unique=True, blank=False, null=False)

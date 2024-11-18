@@ -15,9 +15,10 @@
             </div>
           </div>
           <h2 class="box-title">{{ hotel.name }}</h2>
-          <p class="box-text mb-30 text-style">
-            {{ hotel.description }}
-          </p>
+          <p
+            class="box-text mb-30 text-style"
+            [innerHTML]="hotel.description"
+          ></p>
 
           <div class="service-inner-img mb-40">
             <img src="{{ hotel.image2 }}" alt="" />

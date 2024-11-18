@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, inject, OnInit } from '@angular/core';
 import { SetBgImageDirective } from '../set-bg-image.directive';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
   GoogleMap,
   MapAdvancedMarker,
@@ -9,6 +9,8 @@ import {
 } from '@angular/google-maps';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Rotate } from '@cloudinary/url-gen/actions';
+import { ShapeMockupDirective } from '../shape-mockup.directive';
 
 @Component({
   selector: 'app-destination-details',
@@ -20,11 +22,13 @@ import { FormsModule } from '@angular/forms';
     GoogleMap,
     MapAdvancedMarker,
     FormsModule,
+    ShapeMockupDirective,
   ],
   templateUrl: './destination-details.component.html',
   styleUrl: './destination-details.component.css',
 })
 export class DestinationDetailsComponent implements OnInit {
+  destinationId: string | null = null;
   center: google.maps.LatLngLiteral = { lat: 42.504792, lng: 27.462636 };
   zoom = 15;
   markerPosition: google.maps.LatLngLiteral = {
@@ -37,15 +41,25 @@ export class DestinationDetailsComponent implements OnInit {
   };
   httpClient = inject(HttpClient);
   geocoder = inject(MapGeocoder);
+  private route = inject(ActivatedRoute);
   public data: any = {};
   public categoryQuery: string = '';
   public newDestination: string = '';
   ngOnInit() {
+    this.destinationId = this.route.snapshot.paramMap.get('destinationId');
+
+    if (this.destinationId) {
+      this.fetchHotelDetails(this.destinationId);
+      // this.fetcComments(this.destinationId);
+    }
+  }
+
+  fetchHotelDetails(destinationId: string): void {
     const params = {
       category: this.categoryQuery,
     };
     this.httpClient
-      .get('http://localhost:8000/api/destinations/11/')
+      .get(`http://localhost:8000/api/destinations/${destinationId}/`)
       .subscribe({
         next: (data: any) => {
           this.data = data;

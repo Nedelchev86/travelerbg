@@ -2,3 +2,8 @@
 .space-top {
   padding-top: 80px;
 }
+
+.wp-block-tag-cloud a,
+.tagcloud a {
+  margin-right: 12px;
+}

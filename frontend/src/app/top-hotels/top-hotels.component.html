@@ -60,9 +60,13 @@
                   >/Person
                 </h4>
                 <div class="tour-action">
-                  <span><i class="fa-light fa-clock"></i>7 Days</span>
-                  <a href="tour-details.html" class="th-btn style4 th-icon"
-                    >Book Now</a
+                  <span
+                    ><i class="fa-light fa-map"></i>{{ hotel.location }}</span
+                  >
+                  <a
+                    [routerLink]="['/hotels', hotel.id]"
+                    class="th-btn style4 th-icon"
+                    >Details</a
                   >
                 </div>
               </div>

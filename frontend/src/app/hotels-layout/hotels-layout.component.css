@@ -1,0 +1,12 @@
+.wp-block-tag-cloud a,
+.tagcloud a {
+  margin-right: 12px;
+}
+
+.active {
+  color: #1ca8cb;
+}
+
+.active:hover {
+  color: black;
+}

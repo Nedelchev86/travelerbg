@@ -20,9 +20,9 @@ class DestinationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Destination
         fields = [
-            'id', 'user', 'title', 'category', 'basic_information', 'responsibilities',
-            'benefits', 'image', 'image2', 'image3', 'image4', 'image5',
-            'vacancy', 'location', 'cost', 'is_published', 'created_at', 'modified_at',
+            'id', 'user', 'title', 'category', 'basic_information',
+             'image', 'image2', 'image3', 'image4', 'image5',
+             'location', 'lat', 'lng', 'time', 'is_published', 'created_at', 'modified_at',
             'tags', 'average_rating', 'number_of_votes',
         ]
         extra_kwargs = {
