@@ -5,9 +5,9 @@ from backend.travelers.models import Traveler
 
 @admin.register(Traveler)
 class JobSeekerAdmin(admin.ModelAdmin):
-    list_display = ('user', 'name', 'city', 'nationality', 'occupation', 'activated', 'average_rating')
-    list_filter = ('city', 'nationality', 'occupation', 'activated')
-    search_fields = ('user__username', 'name', 'city', 'nationality', 'occupation')
+    list_display = ('user', 'name', 'city', 'occupation', 'activated', 'average_rating')
+    list_filter = ('city', 'occupation', 'activated')
+    search_fields = ('user__username', 'name', 'city', 'occupation')
     readonly_fields = ('user',)
 
 #

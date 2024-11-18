@@ -8,7 +8,7 @@ from backend.destinations.models import Destination, Category
 class DestinationAdmin(admin.ModelAdmin):
     list_display = ('title', 'category', 'location', 'is_published')
     list_filter = ('category', 'location', 'is_published')
-    search_fields = ('title', 'basic_information', 'responsibilities', 'location', 'cost')
+    search_fields = ('title', 'basic_information', 'location', 'cost')
     # prepopulated_fields = {'slug': ('title',)}
     # readonly_fields = ["user"]
 
