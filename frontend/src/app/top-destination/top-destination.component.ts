@@ -12,7 +12,7 @@ import { LoaderComponent } from '../shared/loader/loader.component';
 @Component({
   selector: 'app-top-destination',
   standalone: true,
-  imports: [SetBgImageDirective, RouterLink, LoaderComponent, LoaderComponent],
+  imports: [SetBgImageDirective, RouterLink, LoaderComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './top-destination.component.html',
   styleUrl: './top-destination.component.css',
@@ -33,21 +33,21 @@ export class TopDestinationComponent implements OnInit {
       },
     });
   }
-  ngAfterViewInit() {
-    this.loadScript('assets/js/test.js');
-  }
+  // ngAfterViewInit() {
+  //   this.loadScript('assets/js/test.js');
+  // }
 
-  loadScript(src: string) {
-    const script = document.createElement('script');
-    script.src = src;
-    script.type = 'text/javascript';
-    script.async = true;
-    script.onload = () => {
-      console.log('Script loaded successfully.');
-    };
-    script.onerror = () => {
-      console.error('Error loading script.');
-    };
-    document.body.appendChild(script);
-  }
+  // loadScript(src: string) {
+  //   const script = document.createElement('script');
+  //   script.src = src;
+  //   script.type = 'text/javascript';
+  //   script.async = true;
+  //   script.onload = () => {
+  //     console.log('Script loaded successfully.');
+  //   };
+  //   script.onerror = () => {
+  //     console.error('Error loading script.');
+  //   };
+  //   document.body.appendChild(script);
+  // }
 }
