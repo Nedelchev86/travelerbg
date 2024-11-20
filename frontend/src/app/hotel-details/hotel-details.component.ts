@@ -175,7 +175,8 @@ export class HotelDetailsComponent {
         .subscribe({
           next: (data: any) => {
             this.hotel.average_rating = data.average_rating;
-            this.hotel.users_rated = data.users_rated;
+            this.hotel.number_of_votes = data.number_of_votes;
+            console.log(data);
           },
           error: (err) => {
             console.log(err);

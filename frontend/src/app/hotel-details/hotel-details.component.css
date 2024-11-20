@@ -6,3 +6,9 @@
   display: inline-block;
   padding-left: 20px;
 }
+
+.checklist ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}

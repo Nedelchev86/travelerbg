@@ -65,6 +65,7 @@ export class RatingComponent implements OnChanges {
   }
 
   private updateStars(): void {
+  
     this.stars = [];
     for (let i = 1; i <= 5; i++) {
       if (i <= this.rating) {

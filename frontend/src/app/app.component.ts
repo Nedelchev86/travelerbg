@@ -80,6 +80,15 @@ export class AppComponent implements OnInit {
   };
 
   ngOnInit() {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      console.log('User is not logged in');
+      this.authService.currentUser.set(null); // Clear any current user data
+      // Optionally, you could redirect to the login page here
+      return; // Exit early if no token exists
+    }
+
     this.http.get<UserInterface>('http://localhost:8000/api/user/').subscribe({
       next: (data) => {
         console.log(data);
@@ -88,11 +97,9 @@ export class AppComponent implements OnInit {
       },
       error: (error) => {
         if (error.status === 401) {
+          this.authService.currentUser.set(null);
           console.log('test');
-          return;
         }
-
-        this.authService.currentUser.set(null);
       },
     });
   }

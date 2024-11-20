@@ -494,12 +494,12 @@
                 class="tag-box"
                 *ngFor="let tag of tags.controls; let i = index"
               >
-                <span>{{ tag.value }}</span>
                 <button
                   type="button"
                   class="btn btn-danger btn-sm"
                   (click)="removeTag(i)"
                 >
+                  {{ tag.value }}
                   x
                 </button>
               </div>
@@ -512,11 +512,7 @@
                 formControlName="newTag"
                 type="text"
               />
-              <button
-                type="button"
-                class="btn btn-primary"
-                (click)="addNewTag()"
-              >
+              <button type="button" class="th-btn style3" (click)="addNewTag()">
                 Add Tag
               </button>
             </div>
