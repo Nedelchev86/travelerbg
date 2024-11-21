@@ -136,6 +136,7 @@
   box-shadow: none;
   border: none;
   max-width: 200px;
+  margin-top: 20px;
 }
 
 .th-btn.style3:before {

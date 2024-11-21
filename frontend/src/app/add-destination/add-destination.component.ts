@@ -32,6 +32,10 @@ import {
   List,
   TodoList,
   BlockQuote,
+  Heading,
+  FontFamily,
+  FontSize,
+  FontColor,
 } from 'ckeditor5';
 
 @Component({
@@ -93,7 +97,6 @@ export class AddDestinationComponent {
   public Editor = ClassicEditor;
 
   public config = {
-    height: '800px',
     toolbar: {
       items: [
         'undo',
@@ -104,27 +107,11 @@ export class AddDestinationComponent {
         'fontfamily',
         'fontsize',
         'fontColor',
-        'fontBackgroundColor',
         '|',
         'bold',
         'italic',
-        'strikethrough',
-        'subscript',
-        'superscript',
-        'code',
         '|',
         'link',
-        'Image',
-        'blockQuote',
-        'codeBlock',
-        '|',
-        'bulletedList',
-        'numberedList',
-        'todoList',
-        'outdent',
-        'indent',
-        'Link',
-        'List',
       ],
       shouldNotGroupWhenFull: false,
     },
@@ -137,9 +124,12 @@ export class AddDestinationComponent {
       Undo,
       BlockQuote,
       Link,
-      List,
       TodoList,
       Image,
+      Heading,
+      FontFamily,
+      FontSize,
+      FontColor,
     ],
   };
 

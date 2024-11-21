@@ -187,34 +187,23 @@
               Title is required.
             </div>
           </div>
-          <div class="form-group">
-            <label>Tags</label>
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <div class="form-group">
+                <label>Tags</label>
 
-            <div class="form-group">
-              <label for="newTag"></label>
-              <input
-                class="form-control"
-                id="newTag"
-                formControlName="newTag"
-                type="text"
-              />
-
-              <div class="added-tags">
-                <div
-                  class="tag-box"
-                  *ngFor="let tag of tags.controls; let i = index"
-                >
-                  <!-- <span>{{ tag.value }}</span> -->
-                  <button
-                    type="button"
-                    class="btn btn-danger btn-sm"
-                    (click)="removeTag(i)"
-                  >
-                    {{ tag.value }}
-                    x
-                  </button>
+                <div class="form-group">
+                  <label for="newTag"></label>
+                  <input
+                    class="form-control"
+                    id="newTag"
+                    formControlName="newTag"
+                    type="text"
+                  />
                 </div>
               </div>
+            </div>
+            <div class="col-md-6 form-group">
               <button type="button" class="th-btn style3" (click)="addNewTag()">
                 Add Tag
               </button>
@@ -226,7 +215,24 @@
             >
               At least one tag is required.
             </div>
+            <div class="added-tags">
+              <div
+                class="tag-box"
+                *ngFor="let tag of tags.controls; let i = index"
+              >
+                <!-- <span>{{ tag.value }}</span> -->
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  (click)="removeTag(i)"
+                >
+                  {{ tag.value }}
+                  x
+                </button>
+              </div>
+            </div>
           </div>
+
           <!-- <div class="form-group">
             <label for="tags">Tags</label>
             <input
@@ -292,7 +298,7 @@
           </div>
 
           <div class="form-group">
-            <label for="cost">Time</label>
+            <label for="cost">Duration</label>
             <input
               class="form-control"
               id="time"
@@ -375,7 +381,9 @@
             </div>
           </div> -->
           <div class="form-group">
-            <label for="location">Location</label>
+            <label for="location"
+              >Location ( Write location or select on map )</label
+            >
             <input
               class="form-control"
               id="location"
@@ -393,7 +401,33 @@
               Location is required.
             </div>
           </div>
-          <div style="height: 500px; width: 100%">
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <div class="form-group">
+                <label for="lat">Latitude</label>
+                <input
+                  class="form-control"
+                  id="lat"
+                  formControlName="lat"
+                  type="text"
+                  readonly
+                />
+              </div>
+            </div>
+            <div class="col-md-6 form-group">
+              <div class="form-group">
+                <label for="lng">Longitude</label>
+                <input
+                  class="form-control"
+                  id="lng"
+                  formControlName="lng"
+                  type="text"
+                  readonly
+                />
+              </div>
+            </div>
+          </div>
+          <div style="height: 500px; width: 100%; margin-bottom: 60px">
             <google-map
               height="100%"
               width="100%"
