@@ -12,7 +12,15 @@ import { AuthService } from '../auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { RatingComponent } from '../rating/rating.component';
 import { CommonModule } from '@angular/common';
+import { GoogleMap } from '@angular/google-maps';
+import { GoogleMapComponent } from '../google-map/google-map.component';
+import { SetBgImageDirective } from '../set-bg-image.directive';
+import { GalleryLightboxComponent } from '../gallery-lightbox/gallery-lightbox.component';
 
+interface Images {
+  imageSrc: string;
+  imageAlt?: string;
+}
 export interface Comment {
   created_at: String;
   email: String;
@@ -27,7 +35,14 @@ export interface Comment {
 @Component({
   selector: 'app-hotel-details',
   standalone: true,
-  imports: [ReactiveFormsModule, RatingComponent, CommonModule],
+  imports: [
+    ReactiveFormsModule,
+    RatingComponent,
+    CommonModule,
+    GoogleMapComponent,
+    SetBgImageDirective,
+    GalleryLightboxComponent,
+  ],
   templateUrl: './hotel-details.component.html',
   styleUrl: './hotel-details.component.css',
 })
@@ -37,6 +52,7 @@ export class HotelDetailsComponent {
   comments: any[] = []; // Store comments data
   commentForm: FormGroup;
   commentFormRegistred: FormGroup;
+  galleryData: Images[] = [];
 
   private http = inject(HttpClient);
   private route = inject(ActivatedRoute);
@@ -67,13 +83,21 @@ export class HotelDetailsComponent {
     }
   }
 
+  getFilteredImages(): Images[] {
+    return [
+      { imageSrc: this.hotel.image2 },
+      { imageSrc: this.hotel.image3 },
+      { imageSrc: this.hotel.image4 },
+    ].filter((item) => item.imageSrc);
+  }
+
   fetchHotelDetails(hotelId: string): void {
     this.http
       .get<Comment[]>(`http://127.0.0.1:8000/api/hotels/${hotelId}/`)
       .subscribe(
         (response: Comment[]) => {
           this.hotel = response;
-          console.log(this.hotel);
+          this.galleryData = this.getFilteredImages();
         },
         (error) => {
           console.error('Error fetching hotel details:', error);
