@@ -1,16 +1,16 @@
 from django.db.models import Avg
 from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from rest_framework.decorators import action
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, get_object_or_404
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from backend.activities.models import Activities
 from backend.activities.serializers import ActivitiesSerializer
-from backend.destinations.models import Destination, Category, DestinationRating
+from backend.destinations.models import Destination, Category, DestinationRating, DestinationsComment
 from backend.destinations.pagination import DestinationPagination
-from backend.destinations.serializers import DestinationSerializer, CategorySerializer
+from backend.destinations.serializers import DestinationSerializer, CategorySerializer, DestinationCommentSerializer
 from backend.hotels.models import Hotel
 from backend.hotels.serializers import HotelSerializer
 
@@ -94,3 +94,35 @@ class DestinationCategory(ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [AllowAny]  # Allows read access to all
+
+
+
+
+class DestinationCommentListView(generics.ListAPIView):
+    serializer_class = DestinationCommentSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        destination_id = self.kwargs['destination_id']
+        return DestinationsComment.objects.filter(destination_id=destination_id)
+
+
+class DestinationCommentCreateView(generics.CreateAPIView):
+    serializer_class = DestinationCommentSerializer
+    permission_classes = [AllowAny]
+
+
+    def perform_create(self, serializer):
+        destination_id = self.kwargs['destination_id']
+        destination = get_object_or_404(Destination, id=destination_id)
+        if self.request.user.is_authenticated:
+            email = self.request.user.email
+            if hasattr(self.request.user, 'traveler'):
+                name = f"{self.request.user.traveler.name} {self.request.user.traveler.name}"
+            elif hasattr(self.request.user, 'business'):
+                name = self.request.user.business.name
+            else:
+                name = self.request.user.email
+            serializer.save(destination=destination, user=self.request.user, name=name, email=email)
+        else:
+            serializer.save(destination=destination)
