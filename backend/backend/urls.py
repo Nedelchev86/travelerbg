@@ -7,7 +7,8 @@ from backend.accounts.views import UserRegistrationAPIView, MyTokenObtainPairVie
 from backend.activities.views import ActivitiesViewSet
 from backend.business.views import BusinessProfileViewSet
 from backend.core.views import TagViewSet
-from backend.destinations.views import DestinationViewSet, DestinationCategory
+from backend.destinations.views import DestinationViewSet, DestinationCategory, DestinationCommentCreateView, \
+    DestinationCommentListView
 from backend.hotels.models import Highlights
 from backend.hotels.views import HotelViewSet, HighlightsViewSet, HotelCommentListView, \
     HotelCommentCreateView, HotelsCategory
@@ -28,6 +29,7 @@ router.register(r'api/business', BusinessProfileViewSet)
 
 
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
@@ -41,6 +43,10 @@ urlpatterns = [
     path('api/categories/hotels/', HotelsCategory.as_view(), name='hotel-category'),
     path('api/hotels/<int:hotel_id>/comments/', HotelCommentListView.as_view(), name='hotel-comment-list'),
     path('api/hotels/<int:hotel_id>/comments/add/', HotelCommentCreateView.as_view(), name='hotel-comment-add'),
+
+
+    path('api/destinations/<int:destination_id>/comments/', DestinationCommentListView.as_view(), name='destination-comment-list'),
+    path('api/destinations/<int:destination_id>/comments/add/', DestinationCommentCreateView.as_view(), name='destination-comment-add'),
 
 
 ]

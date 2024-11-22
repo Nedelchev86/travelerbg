@@ -21,8 +21,8 @@ class Traveler(models.Model):
     instagram = models.URLField(blank=True, null=True, max_length=50)
     about = models.TextField(blank=False, null=False)
     phone_number = models.CharField(max_length=50, blank=True, null=True, validators=[validate_phone_number])
-    profile_picture = CloudinaryField('image', blank=True, null=True)
-    cover = CloudinaryField('image', blank=True, null=True)
+    profile_picture = models.URLField(max_length=255, blank=True, null=True)
+    cover = models.URLField(max_length=255, blank=True, null=True)
     # gender = models.CharField(blank=False, null=False,
     #                           choices=GENDER_TYPE, max_length=6)
     # skills = models.ManyToManyField(Skills, related_name="skills")

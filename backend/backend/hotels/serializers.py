@@ -47,10 +47,12 @@ class HotelSerializer(serializers.ModelSerializer):
     number_of_votes = serializers.SerializerMethodField()
     highlights = HighlightsSerializer(many=True, required=False)
     pagination_class = 10
+    lat = serializers.SerializerMethodField()
+    lng = serializers.SerializerMethodField()
 
     class Meta:
         model = Hotel
-        fields = ["id", "user", "name", "category", "description", "location", "highlights", "website", "lat", "lng", "image", "image2", "image3", "price", "tags", "created_at", "modified_at", 'average_rating', 'number_of_votes']
+        fields = ["id", "user", "name", "category", "description", "location", "highlights", "website", "lat", "lng", "image", "image2", "image3", "image4", "price", "tags", "created_at", "modified_at", 'average_rating', 'number_of_votes']
         extra_kwargs = {
             'user': {'read_only': True}
         }
@@ -60,6 +62,12 @@ class HotelSerializer(serializers.ModelSerializer):
 
     def get_number_of_votes(self, obj):
             return obj.number_of_votes()
+
+    def get_lat(self, obj):
+        return float(obj.lat) if obj.lat is not None else None
+
+    def get_lng(self, obj):
+        return float(obj.lng) if obj.lng is not None else None
 
     def create(self, validated_data):
         tags_data = validated_data.pop('tags', [])
@@ -171,6 +179,7 @@ class HotelCommentSerializer(serializers.ModelSerializer):
         fields = ['id', 'user',   'name', 'email', 'hotel', 'text', 'created_at',
                   'modified_at']
         read_only_fields = ['user', 'created_at', 'modified_at']
+
 
     def get_user(self, obj):
         if not obj.user:

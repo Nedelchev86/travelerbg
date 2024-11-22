@@ -1,20 +1,25 @@
 from rest_framework import serializers
 
+from backend.accounts.serializers import UserSerializer
 from backend.activities.models import Activities
 from backend.activities.serializers import ActivitiesSerializer
+from backend.business.serializers import BusinessSerializer
 from backend.core.models import Tag
 from backend.core.serializers import TagSerializer
-from backend.destinations.models import Destination, Category, DestinationRating
+from backend.destinations.models import Destination, Category, DestinationRating, DestinationsComment
 from backend.hotels.models import Hotel
 from backend.hotels.serializers import HotelSerializer
+from backend.travelers.serializers import TravelerSerializer
 
 
 class DestinationSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True, required=False)
     # related_activities = serializers.SerializerMethodField()
-    # related_hotels = serializers.SerializerMethodField()
+    related_hotels = serializers.SerializerMethodField()
     average_rating = serializers.SerializerMethodField()
     number_of_votes = serializers.SerializerMethodField()
+    lat = serializers.SerializerMethodField()
+    lng = serializers.SerializerMethodField()
 
 
     class Meta:
@@ -23,7 +28,7 @@ class DestinationSerializer(serializers.ModelSerializer):
             'id', 'user', 'title', 'category', 'basic_information',
              'image', 'image2', 'image3', 'image4', 'image5',
              'location', 'lat', 'lng', 'time', 'is_published', 'created_at', 'modified_at',
-            'tags', 'average_rating', 'number_of_votes',
+            'tags', 'average_rating', 'number_of_votes', 'related_hotels',
         ]
         extra_kwargs = {
             'user': {'read_only': True}
@@ -33,6 +38,12 @@ class DestinationSerializer(serializers.ModelSerializer):
 
     def get_number_of_votes(self, obj):
             return obj.number_of_votes()
+
+    def get_lat(self, obj):
+        return float(obj.lat) if obj.lat is not None else None
+
+    def get_lng(self, obj):
+        return float(obj.lng) if obj.lng is not None else None
 
     # def get_related_activities(self, obj):
     #     related_activities = obj.related_activities()
@@ -143,3 +154,22 @@ class RatingSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'user': {'read_only': True},
             'destination': {'read_only': True}}
+
+
+class DestinationCommentSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField()
+
+    class Meta:
+        model = DestinationsComment
+        fields = ['id', 'user',   'name', 'email', 'destination', 'text', 'created_at',
+                  'modified_at']
+        read_only_fields = ['user', 'created_at', 'modified_at']
+
+    def get_user(self, obj):
+        if not obj.user:
+            return None
+        if obj.user.role == 'traveler':
+            return TravelerSerializer(obj.user.traveler).data
+        elif obj.user.role == 'business':
+            return BusinessSerializer(obj.user.business).data
+        return UserSerializer(obj.user).data

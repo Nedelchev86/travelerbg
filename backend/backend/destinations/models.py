@@ -6,6 +6,7 @@ from django.db.models import Count
 from django.utils.crypto import get_random_string
 from django.utils.text import slugify
 
+from backend import settings
 from backend.activities.models import Activities
 from backend.core.models import Tag
 from backend.hotels.models import Hotel
@@ -45,7 +46,7 @@ class Destination(models.Model):
     location = models.CharField(max_length=300,)
     lat = models.DecimalField(max_digits=20, decimal_places=16, blank=True, null=True)
     lng = models.DecimalField(max_digits=20, decimal_places=16, blank=True, null=True)
-    time = models.IntegerField(max_length=30, blank=True)
+    time = models.IntegerField(blank=True)
     is_published = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
@@ -97,3 +98,16 @@ class DestinationRating(models.Model):
 
     class Meta:
         unique_together = ('user', 'destination')
+
+
+class DestinationsComment(models.Model):
+    destination = models.ForeignKey(Destination, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    name = models.CharField(max_length=255, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.text

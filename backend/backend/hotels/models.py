@@ -46,6 +46,7 @@ class Hotel(models.Model):
     image = models.CharField(max_length=255, blank=True, null=True)
     image2 = models.CharField(max_length=255, blank=True, null=True)
     image3 = models.CharField(max_length=255, blank=True, null=True)
+    image4 = models.CharField(max_length=255, blank=True, null=True)
     price = models.DecimalField(max_digits=14, decimal_places=2)
     tags = models.ManyToManyField(Tag, related_name="hotels", blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
