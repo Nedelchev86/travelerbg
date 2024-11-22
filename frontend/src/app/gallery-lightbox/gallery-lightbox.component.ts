@@ -7,26 +7,31 @@ import {
   AnimationEvent,
 } from '@angular/animations';
 import { CommonModule } from '@angular/common';
+import { SetBgImageDirective } from '../set-bg-image.directive';
+
+// interface Item {
+//   imageSrc: string;
+//   imageAlt: string;
+// }
 
 interface Item {
   imageSrc: string;
-  imageAlt: string;
 }
 @Component({
   selector: 'app-gallery-lightbox',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SetBgImageDirective],
   templateUrl: './gallery-lightbox.component.html',
   styleUrl: './gallery-lightbox.component.css',
   animations: [
     trigger('animation', [
       transition('void => visible', [
         style({ transform: 'scale(0.5)' }),
-        animate('150ms', style({ transform: 'scale(1)' })),
+        animate('200ms', style({ transform: 'scale(1)' })),
       ]),
       transition('visible => void', [
         style({ transform: 'scale(1)' }),
-        animate('150ms', style({ transform: 'scale(0.5)' })),
+        animate('200ms', style({ transform: 'scale(0.5)' })),
       ]),
     ]),
     trigger('animation2', [
@@ -39,7 +44,7 @@ interface Item {
 })
 export class GalleryLightboxComponent implements OnInit {
   @Input() galleryData: Item[] = [];
-  @Input() showCount = false;
+  @Input() showCount = true;
 
   previewImage = false;
   showMask = false;
@@ -51,6 +56,7 @@ export class GalleryLightboxComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
+    console.log(this.galleryData);
     this.totalImageCount = this.galleryData.length;
   }
 
