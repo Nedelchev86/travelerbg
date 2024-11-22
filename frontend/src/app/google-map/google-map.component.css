@@ -1,0 +1,12 @@
+.google {
+  width: 90%;
+  /* display: flex; */
+  margin-inline: auto;
+  height: 500px;
+}
+
+.category-area {
+  padding: 30px 0 30px 0;
+  margin-top: 0px;
+  text-align: center;
+}

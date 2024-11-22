@@ -1,11 +1,18 @@
-<div style="height: 500px; width: 100%">
-  <google-map
-    height="100%"
-    width="100%"
-    [center]="center"
-    [zoom]="zoom"
-    [options]="mapOptions"
-  >
-    <map-advanced-marker [position]="markerPosition"></map-advanced-marker>
-  </google-map>
-</div>
+<section
+  class="category-area bg-top-center"
+  [appSetBgImage]="'./assets/img/bg/category_bg_1.png'"
+>
+  <h3 class="page-title mt-30 mb-30">Location</h3>
+  <!-- <div style="height: 500px; width: 90%"> -->
+  <div class="google">
+    <google-map
+      height="100%"
+      width="100%"
+      [center]="center"
+      [zoom]="zoom"
+      [options]="mapOptions"
+    >
+      <map-advanced-marker [position]="markerPosition"></map-advanced-marker>
+    </google-map>
+  </div>
+</section>

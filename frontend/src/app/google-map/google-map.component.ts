@@ -12,11 +12,12 @@ import {
   MapAdvancedMarker,
   GoogleMap,
 } from '@angular/google-maps';
+import { SetBgImageDirective } from '../set-bg-image.directive';
 
 @Component({
   selector: 'app-google-map',
   standalone: true,
-  imports: [GoogleMap, MapAdvancedMarker],
+  imports: [GoogleMap, MapAdvancedMarker, SetBgImageDirective],
   templateUrl: './google-map.component.html',
   styleUrl: './google-map.component.css',
 })
