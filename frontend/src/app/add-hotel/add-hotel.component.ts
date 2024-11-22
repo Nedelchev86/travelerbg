@@ -344,9 +344,10 @@ export class AddHotelComponent implements OnInit {
       price: ['', [Validators.required, Validators.min(0)]],
       tags: this.fb.array([], this.minLengthArray(1)),
       newTag: [''], // Input field for new tag
-      image: [null, Validators.required],
-      image2: [null],
-      image3: [null],
+      image: ['', Validators.required],
+      image2: [''],
+      image3: [''],
+      image4: [''],
       lat: [''], // Add lat control
       lng: [''], // Add lng control
     });
