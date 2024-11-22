@@ -7,3 +7,8 @@
 .tagcloud a {
   margin-right: 12px;
 }
+
+.space,
+.space-bottom {
+  padding-bottom: 60px;
+}

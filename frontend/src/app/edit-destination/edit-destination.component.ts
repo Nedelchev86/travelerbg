@@ -16,11 +16,37 @@ import {
   MapAdvancedMarker,
 } from '@angular/google-maps';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import {
+  ClassicEditor,
+  Bold,
+  Essentials,
+  Italic,
+  Mention,
+  Paragraph,
+  Undo,
+  Image,
+  Link,
+  List,
+  TodoList,
+  BlockQuote,
+  Heading,
+  FontFamily,
+  FontSize,
+  FontColor,
+} from 'ckeditor5';
+import { CloudinaryuploadService } from '../shared/services/cloudinaryupload.service';
 
 @Component({
   selector: 'app-edit-destination',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, GoogleMap, MapAdvancedMarker],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    CKEditorModule,
+    GoogleMap,
+    MapAdvancedMarker,
+  ],
   templateUrl: './edit-destination.component.html',
   styleUrl: './edit-destination.component.css',
 })
@@ -30,6 +56,44 @@ export class EditDestinationComponent implements OnInit {
   categories: any[] = [];
   tags: FormArray;
   destinationId: string | null = null;
+
+  public Editor = ClassicEditor;
+  public config = {
+    toolbar: {
+      items: [
+        'undo',
+        'redo',
+        '|',
+        'heading',
+        '|',
+        'fontfamily',
+        'fontsize',
+        'fontColor',
+        '|',
+        'bold',
+        'italic',
+        '|',
+        'link',
+      ],
+      shouldNotGroupWhenFull: false,
+    },
+    plugins: [
+      Bold,
+      Essentials,
+      Italic,
+      Mention,
+      Paragraph,
+      Undo,
+      BlockQuote,
+      Link,
+      TodoList,
+      Image,
+      Heading,
+      FontFamily,
+      FontSize,
+      FontColor,
+    ],
+  };
 
   center: google.maps.LatLngLiteral = { lat: 42.504792, lng: 27.462636 };
   zoom = 15;
@@ -47,26 +111,23 @@ export class EditDestinationComponent implements OnInit {
     private fb: FormBuilder,
     private http: HttpClient,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private cloudinaryuploadService: CloudinaryuploadService
   ) {
     this.editDestinationForm = this.fb.group({
       title: ['', Validators.required],
       tags: this.fb.array([], this.minLengthArray(1)),
       category: ['', Validators.required],
       basic_information: ['', Validators.required],
-      responsibilities: ['', Validators.required],
-      benefits: [''],
-      image: [null],
-      image2: [null],
-      image3: [null],
-      image4: [null],
-      image5: [null],
-      image6: [null],
+      image: ['', Validators.required],
+      image2: [''],
+      image3: [''],
+      image4: [''],
+      image5: [''],
       lat: [''],
       lng: [''],
-      vacancy: [''],
+      time: [''],
       location: ['', Validators.required],
-      cost: [''],
       newTag: [''], // Input field for new tag
       is_published: [true],
     });
@@ -179,12 +240,21 @@ export class EditDestinationComponent implements OnInit {
     this.tags.removeAt(index);
   }
 
-  onFileChange(event: any, field: string) {
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.editDestinationForm.patchValue({
-        [field]: file,
-      });
+  onFileChange(event: any, field: string): void {
+    console.log('changed');
+    const file = event.target.files[0];
+    if (file) {
+      this.cloudinaryuploadService.uploadImage(file).subscribe(
+        (response) => {
+          console.log('Image uploaded successfully:', response);
+          this.editDestinationForm.patchValue({
+            [field]: response.secure_url,
+          });
+        },
+        (error) => {
+          console.error('Error uploading image:', error);
+        }
+      );
     }
   }
 

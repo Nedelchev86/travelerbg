@@ -43,45 +43,50 @@
               Tags are required.
             </div>
           </div> -->
-         
-          <div class="form-group">
-            <label>Tags</label>
-            <div class="added-tags">
-              <div
-                class="tag-box"
-                *ngFor="let tag of tags.controls; let i = index"
-              >
-                <span>{{ tag.value }}</span>
-                <button
-                  type="button"
-                  class="btn btn-danger btn-sm"
-                  (click)="removeTag(i)"
-                >
-                  x
-                </button>
+
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <div class="form-group">
+                <label>Tags</label>
+
+                <div class="form-group">
+                  <label for="newTag"></label>
+                  <input
+                    class="form-control"
+                    id="newTag"
+                    formControlName="newTag"
+                    type="text"
+                  />
+                </div>
               </div>
             </div>
-            <div class="form-group">
-              <label for="newTag">Add New Tag</label>
-              <input
-                class="form-control"
-                id="newTag"
-                formControlName="newTag"
-                type="text"
-              />
-              <button
-                type="button"
-                class="btn btn-primary"
-                (click)="addNewTag()"
-              >
+            <div class="col-md-6 form-group">
+              <button type="button" class="th-btn style3" (click)="addNewTag()">
                 Add Tag
               </button>
             </div>
+
             <div
               *ngIf="editDestinationForm.get('tags')?.invalid"
               class="text-danger"
             >
               At least one tag is required.
+            </div>
+            <div class="added-tags">
+              <div
+                class="tag-box"
+                *ngFor="let tag of tags.controls; let i = index"
+              >
+                <!-- <span>{{ tag.value }}</span> -->
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  (click)="removeTag(i)"
+                >
+                  {{ tag.value }}
+                  x
+                </button>
+              </div>
             </div>
           </div>
           <div class="form-group">
@@ -107,11 +112,18 @@
           </div>
           <div class="form-group">
             <label for="basic_information">Basic Information</label>
-            <textarea
+            <!-- <textarea
               class="form-control"
               id="basic_information"
               formControlName="basic_information"
-            ></textarea>
+            ></textarea> -->
+            <ckeditor
+            id="basic_information"
+            formControlName="basic_information"
+            [editor]="Editor"
+            [config]="config"
+            id="description"
+          ></ckeditor>
             <div
               *ngIf="
                 editDestinationForm.get('basic_information')?.touched &&
@@ -123,30 +135,15 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="responsibilities">Responsibilities</label>
-            <textarea
+            <label for="cost">Duration</label>
+            <input
               class="form-control"
-              id="responsibilities"
-              formControlName="responsibilities"
-            ></textarea>
-            <div
-              *ngIf="
-                editDestinationForm.get('responsibilities')?.touched &&
-                editDestinationForm.get('responsibilities')?.invalid
-              "
-              class="text-danger"
-            >
-              Responsibilities are required.
-            </div>
+              id="time"
+              formControlName="time"
+              type="number"
+            />
           </div>
-          <div class="form-group">
-            <label for="benefits">Benefits</label>
-            <textarea
-              class="form-control"
-              id="benefits"
-              formControlName="benefits"
-            ></textarea>
-          </div>
+
           <div class="form-group">
             <label for="image">Image 1</label>
             <input
@@ -202,24 +199,7 @@
               (change)="onFileChange($event, 'image5')"
             />
           </div>
-          <div class="form-group">
-            <label for="image6">Image 6</label>
-            <input
-              class="form-control th-btn style4"
-              id="image6"
-              type="file"
-              (change)="onFileChange($event, 'image6')"
-            />
-          </div>
-          <div class="form-group">
-            <label for="vacancy">Vacancy</label>
-            <input
-              class="form-control"
-              id="vacancy"
-              formControlName="vacancy"
-              type="number"
-            />
-          </div>
+
           <!-- <div class="form-group">
             <label for="location">Location</label>
             <input
@@ -240,7 +220,9 @@
           </div> -->
 
           <div class="form-group">
-            <label for="location">Location</label>
+            <label for="location"
+              >Location ( Write location or select on map )</label
+            >
             <input
               class="form-control"
               id="location"
@@ -258,27 +240,33 @@
               Location is required.
             </div>
           </div>
-          <div class="form-group">
-            <label for="lat">Latitude</label>
-            <input
-              class="form-control"
-              id="lat"
-              formControlName="lat"
-              type="text"
-              readonly
-            />
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <div class="form-group">
+                <label for="lat">Latitude</label>
+                <input
+                  class="form-control"
+                  id="lat"
+                  formControlName="lat"
+                  type="text"
+                  readonly
+                />
+              </div>
+            </div>
+            <div class="col-md-6 form-group">
+              <div class="form-group">
+                <label for="lng">Longitude</label>
+                <input
+                  class="form-control"
+                  id="lng"
+                  formControlName="lng"
+                  type="text"
+                  readonly
+                />
+              </div>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="lng">Longitude</label>
-            <input
-              class="form-control"
-              id="lng"
-              formControlName="lng"
-              type="text"
-              readonly
-            />
-          </div>
-          <div style="height: 500px; width: 100%">
+          <div style="height: 500px; width: 100%; margin-bottom: 60px">
             <google-map
               height="100%"
               width="100%"
@@ -287,19 +275,13 @@
               [options]="mapOptions"
               (mapClick)="onMapClick($event)"
             >
-              <map-advanced-marker [position]="markerPosition"></map-advanced-marker>
+              <map-advanced-marker
+                [position]="markerPosition"
+              ></map-advanced-marker>
             </google-map>
           </div>
-          <div class="form-group">
-            <label for="cost">Cost</label>
-            <input
-              class="form-control"
-              id="cost"
-              formControlName="cost"
-              type="text"
-            />
-          </div>
-          <div class="form-group">
+
+          <!-- <div class="form-group">
             <label for="is_published">Is Published</label>
             <input
               class="form-control"
@@ -307,7 +289,7 @@
               formControlName="is_published"
               type="checkbox"
             />
-          </div>
+          </div> -->
           <button class="th-btn" type="submit">Add Destination</button>
         </form>
       </div>
