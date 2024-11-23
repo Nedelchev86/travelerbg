@@ -87,9 +87,12 @@ class HotelSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         tags_data = validated_data.pop('tags', [])
+        highlights_data = validated_data.pop('highlights', [])
         instance = super().update(instance, validated_data)
         instance.tags.clear()
         instance.tags.set(tags_data)
+        instance.highlights.clear()
+        instance.highlights.set(highlights_data)
         return instance
 
     # def to_representation(self, instance):
