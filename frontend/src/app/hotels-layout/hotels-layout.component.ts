@@ -14,6 +14,7 @@ import { TopTravelersComponent } from '../top-travelers/top-travelers.component'
 import { TopDestinationComponent } from '../top-destination/top-destination.component';
 import { TopRatedDestinationsComponent } from '../top-rated-destinations/top-rated-destinations.component';
 import { HttpClient } from '@angular/common/http';
+import { BannerComponent } from "../shared/banner/banner.component";
 
 @Component({
   selector: 'app-hotels-layout',
@@ -29,7 +30,8 @@ import { HttpClient } from '@angular/common/http';
     TopRatedDestinationsComponent,
     RouterLink,
     RouterLinkActive,
-  ],
+    BannerComponent
+],
   templateUrl: './hotels-layout.component.html',
   styleUrl: './hotels-layout.component.css',
 })
