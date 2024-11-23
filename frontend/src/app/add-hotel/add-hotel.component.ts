@@ -29,13 +29,15 @@ import {
   Paragraph,
   Undo,
   Image,
-  ImageUpload,
   Link,
   List,
   TodoList,
   BlockQuote,
+  Heading,
+  FontFamily,
+  FontSize,
+  FontColor,
 } from 'ckeditor5';
-
 export interface Highlight {
   id: number;
   name: string;
@@ -259,6 +261,7 @@ export class AddHotelComponent implements OnInit {
   //     }
   //   }
   // }
+  imagePreviews: { [key: string]: string } = {};
   addHotelForm: FormGroup;
   tags: FormArray;
   highlights: Highlight[] = [];
@@ -279,7 +282,6 @@ export class AddHotelComponent implements OnInit {
   public Editor = ClassicEditor;
 
   public config = {
-    height: '800px',
     toolbar: {
       items: [
         'undo',
@@ -290,27 +292,11 @@ export class AddHotelComponent implements OnInit {
         'fontfamily',
         'fontsize',
         'fontColor',
-        'fontBackgroundColor',
         '|',
         'bold',
         'italic',
-        'strikethrough',
-        'subscript',
-        'superscript',
-        'code',
         '|',
         'link',
-
-        'blockQuote',
-        'codeBlock',
-        '|',
-        'bulletedList',
-        'numberedList',
-        'todoList',
-        'outdent',
-        'indent',
-        'Link',
-        'List',
       ],
       shouldNotGroupWhenFull: false,
     },
@@ -323,8 +309,12 @@ export class AddHotelComponent implements OnInit {
       Undo,
       BlockQuote,
       Link,
-      List,
       TodoList,
+      Image,
+      Heading,
+      FontFamily,
+      FontSize,
+      FontColor,
     ],
   };
 
@@ -336,7 +326,7 @@ export class AddHotelComponent implements OnInit {
   ) {
     this.addHotelForm = this.fb.group({
       name: ['', Validators.required],
-      category: [''],
+      category: ['', Validators.required],
       description: ['', Validators.required],
       location: ['', Validators.required],
       website: ['', Validators.pattern('https?://.+')],
@@ -438,12 +428,19 @@ export class AddHotelComponent implements OnInit {
           this.addHotelForm.patchValue({
             [field]: response.secure_url,
           });
+          this.imagePreviews[field] = response.secure_url;
         },
         (error) => {
           console.error('Error uploading image:', error);
         }
       );
     }
+  }
+  removeImage(field: string): void {
+    this.addHotelForm.patchValue({
+      [field]: null,
+    });
+    delete this.imagePreviews[field];
   }
   onMapClick(event: google.maps.MapMouseEvent): void {
     if (event.latLng) {
@@ -576,6 +573,8 @@ export class AddHotelComponent implements OnInit {
           console.error('Error adding hotel', error);
         }
       );
+    } else {
+      this.addHotelForm.markAllAsTouched(); // Mark all fields as touched to show validation errors
     }
   }
 }

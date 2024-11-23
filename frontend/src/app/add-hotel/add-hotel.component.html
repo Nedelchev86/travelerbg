@@ -340,6 +340,7 @@
                 {{ category.name }}
               </option>
             </select>
+
             <div
               *ngIf="
                 addHotelForm.get('category')?.touched &&
@@ -457,7 +458,7 @@
                 }}</label>
               </div>
             </div>
-            <div
+            <!-- <div
               *ngIf="
                 addHotelForm.get('tags')?.touched &&
                 addHotelForm.get('tags')?.invalid
@@ -465,8 +466,9 @@
               class="text-danger"
             >
               Tags are required.
-            </div>
+            </div> -->
           </div>
+
           <div class="form-group">
             <label for="price">Price</label>
             <input
@@ -486,7 +488,7 @@
               Price is required.
             </div>
           </div>
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label>Tags</label>
 
             <div class="added-tags">
@@ -519,50 +521,161 @@
             <div *ngIf="addHotelForm.get('tags')?.invalid" class="text-danger">
               At least one tag is required.
             </div>
+          </div> -->
+
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <div class="form-group">
+                <label>Tags</label>
+
+                <div class="form-group">
+                  <label for="newTag"></label>
+                  <input
+                    class="form-control"
+                    id="newTag"
+                    formControlName="newTag"
+                    type="text"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 form-group">
+              <button type="button" class="th-btn style3" (click)="addNewTag()">
+                Add Tag
+              </button>
+            </div>
+
+            <div *ngIf="addHotelForm.get('tags')?.invalid" class="text-danger">
+              At least one tag is required.
+            </div>
+            <div class="added-tags">
+              <div
+                class="tag-box"
+                *ngFor="let tag of tags.controls; let i = index"
+              >
+                <!-- <span>{{ tag.value }}</span> -->
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  (click)="removeTag(i)"
+                >
+                  {{ tag.value }}
+                  x
+                </button>
+              </div>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="image">Image 1</label>
-            <input
-              class="form-control th-btn style4"
-              id="image"
-              type="file"
-              (change)="onFileChange($event, 'image')"
-            />
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <div class="form-group">
+                <label for="image">Image 1</label>
+                <input
+                  class="form-control th-btn style4"
+                  id="image"
+                  type="file"
+                  (change)="onFileChange($event, 'image')"
+                />
+              </div>
+              <div
+                *ngIf="addHotelForm.get('image')?.invalid"
+                class="text-danger"
+              >
+                Image is required.
+              </div>
+              <div *ngIf="imagePreviews['image']">
+                <img
+                  [src]="imagePreviews['image']"
+                  alt="Image 1"
+                  style="width: 100px; height: auto"
+                />
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  (click)="removeImage('image')"
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+            <div class="col-md-6 form-group">
+              <div class="form-group">
+                <label for="image2">Image 2</label>
+                <input
+                  class="form-control th-btn style4"
+                  id="image2"
+                  type="file"
+                  (change)="onFileChange($event, 'image2')"
+                />
+              </div>
+              <div *ngIf="imagePreviews['image2']">
+                <img
+                  [src]="imagePreviews['image2']"
+                  alt="Image 2"
+                  style="width: 100px; height: auto"
+                />
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  (click)="removeImage('image2')"
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="image2">Image 2</label>
-            <input
-              class="form-control th-btn style4"
-              id="image2"
-              type="file"
-              (change)="onFileChange($event, 'image2')"
-            />
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <div class="form-group">
+                <label for="image3">Image 3</label>
+                <input
+                  class="form-control th-btn style4"
+                  id="image3"
+                  type="file"
+                  (change)="onFileChange($event, 'image3')"
+                />
+              </div>
+              <div *ngIf="imagePreviews['image3']">
+                <img
+                  [src]="imagePreviews['image3']"
+                  alt="Image 3"
+                  style="width: 100px; height: auto"
+                />
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  (click)="removeImage('image3')"
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+            <div class="col-md-6 form-group">
+              <div class="form-group">
+                <label for="image4">Image 4</label>
+                <input
+                  class="form-control th-btn style4"
+                  id="image4"
+                  type="file"
+                  (change)="onFileChange($event, 'image4')"
+                />
+              </div>
+              <div *ngIf="imagePreviews['image4']">
+                <img
+                  [src]="imagePreviews['image4']"
+                  alt="Image 4"
+                  style="width: 100px; height: auto"
+                />
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  (click)="removeImage('image4')"
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="image3">Image 3</label>
-            <input
-              class="form-control th-btn style4"
-              id="image3"
-              type="file"
-              (change)="onFileChange($event, 'image3')"
-            />
-          </div>
-          <div class="form-group">
-            <label for="image4">Image 4</label>
-            <input
-              class="form-control th-btn style4"
-              id="image4"
-              type="file"
-              (change)="onFileChange($event, 'image4')"
-            />
-          </div>
-          <button
-            class="th-btn"
-            type="submit"
-            [disabled]="addHotelForm.invalid"
-          >
-            Add Hotel
-          </button>
+          <button class="th-btn submit-btn" type="submit">Add Hotel</button>
         </form>
       </div>
     </div>
