@@ -31,111 +31,122 @@
               >
             </div>
           </div>
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <div class="form-group">
+                <label>City *</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="city"
+                  placeholder="City"
+                />
+                <div
+                  *ngIf="
+                    profileForm.get('city')?.invalid &&
+                    profileForm.get('city')?.touched
+                  "
+                  class="text-danger"
+                >
+                  <small *ngIf="profileForm.get('city')?.errors?.['required']"
+                    >City is required.</small
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 form-group">
+              <div class="form-group">
+                <label>Occupation *</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="occupation"
+                  placeholder="Occupation"
+                />
+                <div
+                  *ngIf="
+                    profileForm.get('occupation')?.invalid &&
+                    profileForm.get('occupation')?.touched
+                  "
+                  class="text-danger"
+                >
+                  <small
+                    *ngIf="profileForm.get('occupation')?.errors?.['required']"
+                    >Occupation is required.</small
+                  >
+                </div>
+              </div>
+            </div>
 
-          <div class="form-group">
-            <label>City *</label>
-            <input
-              type="text"
-              class="form-control"
-              formControlName="city"
-              placeholder="City"
-            />
-            <div
-              *ngIf="
-                profileForm.get('city')?.invalid &&
-                profileForm.get('city')?.touched
-              "
-              class="text-danger"
-            >
-              <small *ngIf="profileForm.get('city')?.errors?.['required']"
-                >City is required.</small
-              >
+            <div class="col-md-6 form-group">
+              <div class="form-group">
+                <label>Website</label>
+                <input
+                  type="url"
+                  class="form-control"
+                  formControlName="website"
+                  placeholder="Website"
+                />
+              </div>
+            </div>
+            <div class="col-md-6 form-group">
+              <div class="form-group">
+                <label>LinkedIn</label>
+                <input
+                  type="url"
+                  class="form-control"
+                  formControlName="linkedin"
+                  placeholder="LinkedIn"
+                />
+              </div>
+            </div>
+
+            <div class="col-md-6 form-group">
+              <div class="form-group">
+                <label>Facebook</label>
+                <input
+                  type="url"
+                  class="form-control"
+                  formControlName="facebook"
+                  placeholder="Facebook"
+                />
+              </div>
+            </div>
+            <div class="col-md-6 form-group">
+              <div class="form-group">
+                <label>Youtube</label>
+                <input
+                  type="url"
+                  class="form-control"
+                  formControlName="youtube"
+                  placeholder="Youtubeurl"
+                />
+              </div>
             </div>
           </div>
           <div class="form-group">
-            <label>Nationality *</label>
-            <input
-              type="text"
-              class="form-control"
-              formControlName="nationality"
-              placeholder="Nationality"
-            />
-            <div
-              *ngIf="
-                profileForm.get('nationality')?.invalid &&
-                profileForm.get('nationality')?.touched
-              "
-              class="text-danger"
-            >
-              <small
-                *ngIf="profileForm.get('nationality')?.errors?.['required']"
-                >Nationality is required.</small
-              >
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Occupation *</label>
-            <input
-              type="text"
-              class="form-control"
-              formControlName="occupation"
-              placeholder="Occupation"
-            />
-            <div
-              *ngIf="
-                profileForm.get('occupation')?.invalid &&
-                profileForm.get('occupation')?.touched
-              "
-              class="text-danger"
-            >
-              <small *ngIf="profileForm.get('occupation')?.errors?.['required']"
-                >Occupation is required.</small
-              >
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Website</label>
+            <label>Instagram</label>
             <input
               type="url"
               class="form-control"
-              formControlName="website"
-              placeholder="Website"
-            />
-          </div>
-          <div class="form-group">
-            <label>LinkedIn</label>
-            <input
-              type="url"
-              class="form-control"
-              formControlName="linkedin"
-              placeholder="LinkedIn"
-            />
-          </div>
-          <div class="form-group">
-            <label>Facebook</label>
-            <input
-              type="url"
-              class="form-control"
-              formControlName="facebook"
-              placeholder="Facebook"
-            />
-          </div>
-          <div class="form-group">
-            <label>GitHub</label>
-            <input
-              type="url"
-              class="form-control"
-              formControlName="github"
-              placeholder="GitHub"
+              formControlName="instagram"
+              placeholder="Instagram url"
             />
           </div>
           <div class="form-group">
             <label>About *</label>
-            <textarea
+            <!-- <textarea
               class="form-control"
               formControlName="about"
               placeholder="About"
-            ></textarea>
+            ></textarea> -->
+            <ckeditor
+            id="about"
+            formControlName="about"
+            [editor]="Editor"
+            [config]="config"
+  
+          ></ckeditor>
             <div
               *ngIf="
                 profileForm.get('about')?.invalid &&
@@ -173,7 +184,7 @@
             <label>Profile Picture</label>
             <input
               type="file"
-              class="form-control"
+              class="form-control th-btn style4"
               (change)="onFileChange($event, 'profile_picture')"
             />
           </div>
@@ -181,7 +192,7 @@
             <label>Cover</label>
             <input
               type="file"
-              class="form-control"
+              class="form-control th-btn style4"
               (change)="onFileChange($event, 'cover')"
             />
           </div>
