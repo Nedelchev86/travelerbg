@@ -145,80 +145,29 @@ Sidemenu
       <i class="fal fa-times"></i>
     </button>
     <div class="mobile-logo">
-      <a href="home-travel.html"
-        ><img src="/assets/img/logo2.svg" alt="Tourm"
-      /></a>
+      <a routerLink="/"><img src="/assets/img/logo.png" alt="Tourm" /></a>
     </div>
     <div class="th-mobile-menu">
       <ul>
-        <li class="menu-item-has-children">
-          <a class="active" href="home-travel.html">H2me</a>
-          <ul class="sub-menu">
-            <li><a href="home-travel.html">Home Travel</a></li>
-            <li><a href="home-tour.html">Home Tour</a></li>
-            <li><a href="home-agency.html">Home Agency</a></li>
-          </ul>
-        </li>
-        <li><a href="about.html">About Us2</a></li>
-        <li class="menu-item-has-children">
-          <a href="#">Destination2</a>
-          <ul class="sub-menu">
-            <li>
-              <!-- <a routeLink="destination" routeLinkActive="active"
-                  >Destination</a
-                > -->
-            </li>
-            <!-- <li><a href="destination.html">Destination</a></li> -->
-            <!-- <li><a href="destination-details.html">Destination Details</a></li> -->
-          </ul>
-        </li>
-        <li class="menu-item-has-children">
-          <a href="#">Service</a>
-          <ul class="sub-menu">
-            <li><a href="service.html">Services</a></li>
-            <li><a href="service-details.html">Service Details</a></li>
-          </ul>
-        </li>
-        <li class="menu-item-has-children">
-          <a routerLink="/activities">Activities</a>
-          <!-- <ul class="sub-menu">
-              <li><a href="activities.html">activities</a></li>
-              <li><a href="activities-details.html">activities Details</a></li>
-            </ul> -->
-        </li>
-        <li class="menu-item-has-children">
-          <a href="#">Pages</a>
-          <ul class="sub-menu">
-            <li class="menu-item-has-children">
-              <a href="#">Shop</a>
-              <ul class="sub-menu">
-                <li><a href="shop.html">Shop</a></li>
-                <li><a href="shop-details.html">Shop Details</a></li>
-                <li><a href="cart.html">Cart Page</a></li>
-                <li><a href="checkout.html">Checkout</a></li>
-                <li><a href="wishlist.html">Wishlist</a></li>
-              </ul>
-            </li>
-
-            <li><a href="gallery.html">Gallery</a></li>
-            <li><a href="tour.html">Our Tour</a></li>
-            <li><a href="tour-details.html">Tour Details</a></li>
-            <li><a href="tour-guide.html">Tour Guider</a></li>
-            <li><a href="tour-guider-details.html">Tour Guider Details</a></li>
-            <li><a href="faq.html">Faq Page</a></li>
-            <li><a href="price.html">Price Package</a></li>
-            <li><a href="error.html">Error Page</a></li>
-          </ul>
-        </li>
-        <li class="menu-item-has-children">
-          <a href="#">Blog</a>
-          <ul class="sub-menu">
-            <li><a href="blog.html">Blog</a></li>
-            <li><a href="blog-details.html">Blog Details</a></li>
-          </ul>
+        <li>
+          <a routerLink="" routerLinkActive="active">Home</a>
         </li>
         <li>
-          <a href="contact.html">Contact us</a>
+          <a routerLink="/travelers" routerLinkActive="active">Travelers</a>
+        </li>
+        <li>
+          <a routerLink="/destinations" routerLinkActive="active"
+            >Destinations</a
+          >
+        </li>
+        <li>
+          <a routerLink="/hotels" routerLinkActive="active">Hotels</a>
+        </li>
+        <li>
+          <a routerLink="/activities">Activities</a>
+        </li>
+        <li>
+          <a routerLink="/contacs-us" routerLinkActive="active">Contact us</a>
         </li>
       </ul>
     </div>
@@ -359,9 +308,7 @@ Sidemenu
             <a routerLink="/profile" class="col-auto d-xl-block"
               ><img
                 class="square"
-                src="https://res.cloudinary.com/drjgddl0y/{{
-                  authService.currentUser()?.user?.profile_picture
-                }}"
+                src="{{ authService.currentUser()?.user?.profile_picture }}"
                 alt=""
                 width="40px"
             /></a>
@@ -382,7 +329,7 @@ Sidemenu
             </div>
           </div>
           }@else {
-          <div class="col-auto d-none d-xl-block">
+          <div class="col-auto d-xl-block">
             <div class="header-button">
               <button (click)="openLoginRegisterPopup()" class="th-btn style3">
                 Sign In / Register <i class="fa-regular fa-user"></i>
