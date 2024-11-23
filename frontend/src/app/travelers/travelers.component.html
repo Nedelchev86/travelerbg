@@ -47,18 +47,10 @@ Team Area
       <div class="col-xl-4 col-md-6">
         <div class="th-team team-grid">
           <div class="team-img">
-            <img
-              src="https://res.cloudinary.com/drjgddl0y/{{ traveler.cover }}"
-              alt="Team"
-            />
+            <img src="{{ traveler.cover }}" alt="Team" />
           </div>
           <div class="team-img2">
-            <img
-              src="https://res.cloudinary.com/drjgddl0y/{{
-                traveler.profile_picture
-              }}"
-              alt="Team"
-            />
+            <img src="{{ traveler.profile_picture }}" alt="Team" />
           </div>
           <div class="team-content">
             <div class="media-body">
@@ -72,7 +64,16 @@ Team Area
                   (rated)="rateTraveler(traveler.user, $event)"
                 ></app-rating>
               </h3>
-              <span class="team-desig">Tourist Guide</span>
+              <span class="team-desig">{{ traveler.occupation }}</span>
+              <div class="th-social">
+                <span class="traveler-text">
+                  Destinations:
+                  {{ traveler.published_destinations_count }}</span
+                >
+                <span class="traveler-text"
+                  >Activities: {{ traveler.published_activities_count }}</span
+                >
+              </div>
 
               <div class="th-social">
                 <a target="_blank" href="https://facebook.com/"

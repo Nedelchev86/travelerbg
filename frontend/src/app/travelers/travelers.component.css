@@ -18,3 +18,22 @@
 .team-grid .team-img2 img {
   min-height: 276px;
 }
+
+.traveler-text {
+  display: inline-block;
+  color: #1ca8cb;
+  padding-right: 20px;
+  padding-bottom: 12px;
+}
+
+/* .traveler-text:hover {
+  color: white;
+} */
+
+.team-grid:hover .traveler-text {
+  color: var(--white-color);
+}
+
+.team-grid:hover .rating-text {
+  color: var(--white-color);
+}
