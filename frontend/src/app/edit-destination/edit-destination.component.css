@@ -214,3 +214,19 @@
 .text-style {
   white-space: pre-wrap;
 }
+
+.col-md-6.form-group {
+  margin-bottom: 0px;
+}
+
+.red {
+  color: red;
+}
+
+.submit-btn {
+  margin-top: 20px;
+}
+
+.btn.btn-danger.btn-sm {
+  margin-left: 20px;
+}

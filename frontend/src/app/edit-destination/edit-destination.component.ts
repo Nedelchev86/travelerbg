@@ -56,6 +56,7 @@ export class EditDestinationComponent implements OnInit {
   categories: any[] = [];
   tags: FormArray;
   destinationId: string | null = null;
+  imagePreviews: { [key: string]: string } = {};
 
   public Editor = ClassicEditor;
   public config = {
@@ -176,6 +177,12 @@ export class EditDestinationComponent implements OnInit {
           response.tags.forEach((tag: { id: Number; name: string }) => {
             this.tags.push(this.fb.control(tag.name, Validators.required));
           });
+
+          this.imagePreviews['image'] = response.image;
+          this.imagePreviews['image2'] = response.image2;
+          this.imagePreviews['image3'] = response.image3;
+          this.imagePreviews['image4'] = response.image4;
+          this.imagePreviews['image5'] = response.image5;
         },
         (error) => {
           console.error('Failed to fetch destination details', error);
@@ -250,12 +257,20 @@ export class EditDestinationComponent implements OnInit {
           this.editDestinationForm.patchValue({
             [field]: response.secure_url,
           });
+          this.imagePreviews[field] = response.secure_url;
         },
         (error) => {
           console.error('Error uploading image:', error);
         }
       );
     }
+  }
+
+  removeImage(field: string): void {
+    this.editDestinationForm.patchValue({
+      [field]: null,
+    });
+    delete this.imagePreviews[field];
   }
 
   onSubmit() {
