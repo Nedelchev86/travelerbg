@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { TopTravelersComponent } from '../top-travelers/top-travelers.component';
 import { TopHotelsComponent } from '../top-hotels/top-hotels.component';
 import { TopRatedDestinationsComponent } from '../top-rated-destinations/top-rated-destinations.component';
+import { BannerComponent } from '../shared/banner/banner.component';
 
 @Component({
   selector: 'app-destinations-layout',
@@ -16,6 +17,7 @@ import { TopRatedDestinationsComponent } from '../top-rated-destinations/top-rat
     SetBgImageDirective,
     TopHotelsComponent,
     TopRatedDestinationsComponent,
+    BannerComponent,
   ],
   templateUrl: './destinations-layout.component.html',
   styleUrl: './destinations-layout.component.css',
