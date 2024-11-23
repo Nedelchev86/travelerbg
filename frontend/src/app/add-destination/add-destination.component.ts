@@ -55,6 +55,7 @@ export class AddDestinationComponent {
   addDestinationForm: FormGroup;
   categories: any[] = [];
   tags: FormArray;
+  imagePreviews: { [key: string]: string } = {};
 
   center: google.maps.LatLngLiteral = { lat: 42.504792, lng: 27.462636 };
   zoom = 15;
@@ -75,16 +76,16 @@ export class AddDestinationComponent {
     private cloudinaryuploadService: CloudinaryuploadService
   ) {
     this.addDestinationForm = this.fb.group({
-      title: [''],
-      category: [''],
-      basic_information: [''],
+      title: ['', Validators.required],
+      category: ['', Validators.required],
+      desciption: ['', Validators.required],
       image: ['', Validators.required],
       image2: [''],
       image3: [''],
       image4: [''],
       image5: [''],
-      location: [''],
-      time: [''],
+      location: ['', Validators.required],
+      time: ['', Validators.required],
       lat: [''], // Add lat control
       lng: [''], // Add lng control
       is_published: [true],
@@ -176,12 +177,20 @@ export class AddDestinationComponent {
           this.addDestinationForm.patchValue({
             [field]: response.secure_url,
           });
+          this.imagePreviews[field] = response.secure_url;
         },
         (error) => {
           console.error('Error uploading image:', error);
         }
       );
     }
+  }
+
+  removeImage(field: string): void {
+    this.addDestinationForm.patchValue({
+      [field]: null,
+    });
+    delete this.imagePreviews[field];
   }
 
   onMapClick(event: google.maps.MapMouseEvent): void {
