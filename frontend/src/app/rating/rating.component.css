@@ -1,5 +1,7 @@
 .rating {
   display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .rating span {
   cursor: pointer;
@@ -30,3 +32,4 @@
   /* margin-top: 5px; */
   margin-left: 20px;
 }
+
