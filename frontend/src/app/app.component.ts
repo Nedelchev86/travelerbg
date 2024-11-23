@@ -38,24 +38,11 @@ import {
 @Component({
   selector: 'app-root',
   standalone: true,
-
   imports: [
     CKEditorModule,
     RouterOutlet,
-    RouterLink,
     HeaderComponent,
     FooterComponent,
-    MainComponent,
-    TraleversComponent,
-    DestinationsComponent,
-    DestinationDetailsComponent,
-    ActivitiesComponent,
-    LoginRegisterComponent,
-    ProfileComponent,
-    AddDestinationComponent,
-    LoaderComponent,
-    RatingComponent,
-    DestinationsByUserComponent,
     CloudinaryModule,
     GoogleMapsModule,
   ],
@@ -73,7 +60,7 @@ export class AppComponent implements OnInit {
   public config = {
     toolbar: ['undo', 'redo', '|', 'bold', 'italic'],
     plugins: [Bold, Essentials, Italic, Mention, Paragraph, Undo],
-    licenseKey: '<YOUR_LICENSE_KEY>',
+    // licenseKey: '<YOUR_LICENSE_KEY>',
     // mention: {
     //     Mention configuration
     // }
