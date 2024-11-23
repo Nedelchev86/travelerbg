@@ -26,12 +26,39 @@
             </div>
           </div>
           <div class="form-group">
+            <label for="category">Category</label>
+            <select
+              class="form-control"
+              id="category"
+              formControlName="category"
+            >
+              <option *ngFor="let category of categories" [value]="category.id">
+                {{ category.name }}
+              </option>
+            </select>
+            <div
+              *ngIf="
+                editHotelForm.get('category')?.touched &&
+                editHotelForm.get('category')?.invalid
+              "
+              class="text-danger"
+            >
+              Category is required.
+            </div>
+          </div>
+          <div class="form-group">
             <label for="description">Description</label>
-            <textarea
+            <!-- <textarea
               class="form-control"
               id="description"
               formControlName="description"
-            ></textarea>
+            ></textarea> -->
+            <ckeditor
+              [editor]="Editor"
+              [config]="config"
+              id="description"
+              formControlName="description"
+            ></ckeditor>
             <div
               *ngIf="
                 editHotelForm.get('description')?.touched &&
@@ -43,12 +70,15 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="location">Location</label>
+            <label for="location"
+              >Location (Write location or select on Map )</label
+            >
             <input
               class="form-control"
               id="location"
               formControlName="location"
               type="text"
+              (change)="onLocationChange()"
             />
             <div
               *ngIf="
@@ -58,6 +88,118 @@
               class="text-danger"
             >
               Location is required.
+            </div>
+          </div>
+          <div style="height: 500px; width: 100%">
+            <google-map
+              height="100%"
+              width="100%"
+              [center]="center"
+              [zoom]="zoom"
+              [options]="mapOptions"
+              (mapClick)="onMapClick($event)"
+            >
+              <map-advanced-marker
+                [position]="markerPosition"
+              ></map-advanced-marker>
+            </google-map>
+          </div>
+          <div class="form-group">
+            <label for="website">Website</label>
+            <input
+              class="form-control"
+              id="website"
+              formControlName="website"
+              type="url"
+            />
+            <div
+              *ngIf="
+                editHotelForm.get('website')?.touched &&
+                editHotelForm.get('website')?.invalid
+              "
+              class="text-danger"
+            >
+              Please enter a valid URL.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Highlights</label>
+            <div class="custom-checkbox">
+              <div
+                class="single-tag"
+                *ngFor="let highlight of highlights; let i = index"
+              >
+                <input
+                  type="checkbox"
+                  [value]="highlight.id"
+                  (change)="onHighlightsChange($event)"
+                  id="tag-{{ highlight.id }}"
+                  [checked]="
+                    editHotelForm
+                      .get('highlights')
+                      ?.value.includes(highlight.id)
+                  "
+                />
+                <label for="tag-{{ highlight.id }}">{{ highlight.name }}</label>
+              </div>
+            </div>
+            <div
+              *ngIf="
+                editHotelForm.get('tags')?.touched &&
+                editHotelForm.get('tags')?.invalid
+              "
+              class="text-danger"
+            >
+              Tags are required.
+            </div>
+          </div>
+          <!-- <div class="form-group">
+            <label>Highlights</label>
+            <div *ngFor="let highlight of highlights; let i = index">
+              <input type="checkbox" [formControlName]="i" /> {{ highlight.name }}
+            </div>
+          </div> -->
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <div class="form-group">
+                <label>Tags</label>
+
+                <div class="form-group">
+                  <label for="newTag"></label>
+                  <input
+                    class="form-control"
+                    id="newTag"
+                    formControlName="newTag"
+                    type="text"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 form-group">
+              <button type="button" class="th-btn style3" (click)="addNewTag()">
+                Add Tag
+              </button>
+            </div>
+
+            <div *ngIf="editHotelForm.get('tags')?.invalid" class="text-danger">
+              At least one tag is required.
+            </div>
+            <div class="added-tags">
+              <div
+                class="tag-box"
+                *ngFor="let tag of tags.controls; let i = index"
+              >
+                <!-- <span>{{ tag.value }}</span> -->
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  (click)="removeTag(i)"
+                >
+                  {{ tag.value }}
+                  x
+                </button>
+              </div>
             </div>
           </div>
           <div class="form-group">
@@ -79,54 +221,153 @@
               Price is required.
             </div>
           </div>
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label>Tags</label>
-            <div class="tags-container">
-              <div class="tag-checkbox" *ngFor="let tag of tags">
-                <input
-                  type="checkbox"
-                  [value]="tag.id"
-                  (change)="onTagChange($event)"
-                  id="tag-{{ tag.id }}"
-                  [checked]="editHotelForm.get('tags')?.value.includes(tag.id)"
-                />
-                <label for="tag-{{ tag.id }}">{{ tag.name }}</label>
+
+            <div class="added-tags">
+              <div
+                class="tag-box"
+                *ngFor="let tag of tags.controls; let i = index"
+              >
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  (click)="removeTag(i)"
+                >
+                  {{ tag.value }}
+                  x
+                </button>
               </div>
             </div>
-
+            <div class="form-group">
+              <label for="newTag">Add New Tag</label>
+              <input
+                class="form-control"
+                id="newTag"
+                formControlName="newTag"
+                type="text"
+              />
+              <button type="button" class="th-btn style3" (click)="addNewTag()">
+                Add Tag
+              </button>
+            </div>
             <div *ngIf="editHotelForm.get('tags')?.invalid" class="text-danger">
-              Tags are required.
+              At least one tag is required.
+            </div>
+          </div> -->
+
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <div class="form-group">
+                <label for="image">Image 1</label>
+                <input
+                  class="form-control th-btn style4"
+                  id="image"
+                  type="file"
+                  (change)="onFileChange($event, 'image')"
+                />
+              </div>
+              <div
+                *ngIf="editHotelForm.get('image')?.invalid"
+                class="text-danger"
+              >
+                Image is required.
+              </div>
+              <div *ngIf="imagePreviews['image']">
+                <img
+                  [src]="imagePreviews['image']"
+                  alt="Image 1"
+                  style="width: 100px; height: auto"
+                />
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  (click)="removeImage('image')"
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+            <div class="col-md-6 form-group">
+              <div class="form-group">
+                <label for="image2">Image 2</label>
+                <input
+                  class="form-control th-btn style4"
+                  id="image2"
+                  type="file"
+                  (change)="onFileChange($event, 'image2')"
+                />
+              </div>
+              <div *ngIf="imagePreviews['image2']">
+                <img
+                  [src]="imagePreviews['image2']"
+                  alt="Image 2"
+                  style="width: 100px; height: auto"
+                />
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  (click)="removeImage('image2')"
+                >
+                  Remove
+                </button>
+              </div>
             </div>
           </div>
-          <div class="form-group">
-            <label for="image">Image 1</label>
-            <input
-              class="form-control th-btn style4"
-              id="image"
-              type="file"
-              (change)="onFileChange($event, 'image')"
-            />
-          </div>
-          <div class="form-group">
-            <label for="image2">Image 2</label>
-            <input
-              class="form-control th-btn style4"
-              id="image2"
-              type="file"
-              (change)="onFileChange($event, 'image2')"
-            />
-          </div>
-          <div class="form-group">
-            <label for="image3">Image 3</label>
-            <input
-              class="form-control th-btn style4"
-              id="image3"
-              type="file"
-              (change)="onFileChange($event, 'image3')"
-            />
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <div class="form-group">
+                <label for="image3">Image 3</label>
+                <input
+                  class="form-control th-btn style4"
+                  id="image3"
+                  type="file"
+                  (change)="onFileChange($event, 'image3')"
+                />
+              </div>
+              <div *ngIf="imagePreviews['image3']">
+                <img
+                  [src]="imagePreviews['image3']"
+                  alt="Image 3"
+                  style="width: 100px; height: auto"
+                />
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  (click)="removeImage('image3')"
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+            <div class="col-md-6 form-group">
+              <div class="form-group">
+                <label for="image4">Image 4</label>
+                <input
+                  class="form-control th-btn style4"
+                  id="image4"
+                  type="file"
+                  (change)="onFileChange($event, 'image4')"
+                />
+              </div>
+              <div *ngIf="imagePreviews['image4']">
+                <img
+                  [src]="imagePreviews['image4']"
+                  alt="Image 4"
+                  style="width: 100px; height: auto"
+                />
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  (click)="removeImage('image4')"
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
           </div>
           <button
-            class="th-btn"
+            class="th-btn submit-btn"
             type="submit"
             [disabled]="editHotelForm.invalid"
           >

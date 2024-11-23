@@ -66,12 +66,12 @@ export class HotelDetailsComponent {
       email: ['', [Validators.required, Validators.email]],
       website: [''],
       text: ['', Validators.required],
-      saveInfo: [false],
+
     });
 
     this.commentFormRegistred = this.fb.group({
       text: ['', Validators.required],
-      saveInfo: [false],
+
     });
   }
 
