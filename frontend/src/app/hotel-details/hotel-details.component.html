@@ -118,6 +118,15 @@
                 ></textarea>
                 <i class="far fa-pencil"></i>
               </div>
+              <div
+                *ngIf="
+                  commentFormRegistred.get('text')?.touched &&
+                  commentFormRegistred.get('text')?.invalid
+                "
+                class="text-danger"
+              >
+                Comment is required.
+              </div>
 
               <div class="col-12 form-group mb-0">
                 <button
@@ -150,6 +159,15 @@
                 />
                 <i class="far fa-user"></i>
               </div>
+              <div
+                *ngIf="
+                  commentForm.get('name')?.touched &&
+                  commentForm.get('name')?.invalid
+                "
+                class="text-danger"
+              >
+                Name is required.
+              </div>
               <div class="col-md-6 form-group">
                 <input
                   type="email"
@@ -159,6 +177,15 @@
                   required
                 />
                 <i class="far fa-envelope"></i>
+              </div>
+              <div
+                *ngIf="
+                  commentForm.get('email')?.touched &&
+                  commentForm.get('email')?.invalid
+                "
+                class="text-danger"
+              >
+                Email is required.
               </div>
               <div class="col-12 form-group">
                 <input
@@ -178,16 +205,14 @@
                 ></textarea>
                 <i class="far fa-pencil"></i>
               </div>
-              <div class="col-12 form-group">
-                <input
-                  type="checkbox"
-                  id="saveInfo"
-                  formControlName="saveInfo"
-                />
-                <label for="saveInfo">
-                  Save my name, email, and website in this browser for the next
-                  time I comment.
-                </label>
+              <div
+                *ngIf="
+                  commentForm.get('text')?.touched &&
+                  commentForm.get('text')?.invalid
+                "
+                class="text-danger"
+              >
+                Comment is required.
               </div>
               <div class="col-12 form-group mb-0">
                 <button
