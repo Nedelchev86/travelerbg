@@ -127,7 +127,7 @@ export class DestinationsComponent {
       .map((_, i) => i + 1);
   }
 
-  updateDestinationRating(destinationId: string, rating: number): void {
+  updateDestinationRating(destinationId: string): void {
     const destination = this.data.find((t) => t.id === destinationId);
     console.log('destination', destination);
     if (destination) {
@@ -136,6 +136,7 @@ export class DestinationsComponent {
         .subscribe({
           next: (data: any) => {
             console.log('test', data);
+
             destination.average_rating = data.average_rating;
             destination.number_of_votes = data.number_of_votes;
           },
@@ -162,8 +163,7 @@ export class DestinationsComponent {
       })
       .subscribe({
         next: (response) => {
-          console.log('Rating submitted successfully', response);
-          this.updateDestinationRating(destinationId, rating);
+          this.updateDestinationRating(destinationId);
           this.toast.success('Rating submitted successfully');
         },
         error: (err) => {
