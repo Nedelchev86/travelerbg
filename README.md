@@ -1,6 +1,9 @@
 Description
 This project is a web application that serves two main user types: travelers and business owners. The platform allows users to add, manage, and explore various destinations, hotels, and activities. It aims to provide a seamless experience for both travelers looking for new adventures and business owners wanting to promote their services.
 
+![register](https://github.com/user-attachments/assets/0ad91102-c3c4-4daa-9b51-3a7acc5ec2a5)
+
+
 User Types
 Travelers:
 
