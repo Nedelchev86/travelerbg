@@ -10,7 +10,6 @@ import { CommonModule } from '@angular/common';
   selector: 'app-my-destinations',
   standalone: true,
   imports: [
-    SetBgImageDirective,
     RouterLink,
     RouterLinkActive,
     DeleteConfirmationModalComponent,

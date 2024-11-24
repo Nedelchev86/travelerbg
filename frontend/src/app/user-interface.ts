@@ -20,6 +20,8 @@ export interface UserDetails {
   profile_picture: string;
   cover: string;
   published_destinations_count: number;
+  published_activities_count: number;
+  published_hotels_count: number;
 }
 
 export interface BussinessDetails {
@@ -44,6 +46,8 @@ export interface BussinessDetails {
   about: string;
   occupation: string;
   published_destinations_count: number;
+  published_activities_count: number;
+  published_hotels_count: number;
 }
 
 export interface LoginResponse {

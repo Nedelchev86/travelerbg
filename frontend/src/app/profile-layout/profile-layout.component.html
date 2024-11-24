@@ -17,49 +17,49 @@
                   [routerLinkActiveOptions]="{ exact: true }"
                   ><img src="assets/img/theme-img/map.svg" alt="" />Dashboard</a
                 >
-                <span>(8)</span>
               </li>
               <li>
                 <a routerLink="/profile/edit-profile" routerLinkActive="active"
                   ><img src="assets/img/theme-img/map.svg" alt="" />Edit Profile
                 </a>
-                <span>(6)</span>
               </li>
               <li>
                 <a routerLink="/profile/add-hotel" routerLinkActive="active"
                   ><img src="assets/img/theme-img/map.svg" alt="" />Add Hotel</a
                 >
-                <span>(2)</span>
               </li>
               <li>
                 <a routerLink="/profile/my-hotels" routerLinkActive="active"
                   ><img src="assets/img/theme-img/map.svg" alt="" />My Hotels</a
                 >
-                <span>(7)</span>
+                <span>{{
+                  authService.currentUser()?.user?.published_hotels_count
+                }}</span>
               </li>
               <li>
                 <a
-                  routerLink="/profile/add-destination"
+                  routerLink="/profile/add-activities"
                   routerLinkActive="active"
                   ><img src="assets/img/theme-img/map.svg" alt="" />Add
                   Activities</a
                 >
-                <span>(2)</span>
               </li>
               <li>
-                <a
-                  routerLink="/profile/my-destinations"
-                  routerLinkActive="active"
+                <a routerLink="/profile/my-activities" routerLinkActive="active"
                   ><img src="assets/img/theme-img/map.svg" alt="" />My
                   Activities</a
                 >
-                <span>(7)</span>
+                <span
+                  >({{
+                    authService.currentUser()?.user?.published_activities_count
+                  }})</span
+                >
               </li>
               <li>
                 <a routerLink="/profile/bookmarked" routerLinkActive="active"
                   ><img src="assets/img/theme-img/map.svg" alt="" />Bookmarked
                 </a>
-                <span>(9)</span>
+                <span>(ToDo)</span>
               </li>
               <li>
                 <a
@@ -69,7 +69,6 @@
                   ><img src="assets/img/theme-img/map.svg" alt="" />Delete
                   Profile</a
                 >
-                <span>(10)</span>
               </li>
             </ul>
           </div>
@@ -124,6 +123,25 @@
                   >({{
                     authService.currentUser()?.user
                       ?.published_destinations_count
+                  }})</span
+                >
+              </li>
+              <li>
+                <a
+                  routerLink="/profile/add-activities"
+                  routerLinkActive="active"
+                  ><img src="assets/img/theme-img/map.svg" alt="" />Add
+                  Activities</a
+                >
+              </li>
+              <li>
+                <a routerLink="/profile/my-activities" routerLinkActive="active"
+                  ><img src="assets/img/theme-img/map.svg" alt="" />My
+                  Activities</a
+                >
+                <span
+                  >({{
+                    authService.currentUser()?.user?.published_activities_count
                   }})</span
                 >
               </li>
