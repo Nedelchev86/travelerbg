@@ -1,13 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { SetBgImageDirective } from '../set-bg-image.directive';
+import { RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-activities',
   standalone: true,
-  imports: [SetBgImageDirective],
+  imports: [SetBgImageDirective, RouterLink],
   templateUrl: './activities.component.html',
-  styleUrl: './activities.component.css'
+  styleUrl: './activities.component.css',
 })
 export class ActivitiesComponent {
   httpClient = inject(HttpClient);
@@ -16,7 +17,6 @@ export class ActivitiesComponent {
     this.httpClient.get('http://localhost:8000/api/activities/').subscribe({
       next: (data: any) => {
         this.data = data;
- 
       },
       error: (err) => console.log(err),
     });
