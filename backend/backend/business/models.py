@@ -2,7 +2,9 @@ from cloudinary.models import CloudinaryField
 from django.contrib.auth import get_user_model
 from django.db import models
 
+from backend.activities.models import Activities
 from backend.core.validators import validate_start_with_upper, validate_phone_number
+from backend.hotels.models import Hotel
 
 UserModel = get_user_model()
 
@@ -17,6 +19,13 @@ class BusinessProfile(models.Model):
     linkedin_url = models.URLField(max_length=200, null=True, blank=True)
     facebook_url = models.URLField(max_length=200, null=True, blank=True)
     activated = models.BooleanField(default=False)
+
+
+    def count_published_hotels(self):
+        return Hotel.objects.filter(user=self.user).count()
+
+    def count_published_activities(self):
+        return Activities.objects.filter(user=self.user).count()
 
     def __str__(self):
         if self.name:

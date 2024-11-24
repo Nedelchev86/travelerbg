@@ -27,13 +27,26 @@ class ActivityCategory(models.Model):
 class Activities(models.Model):
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE)
     title = models.CharField(max_length=300)
-    description = models.TextField()
+    description = models.TextField(blank=False, null=False)
+    highlights = models.TextField(blank=True, null=True)
     category = models.ForeignKey(ActivityCategory,  on_delete=models.CASCADE)
-    image = CloudinaryField('image', blank=True, null=True)
-    image2 = CloudinaryField('image', blank=True, null=True)
-    image3 = CloudinaryField('image', blank=True, null=True)
+    image = models.CharField(max_length=255, blank=True, null=True)
+    image2 = models.CharField(max_length=255, blank=True, null=True)
+    image3 = models.CharField(max_length=255, blank=True, null=True)
     price = models.DecimalField(max_digits=5, decimal_places=2)
-    time = models.IntegerField(blank=True, null=True)
+    duration = models.IntegerField(blank=True, null=True)
+    location = models.CharField(max_length=100)
+    lat = models.DecimalField(max_digits=20, decimal_places=16, blank=True, null=True)
+    lng = models.DecimalField(max_digits=20, decimal_places=16, blank=True, null=True)
     tags = models.ManyToManyField(Tag, related_name="activities", blank=True)
-    # Other fields...
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
 
+
+class FavoriteActivity(models.Model):
+    user = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name='favorite_activities')
+    activity = models.ForeignKey(Activities, on_delete=models.CASCADE, related_name='favorited_by')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'activity')

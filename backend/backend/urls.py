@@ -4,7 +4,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from backend.accounts.views import UserRegistrationAPIView, MyTokenObtainPairView, MyTokenRefreshView, UserProfileView
-from backend.activities.views import ActivitiesViewSet
+from backend.activities.views import ActivitiesViewSet, ActivitiesCategory, FavoriteActivityViewSet
 from backend.business.views import BusinessProfileViewSet
 from backend.core.views import TagViewSet
 from backend.destinations.views import DestinationViewSet, DestinationCategory, DestinationCommentCreateView, \
@@ -23,6 +23,7 @@ router.register(r'api/hotels', HotelViewSet)
 router.register(r'api/tags', TagViewSet)
 router.register(r'api/highlights', HighlightsViewSet)
 router.register(r'api/business', BusinessProfileViewSet)
+router.register(r'api/favorite-activities', FavoriteActivityViewSet, basename='favorite-activity')
 
 
 
@@ -41,6 +42,7 @@ urlpatterns = [
     path('api/categories/', DestinationCategory.as_view(), name='destination-category'),
 
     path('api/categories/hotels/', HotelsCategory.as_view(), name='hotel-category'),
+    path('api/categories/activities/', ActivitiesCategory.as_view(), name='activities-category'),
     path('api/hotels/<int:hotel_id>/comments/', HotelCommentListView.as_view(), name='hotel-comment-list'),
     path('api/hotels/<int:hotel_id>/comments/add/', HotelCommentCreateView.as_view(), name='hotel-comment-add'),
 

@@ -1,14 +1,15 @@
 from django.db.models import Avg
 from django.shortcuts import render
-from rest_framework import viewsets, generics
+from rest_framework import viewsets, generics, permissions, status
 from rest_framework.decorators import action
 from rest_framework.generics import ListAPIView, get_object_or_404
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
 from backend.hotels.pagination import HotelsPagination
-from backend.hotels.serializers import CategorySerializer, HighlightsSerializer, HotelCommentSerializer
-from backend.hotels.models import Hotel, Category, Highlights, HotelComment, HotelRating
+from backend.hotels.serializers import CategorySerializer, HighlightsSerializer, HotelCommentSerializer, \
+    FavoriteHotelSerializer
+from backend.hotels.models import Hotel, Category, Highlights, HotelComment, HotelRating, FavoriteHotels
 from backend.hotels.serializers import HotelSerializer
 
 
@@ -67,7 +68,26 @@ class HotelViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(top_hotels, many=True)
         return Response(serializer.data)
 
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    def add_to_favorites(self, request, pk=None):
+        hotel = self.get_object()
+        favorite, created = FavoriteHotels.objects.get_or_create(user=request.user, hotel=hotel)
+        if created:
+            return Response({'status': 'hotel added to favorites'})
+        else:
+            return Response({'status': 'hotel already in favorites'})
 
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    def remove_from_favorites(self, request, pk=None):
+        hotel = self.get_object()
+        FavoriteHotels.objects.filter(user=request.user, hotel=hotel).delete()
+        return Response({'status': 'hotel removed from favorites'})
+
+    @action(detail=True, methods=['get'], permission_classes=[IsAuthenticated])
+    def is_favorite(self, request, pk=None):
+        hotel = self.get_object()
+        is_favorite = FavoriteHotels.objects.filter(user=request.user, hotel=hotel).exists()
+        return Response({'is_favorite': is_favorite}, status=status.HTTP_200_OK)
 
 class HotelsCategory(ListAPIView):
     queryset = Category.objects.all()
@@ -108,3 +128,12 @@ class HotelCommentCreateView(generics.CreateAPIView):
             serializer.save(hotel=hotel, user=self.request.user, name=name, email=email)
         else:
             serializer.save(hotel=hotel)
+
+
+class FavoriteActivityViewSet(viewsets.ModelViewSet):
+    queryset = FavoriteHotels.objects.all()
+    serializer_class = FavoriteHotelSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)

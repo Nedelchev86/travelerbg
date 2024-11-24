@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from backend.activities.models import Activities, ActivityCategory
+from backend.activities.models import Activities, ActivityCategory, FavoriteActivity
 from backend.core.models import Tag
 from backend.core.serializers import TagSerializer
 from backend.destinations.models import Destination
@@ -11,15 +11,17 @@ class ActivitiesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Activities
-        fields = '__all__'
+        fields = ["id", "user", "title", 'highlights', "category", "description", "location", "highlights", "duration", "lat", "lng", "image", "image2", "image3", "price", "tags", "created_at", "modified_at",]
+        extra_kwargs = {
+            'user': {'read_only': True}
+        }
 
     def create(self, validated_data):
         tags_data = validated_data.pop('tags', [])
-        activities = Activities.objects.create(**validated_data)
-        for tag_data in tags_data:
-            tag, created = Tag.objects.get_or_create(name=tag_data['name'])
-            activities.tags.add(tag)
-        return activities
+
+        hotel = Activities.objects.create(**validated_data)
+        hotel.tags.set(tags_data)
+        return hotel
 
     def update(self, instance, validated_data):
         tags_data = validated_data.pop('tags', [])
@@ -42,3 +44,8 @@ class ActivityCategorySerializer(serializers.ModelSerializer):
     def get_number_of_activity(self, obj):
         return obj.get_number_of_activity()
 
+class FavoriteActivitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FavoriteActivity
+        fields = ['user', 'activity', 'created_at']
+        read_only_fields = ['created_at']

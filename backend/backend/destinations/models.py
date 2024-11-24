@@ -37,7 +37,7 @@ class Destination(models.Model):
     title = models.CharField(max_length=300)
     tags = models.ManyToManyField(Tag, related_name="destinations")
     category = models.ForeignKey(Category,  on_delete=models.CASCADE)
-    basic_information = models.TextField(null=False, blank=False)
+    description = models.TextField(null=False, blank=False)
     image = models.URLField(max_length=255, blank=False, null=False)
     image2 = models.URLField(max_length=255, blank=True, null=True)
     image3 = models.URLField(max_length=255, blank=True, null=True)

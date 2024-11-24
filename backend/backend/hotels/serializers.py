@@ -6,7 +6,7 @@ from backend.business.serializers import BusinessSerializer
 from backend.core.models import Tag
 from backend.core.serializers import TagSerializer
 from backend.destinations.models import Destination
-from backend.hotels.models import Hotel, Category, Highlights, HotelComment, HotelRating
+from backend.hotels.models import Hotel, Category, Highlights, HotelComment, HotelRating, FavoriteHotels
 from backend.travelers.serializers import TravelerSerializer
 
 
@@ -200,3 +200,10 @@ class RatingSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'user': {'read_only': True},
             'hotel': {'read_only': True}}
+
+
+class FavoriteHotelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FavoriteHotels
+        fields = ['user', 'hotel', 'created_at']
+        read_only_fields = ['created_at']

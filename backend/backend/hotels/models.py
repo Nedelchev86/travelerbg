@@ -106,3 +106,12 @@ class HotelRating(models.Model):
 
     class Meta:
         unique_together = ('user', 'hotel')
+
+
+class FavoriteHotels(models.Model):
+    user = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name='favorite_hotel')
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='favorited_hotel_by')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'hotel')
