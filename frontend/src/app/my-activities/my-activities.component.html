@@ -1,0 +1,74 @@
+<div class="row gy-40">
+  <app-delete-confirmation-modal
+    *ngIf="showModal"
+    (confirm)="confirmDelete()"
+    (cancel)="closeModal()"
+  ></app-delete-confirmation-modal>
+
+  <div class="tab-content" id="nav-tabContent">
+    <div
+      class="tab-pane fade active show"
+      id="tab-grid"
+      role="tabpanel"
+      aria-labelledby="tab-shop-grid"
+    >
+      <app-delete-confirmation-modal
+        *ngIf="showModal"
+        (confirm)="confirmDelete()"
+        (cancel)="closeModal()"
+      ></app-delete-confirmation-modal>
+      <div class="row gy-40">
+        @for (activitie of activities; track activitie.id) {
+        <div class="col-xl-3 col-sm-6">
+          <div class="th-product product-grid">
+            <div class="product-img">
+              <img src="{{ activitie.image }}" alt="Product Image" />
+              <span class="product-tag">Sale</span>
+              <div class="actions">
+                <a
+                  routerLink="/activities/{{ activitie.id }}"
+                  routerLinkActive="active"
+                  class="icon-btn popup-content"
+                  ><i class="far fa-eye"></i
+                ></a>
+                <a
+                  routerLink="/profile/edit-activitie/{{ activitie.id }}"
+                  routerLinkActive="active"
+                  class="icon-btn"
+                  ><i class="far fa-edit"></i
+                ></a>
+                <a (click)="openModal(activitie.id)" class="icon-btn"
+                  ><i class="far fa-trash"></i
+                ></a>
+              </div>
+            </div>
+            <div class="product-content">
+              <h3 class="product-title">
+                <a
+                  routerLink="/activities/{{ activitie.id }}"
+                  routerLinkActive="active"
+                  >{{ activitie.title }}</a
+                >
+              </h3>
+              <span class="price">{{ activitie.location }}</span>
+              <div class="woocommerce-product-rating">
+                <span class="count">(5.00 Review)</span>
+                <div
+                  class="star-rating"
+                  role="img"
+                  aria-label="Rated 5.00 out of 5"
+                >
+                  <span
+                    >Rated <strong class="rating">5.00</strong> out of 5 based
+                    on <span class="rating">1</span> customer rating</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
