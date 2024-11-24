@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ShapeMockupDirective } from '../shape-mockup.directive';
 import {
@@ -21,6 +21,10 @@ interface Images {
   imageSrc: string;
   imageAlt?: string;
 }
+
+interface FavoriteStatusResponse {
+  is_favorite: boolean;
+}
 export interface Comment {
   created_at: String;
   email: String;
@@ -40,13 +44,12 @@ export interface Comment {
     RatingComponent,
     CommonModule,
     GoogleMapComponent,
-    SetBgImageDirective,
     GalleryLightboxComponent,
   ],
   templateUrl: './hotel-details.component.html',
   styleUrl: './hotel-details.component.css',
 })
-export class HotelDetailsComponent {
+export class HotelDetailsComponent implements OnInit {
   hotel: any = {}; // Store hotel data
   hotelId: string | null = null;
   comments: any[] = []; // Store comments data
@@ -59,6 +62,7 @@ export class HotelDetailsComponent {
   private fb = inject(FormBuilder);
   public authService = inject(AuthService);
   private toast = inject(ToastrService);
+  isFavorite: boolean = false;
 
   constructor() {
     this.commentForm = this.fb.group({
@@ -66,12 +70,10 @@ export class HotelDetailsComponent {
       email: ['', [Validators.required, Validators.email]],
       website: [''],
       text: ['', Validators.required],
-
     });
 
     this.commentFormRegistred = this.fb.group({
       text: ['', Validators.required],
-
     });
   }
 
@@ -98,6 +100,7 @@ export class HotelDetailsComponent {
         (response: Comment[]) => {
           this.hotel = response;
           this.galleryData = this.getFilteredImages();
+          this.checkIsFavorite(hotelId);
         },
         (error) => {
           console.error('Error fetching hotel details:', error);
@@ -211,5 +214,53 @@ export class HotelDetailsComponent {
           },
         });
     }
+  }
+
+  checkIsFavorite(hotelId: string): void {
+    this.http
+      .get<FavoriteStatusResponse>(
+        `http://localhost:8000/api/hotels/${hotelId}/is_favorite/`
+      )
+      .subscribe({
+        next: (response) => {
+          this.isFavorite = response?.['is_favorite'] || false;
+        },
+        error: (err) => {
+          console.error('Failed to check favorite status', err);
+        },
+      });
+  }
+
+  addToFavorites(hotelId: string): void {
+    this.http
+      .post(`http://localhost:8000/api/hotels/${hotelId}/add_to_favorites/`, {})
+      .subscribe({
+        next: (response) => {
+          this.isFavorite = true; // Set favorite status to true
+          this.toast.success('Added to favorites successfully');
+        },
+        error: (err) => {
+          console.error('Failed to add to favorites', err);
+          this.toast.error('Failed to add to favorites');
+        },
+      });
+  }
+  removeFromFavorites(hotelId: string): void {
+    this.http
+      .post(
+        `http://localhost:8000/api/hotels/${hotelId}/remove_from_favorites/`,
+        {}
+      )
+      .subscribe({
+        next: (response) => {
+          this.isFavorite = true; // Set favorite status to true
+          this.toast.success('Removed from favorite successfully');
+          this.isFavorite = false;
+        },
+        error: (err) => {
+          console.error('Failed to remove from favorites', err);
+          this.toast.error('Failed to remove from  favorites');
+        },
+      });
   }
 }

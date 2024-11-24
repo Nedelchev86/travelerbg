@@ -5,7 +5,6 @@
         <div class="service-img"><img src="{{ hotel.image }}" alt="" /></div>
         <div class="page-content">
           <div class="page-meta mt-50 mb-45">
-            <a class="page-tag" href="tour.html">Featured</a>
             <div class="inline">
               <app-rating
                 [rating]="hotel.average_rating"
@@ -13,6 +12,16 @@
                 (rated)="rateTHotel($event)"
               ></app-rating>
             </div>
+            @if(!isFavorite){
+            <button (click)="addToFavorites(hotel.id)" class="ratting">
+              <i class="fa fa-heart"></i>
+              Add to Favorites</button
+            >}@else{
+            <button (click)="removeFromFavorites(hotel.id)" class="ratting">
+              <i class="fa fa-heart text-danger"></i>
+              Remove from Favorites
+            </button>
+            }
           </div>
           <h2 class="box-title">{{ hotel.name }}</h2>
           <p
