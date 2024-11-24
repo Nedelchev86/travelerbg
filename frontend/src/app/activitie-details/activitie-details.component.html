@@ -1,0 +1,323 @@
+<div class="tour-page-single">
+  <div class="tour-page-single">
+    <div class="slider-area tour-slider1">
+      <swiper-container
+        style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff"
+        class="mySwiper"
+        thumbs-swiper=".mySwiper2"
+        loop="false"
+        space-between="10"
+        navigation="true"
+      >
+        <swiper-slide class="swiper-slide">
+          <div class="tour-slider-img">
+            <img src="{{ activitie.image }}" />
+          </div>
+        </swiper-slide>
+        <swiper-slide class="swiper-slide">
+          <div class="tour-slider-img">
+            <img src="{{ activitie.image2 }}" />
+          </div>
+        </swiper-slide>
+        <swiper-slide class="swiper-slide">
+          <div class="tour-slider-img">
+            <img src="{{ activitie.image3 }}" />
+          </div>
+        </swiper-slide>
+      </swiper-container>
+
+      <swiper-container
+        class="mySwiper2"
+        loop="false"
+        space-between="20"
+        slides-per-view="4"
+        free-mode="true"
+        watch-slides-progress="true"
+        style="margin-top: 30px"
+      >
+        <swiper-slide class="swiper-slide">
+          <div class="tour-slider-img">
+            <img src="{{ activitie.image }}" />
+          </div>
+        </swiper-slide>
+        <swiper-slide class="swiper-slide">
+          <div class="tour-slider-img">
+            <img src="{{ activitie.image2 }}" />
+          </div>
+        </swiper-slide>
+        <swiper-slide class="swiper-slide">
+          <div class="tour-slider-img">
+            <img src="{{ activitie.image3 }}" />
+          </div>
+        </swiper-slide>
+      </swiper-container>
+    </div>
+  </div>
+  <div class="page-content">
+    <div class="page-meta mb-45">
+      <a class="page-tag" href="tour.html">Featured</a>
+      <span class="ratting">
+        <i class="fa-sharp fa-solid fa-star"></i>
+        <span>4.8</span>
+      </span>
+      @if(!isFavorite){
+      <button (click)="addToFavorites(activitie.id)" class="ratting">
+        <i class="fa fa-heart"></i>
+        Add to Favorites</button
+      >}@else{
+      <button (click)="removeFromFavorites(activitie.id)" class="ratting">
+        <i class="fa fa-heart text-danger"></i>
+        Remove from Favorites
+      </button>
+      }
+    </div>
+
+    <h2 class="box-title">{{ activitie.title }}</h2>
+    <p class="box-text mb-30" [innerHTML]="activitie.description"></p>
+    <p class="box-text mb-50" [innerHTML]="activitie.highlights"></p>
+    <div class="tour-snapshot">
+      <h4 class="box-title">Tour Snapshot</h4>
+      <div class="tour-snap-wrapp">
+        <div class="tour-snap">
+          <div class="icon">
+            <i class="fa-light fa-clock"></i>
+          </div>
+          <div class="content">
+            <span class="title">Duration:</span>
+            <span>{{ activitie.duration }}</span>
+          </div>
+        </div>
+        <div class="tour-snap">
+          <div class="icon">
+            <img src="assets/img/icon/guide2.svg" alt="" />
+          </div>
+          <div class="content">
+            <span class="title">Price:</span>
+            <span>{{ activitie.price }}</span>
+          </div>
+        </div>
+        <div class="tour-snap">
+          <div class="icon">
+            <img src="assets/img/icon/ship.svg" alt="" />
+          </div>
+          <div class="content">
+            <span class="title">Categorty:</span>
+            <span>{{ activitie.category }}</span>
+          </div>
+        </div>
+        <div class="tour-snap">
+          <div class="icon">
+            <!-- <img src="assets/img/icon/01.svg" alt="" /> -->
+          </div>
+          <div class="content">
+            <!-- <span class="title">Free Cancellation</span>
+            <a href="#" class="line-btn">Learn more</a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <h2 class="box-title">Overview</h2>
+
+    <h2 class="box-title">Included and Excluded</h2>
+    <p class="blog-text mb-35">
+      voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque
+      ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae
+      dicta sunt explicabo. Dolorem ipsum quia dolor sit amet, consectetur,
+      adipisci.
+    </p>
+    <div class="destination-checklist">
+      <div class="checklist style2 style4">
+        <ul>
+          <li>Hotel Fair</li>
+          <li>Transportation</li>
+          <li>Breakfast</li>
+          <li>Sightseeing</li>
+          <li>Travel Tax</li>
+          <li>Seasonal Food</li>
+        </ul>
+      </div>
+      <div class="checklist style5">
+        <ul>
+          <li>WIFI</li>
+          <li>Swimming Pool</li>
+          <li>GYM</li>
+          <li>Travel Insurance</li>
+          <li>Family Expenses</li>
+          <li>Family Expenses</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="location-map">
+    <h3 class="page-title mt-45 mb-30">Activity Location</h3>
+    <div class="contact-map">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3644.7310056272386!2d89.2286059153658!3d24.00527418490799!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39fe9b97badc6151%3A0x30b048c9fb2129bc!2sAngfuztheme!5e0!3m2!1sen!2sbd!4v1651028958211!5m2!1sen!2sbd"
+        allowfullscreen=""
+        loading="lazy"
+      ></iframe>
+      <div class="contact-icon">
+        <img src="assets/img/icon/location-dot3.svg" alt="" />
+      </div>
+    </div>
+  </div>
+  <div class="th-comments-wrap style2">
+    <h2 class="blog-inner-title h4">Reviews (3)</h2>
+    <ul class="comment-list">
+      <li class="th-comment-item">
+        <div class="th-post-comment">
+          <div class="comment-avater">
+            <img
+              src="assets/img/blog/comment-author-1.jpg"
+              alt="Comment Author"
+            />
+          </div>
+          <div class="comment-content">
+            <h3 class="name">Adam Jhon</h3>
+            <div class="commented-wrapp">
+              <span class="commented-on">20 Jun, 2024</span>
+              <span class="commented-time">08:56pm </span>
+              <span class="comment-review">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+              </span>
+            </div>
+            <p class="text">
+              Credibly pontificate transparent quality vectors with quality
+              mindshare. Efficiently architect worldwide strategic theme areas
+              after user.
+            </p>
+            <div class="reply_and_edit">
+              <i class="fa-solid fa-thumbs-up"></i>
+            </div>
+          </div>
+        </div>
+        <ul class="children">
+          <li class="th-comment-item">
+            <div class="th-post-comment">
+              <div class="comment-avater">
+                <img
+                  src="assets/img/blog/comment-author-4.jpg"
+                  alt="Comment Author"
+                />
+              </div>
+              <div class="comment-content">
+                <div class="">
+                  <h3 class="name">Maria Willson</h3>
+                  <div class="commented-wrapp">
+                    <span class="commented-on">23 Jun, 2024</span>
+                    <span class="commented-time">08:56pm </span>
+                    <span class="comment-review">
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                    </span>
+                  </div>
+                </div>
+                <p class="text">
+                  It is different from airport transfer or port transfer, which
+                  are services that pick you up
+                </p>
+                <div class="reply_and_edit">
+                  <i class="fa-solid fa-thumbs-up"></i>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </li>
+      <li class="th-comment-item">
+        <div class="th-post-comment">
+          <div class="comment-avater">
+            <img
+              src="assets/img/blog/comment-author-5.jpg"
+              alt="Comment Author"
+            />
+          </div>
+          <div class="comment-content">
+            <div class="">
+              <h3 class="name">Michel Edwards</h3>
+              <div class="commented-wrapp">
+                <span class="commented-on">27 Jun, 2024</span>
+                <span class="commented-time">08:56pm </span>
+                <span class="comment-review">
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                </span>
+              </div>
+            </div>
+            <p class="text">
+              Credibly pontificate transparent quality vectors with quality
+              mindshare. Efficiently architect worldwide strategic theme areas
+              after user.
+            </p>
+            <div class="reply_and_edit">
+              <i class="fa-solid fa-thumbs-up"></i>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <!-- Comment end -->
+  <!-- Comment Form -->
+  <div class="th-comment-form">
+    <div class="row">
+      <h3 class="blog-inner-title h4 mb-2">Leave a Reply</h3>
+      <p class="mb-25">
+        Your email address will not be published. Required fields are marked
+      </p>
+      <div class="col-md-6 form-group">
+        <input
+          type="text"
+          placeholder="Full Name*"
+          class="form-control"
+          required
+        />
+        <i class="far fa-user"></i>
+      </div>
+      <div class="col-md-6 form-group">
+        <input
+          type="text"
+          placeholder="Your Email*"
+          class="form-control"
+          required
+        />
+        <i class="far fa-envelope"></i>
+      </div>
+      <div class="col-12 form-group">
+        <input
+          type="text"
+          placeholder="Website"
+          class="form-control"
+          required
+        />
+        <i class="far fa-globe"></i>
+      </div>
+      <div class="col-12 form-group">
+        <textarea placeholder="Comment*" class="form-control"></textarea>
+        <i class="far fa-pencil"></i>
+      </div>
+      <div class="col-12 form-group">
+        <input type="checkbox" id="html" />
+        <label for="html"
+          >Save my name, email, and website in this browser for the next time I
+          comment.</label
+        >
+      </div>
+      <div class="col-12 form-group mb-0">
+        <button class="th-btn">
+          Send Message<img src="assets/img/icon/plane2.svg" alt="" />
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
