@@ -1,0 +1,134 @@
+<div
+  class="breadcumb-wrapper"
+  [appSetBgImage]="'assets/img/bg/breadcumb-bg.jpg'"
+>
+  <div class="container">
+    <div class="breadcumb-content">
+      <h1 class="breadcumb-title">Activities</h1>
+      <ul class="breadcumb-menu">
+        <li><a href="home-travel.html">Home</a></li>
+        <li>Activities</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<section class="space">
+  <div class="container">
+    <div class="row">
+      <div class="col-xxl-8 col-lg-7">
+        <router-outlet></router-outlet>
+      </div>
+      <div class="col-xxl-4 col-lg-5">
+        <aside class="sidebar-area">
+          <div class="widget widget_search">
+            <form class="search-form">
+              <input type="text" placeholder="Search" />
+              <button type="submit"><i class="far fa-search"></i></button>
+            </form>
+          </div>
+          <div class="widget widget_categories">
+            <h3 class="widget_title">Activity Type</h3>
+            <ul>
+              <li>
+                <a href="blog.html"
+                  ><i class="fa-light fa-square-check"></i>Food and drink</a
+                >
+                <span>(10)</span>
+              </li>
+              <li>
+                <a href="blog.html"
+                  ><i class="fa-light fa-square-check"></i>Entertainment</a
+                >
+                <span>(6)</span>
+              </li>
+              <li>
+                <a href="blog.html"
+                  ><i class="fa-light fa-square-check"></i>Sports</a
+                >
+                <span>(2)</span>
+              </li>
+              <li>
+                <a href="blog.html"
+                  ><i class="fa-light fa-square-check"></i>Nature and
+                  outdoors</a
+                >
+                <span>(7)</span>
+              </li>
+              <li>
+                <a href="blog.html"
+                  ><i class="fa-light fa-square-check"></i>Culture and events</a
+                >
+                <span>(9)</span>
+              </li>
+              <li>
+                <a href="blog.html"
+                  ><i class="fa-light fa-square-check"></i>Mountain
+                  Campaigning</a
+                >
+                <span>(10)</span>
+              </li>
+            </ul>
+          </div>
+          <div class="widget widget_price_filter">
+            <h4 class="widget_title">Filter By Price</h4>
+            <div class="price_slider_wrapper">
+              <div class="price_label">
+                Price: <span class="from">$0 </span> —
+                <span class="to">$1000</span>
+              </div>
+              <div class="price_slider"></div>
+            </div>
+          </div>
+          <div class="widget widget_categories">
+            <h3 class="widget_title">Duration</h3>
+            <ul>
+              <li>
+                <a href="blog.html"
+                  ><i class="fa-light fa-square-check"></i>Up to 2 hour</a
+                >
+                <span>(20)</span>
+              </li>
+              <li>
+                <a href="blog.html"
+                  ><i class="fa-light fa-square-check"></i>1 to 4 hour</a
+                >
+                <span>(24)</span>
+              </li>
+              <li>
+                <a href="blog.html"
+                  ><i class="fa-light fa-square-check"></i>4 hour to 1 day</a
+                >
+                <span>(25)</span>
+              </li>
+            </ul>
+          </div>
+          <div class="widget widget_categories">
+            <h3 class="widget_title">Duration</h3>
+            <ul>
+              <li>
+                <a href="blog.html"
+                  ><i class="fa-light fa-square-check"></i>Gozayan Tour, BD</a
+                >
+                <span>(26)</span>
+              </li>
+              <li>
+                <a href="blog.html"
+                  ><i class="fa-light fa-square-check"></i>Tourope UK</a
+                >
+                <span>(27)</span>
+              </li>
+              <li>
+                <a href="blog.html"
+                  ><i class="fa-light fa-square-check"></i>European Tours
+                  Limited</a
+                >
+                <span>(29)</span>
+              </li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</section>
