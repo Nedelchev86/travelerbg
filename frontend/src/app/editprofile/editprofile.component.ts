@@ -89,7 +89,7 @@ export class EditProfileComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private http: HttpClient) {
     this.profileForm = this.fb.group({
-      name: ['', [Validators.required, Validators.pattern('^[A-Z][a-z]*$')]],
+      name: ['', [Validators.required, ,]],
       city: ['', Validators.required],
       occupation: ['', Validators.required],
       website: [''],
@@ -187,7 +187,7 @@ export class EditProfileComponent implements OnInit {
           (response) => {
             console.log('Profile updated successfully', response);
 
-            this.authService.updateUserDetails(response as UserDetails);
+            this.authService.fetchUserData();
             this.router.navigate(['/profile']);
           },
           (error) => {

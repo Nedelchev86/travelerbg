@@ -68,6 +68,7 @@ export class AuthService {
   }
 
   isActivated(): boolean {
+    console.log('USER', this.currentUser()?.user);
     return this.currentUser()?.user.activated === true;
   }
 

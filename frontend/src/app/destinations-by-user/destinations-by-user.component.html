@@ -7,10 +7,7 @@
       @for (destination of destinations; track destination.id){
       <div class="tour-box th-ani d-flex">
         <div class="tour-box_img global-img">
-          <img
-            [src]="'https://res.cloudinary.com/drjgddl0y/' + destination.image"
-            alt="image"
-          />
+          <img [src]="destination.image" alt="image" />
         </div>
         <div class="tour-content flex-grow-1">
           <h3 class="box-title">
@@ -18,9 +15,10 @@
               destination.title
             }}</a>
           </h3>
+
           <div class="tour-rating">
             <div class="star-rating" role="img">
-              <span [style.width.%]="(destination.rating / 5) * 100">
+              <span [style.width.%]="destination.average_rating * 18">
                 Rated
                 <strong class="rating">{{ destination.rating }}</strong>
                 out of 5 based on
@@ -32,13 +30,12 @@
             </div>
           </div>
           <h4 class="tour-box_price">
-            <span class="currency">${{ destination.price }}</span
-            >/Person
+            <span>Location: {{ destination.location }}</span>
           </h4>
           <div class="tour-action">
             <span
               ><i class="fa-light fa-clock"></i
-              >{{ destination.duration }} Days</span
+              >{{ destination.time }} Minute</span
             >
             <a
               routerLink="/destinations/{{ destination.id }}"

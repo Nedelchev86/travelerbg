@@ -107,6 +107,7 @@ export class EditBusinessProfileComponent {
         .subscribe(
           (response) => {
             console.log('Profile updated successfully', response);
+            this.authService.fetchUserData();
             this.router.navigate(['/profile']);
           },
           (error) => {

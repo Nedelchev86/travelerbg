@@ -34,7 +34,7 @@ import {
   Paragraph,
   Undo,
 } from 'ckeditor5';
-
+import { environment } from '../environments/environment';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -56,6 +56,7 @@ export class AppComponent implements OnInit {
   http = inject(HttpClient);
   authService = inject(AuthService);
 
+  private readonly API_URL = environment.apiUrl;
   public Editor = ClassicEditor;
   public config = {
     toolbar: ['undo', 'redo', '|', 'bold', 'italic'],
@@ -76,7 +77,7 @@ export class AppComponent implements OnInit {
       return; // Exit early if no token exists
     }
 
-    this.http.get<UserInterface>('http://localhost:8000/api/user/').subscribe({
+    this.http.get<UserInterface>(`${this.API_URL}user/`).subscribe({
       next: (data) => {
         console.log(data);
         this.authService.currentUser.set(data);
