@@ -1,3 +1,9 @@
 .black {
   color: black;
 }
+
+.page-meta.mb-45 {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}

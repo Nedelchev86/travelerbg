@@ -49,6 +49,9 @@ export class ActivitieDetailsComponent {
       );
   }
   checkIsFavorite(activitieId: string): void {
+    if (!this.authService.isLoggedIn()) {
+      return;
+    }
     this.http
       .get<FavoriteStatusResponse>(
         `http://localhost:8000/api/activities/${activitieId}/is_favorite/`
@@ -64,6 +67,10 @@ export class ActivitieDetailsComponent {
   }
 
   addToFavorites(activityId: string): void {
+    if (!this.authService.isLoggedIn()) {
+      this.toast.error('Please login to add to favorites', 'Login required');
+      return;
+    }
     this.http
       .post(
         `http://localhost:8000/api/activities/${activityId}/add_to_favorites/`,
