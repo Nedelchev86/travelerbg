@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { BannerComponent } from '../shared/banner/banner.component';
 import { SetBgImageDirective } from '../set-bg-image.directive';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { TopRatedDestinationsComponent } from '../top-rated-destinations/top-rated-destinations.component';
 import { TopHotelsComponent } from '../top-hotels/top-hotels.component';
 import { ShapeMockupDirective } from '../shape-mockup.directive';
@@ -16,6 +16,7 @@ import { ShapeMockupDirective } from '../shape-mockup.directive';
     TopRatedDestinationsComponent,
     TopHotelsComponent,
     ShapeMockupDirective,
+    RouterLink,
   ],
   templateUrl: './travelers-layout.component.html',
   styleUrl: './travelers-layout.component.css',

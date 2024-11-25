@@ -84,9 +84,10 @@
         <div class="col-xl-8 ps-3 ps-xl-5 pe-xl-4">
           <div class="team-about">
             <h2 class="team-about_title">About Me</h2>
-            <p class="team-about_text mb-25">
-              {{ authService.currentUser()?.user?.about }}
-            </p>
+            <p
+              class="team-about_text mb-25"
+              [innerHTML]="authService.currentUser()?.user?.about"
+            ></p>
 
             <div class="counter-box-wrap">
               <div class="counter-box">

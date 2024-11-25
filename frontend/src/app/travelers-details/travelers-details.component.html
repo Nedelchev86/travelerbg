@@ -64,9 +64,10 @@
         <div class="col-xl-8 ps-3 ps-xl-5 pe-xl-4">
           <div class="team-about">
             <h2 class="team-about_title">About Me</h2>
-            <p class="team-about_text mb-25">
-              {{ travelerDetails.about }}
-            </p>
+            <p
+              class="team-about_text mb-25"
+              [innerHTML]="travelerDetails.about"
+            ></p>
             <div class="counter-area space">
               <div class="container">
                 <div class="row">
