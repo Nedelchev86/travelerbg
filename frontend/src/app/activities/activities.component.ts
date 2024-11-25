@@ -14,7 +14,7 @@ import { environment } from '../../environments/environment';
 export class ActivitiesComponent {
   httpClient = inject(HttpClient);
   public data: Array<any> = [];
-  private readonly API_URL = environment;
+  private readonly API_URL = environment.apiUrl;
   ngOnInit() {
     this.httpClient.get(`${this.API_URL}activities/`).subscribe({
       next: (data: any) => {
