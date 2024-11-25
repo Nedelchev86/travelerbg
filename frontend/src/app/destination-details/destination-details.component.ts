@@ -69,11 +69,17 @@ export class DestinationDetailsComponent implements OnInit {
   isFavorite: boolean = false;
 
   ngOnInit() {
-    this.destinationId = this.route.snapshot.paramMap.get('destinationId');
+    // this.destinationId = this.route.snapshot.paramMap.get('destinationId');
 
-    if (this.destinationId) {
-      this.fetchHotelDetails(this.destinationId);
-    }
+    // if (this.destinationId) {
+    //   this.fetchHotelDetails(this.destinationId);
+    // }
+    this.route.params.subscribe((params) => {
+      this.destinationId = params['destinationId'];
+      if (this.destinationId) {
+        this.fetchHotelDetails(this.destinationId);
+      }
+    });
   }
 
   getFilteredImages(): Images[] {

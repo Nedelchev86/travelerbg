@@ -38,7 +38,11 @@
                   destination.title
                 }}</a>
               </h3>
-              <a class="line-btn" routerLink="/destinations">See more</a>
+              <a
+                class="line-btn"
+                [routerLink]="['/destinations', destination.id]"
+                >See more</a
+              >
             </div> </swiper-slide
           >}
         </swiper-container>

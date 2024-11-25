@@ -99,7 +99,7 @@ export class AddActivitiesComponent {
   }
 
   fetchCategories(): void {
-    this.http.get(`${this.API_URL}activities/`).subscribe(
+    this.http.get(`${this.API_URL}categories/activities/`).subscribe(
       (response: any) => {
         this.categories = response;
       },
