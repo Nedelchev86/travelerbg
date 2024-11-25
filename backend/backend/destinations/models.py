@@ -69,6 +69,8 @@ class Destination(models.Model):
             .order_by('-num_shared_tags').distinct()[:8]
 
 
+
+
     # def related_activities(self):
     #     return Activities.objects.filter(tags__in=self.tags.all()) \
     #         .annotate(num_shared_tags=Count('tags')) \
@@ -111,3 +113,11 @@ class DestinationsComment(models.Model):
 
     def __str__(self):
         return self.text
+
+class FavoriteDestinations(models.Model):
+    user = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name='favorite_favorite_destination_by')
+    destination = models.ForeignKey(Destination, on_delete=models.CASCADE, related_name='favorite_destination_by')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'destination')

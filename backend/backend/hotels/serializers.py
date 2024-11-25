@@ -47,8 +47,8 @@ class HotelSerializer(serializers.ModelSerializer):
     number_of_votes = serializers.SerializerMethodField()
     highlights = HighlightsSerializer(many=True, required=False)
     pagination_class = 10
-    lat = serializers.SerializerMethodField()
-    lng = serializers.SerializerMethodField()
+    # lat = serializers.SerializerMethodField()
+    # lng = serializers.SerializerMethodField()
 
     class Meta:
         model = Hotel
@@ -63,11 +63,11 @@ class HotelSerializer(serializers.ModelSerializer):
     def get_number_of_votes(self, obj):
             return obj.number_of_votes()
 
-    def get_lat(self, obj):
-        return float(obj.lat) if obj.lat is not None else None
-
-    def get_lng(self, obj):
-        return float(obj.lng) if obj.lng is not None else None
+    # def get_lat(self, obj):
+    #     return float(obj.lat) if obj.lat is not None else None
+    #
+    # def get_lng(self, obj):
+    #     return float(obj.lng) if obj.lng is not None else None
 
     def create(self, validated_data):
         tags_data = validated_data.pop('tags', [])

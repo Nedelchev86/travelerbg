@@ -19,6 +19,8 @@ import {
 import { CKEditorConfigService } from '../shared/services/ckeditor-config.service';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../auth.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-add-activities',
@@ -38,6 +40,7 @@ export class AddActivitiesComponent {
   categories: any[] = [];
   tags: FormArray;
   imagePreviews: { [key: string]: string } = {};
+  authSevices = inject(AuthService);
 
   center: google.maps.LatLngLiteral = { lat: 42.504792, lng: 27.462636 };
   zoom = 15;
@@ -54,6 +57,7 @@ export class AddActivitiesComponent {
   private ckEditorConfigService = inject(CKEditorConfigService);
   public Editor = this.ckEditorConfigService.Editor;
   public config = this.ckEditorConfigService.config;
+  private readonly API_URL = environment.apiUrl;
 
   constructor(
     private fb: FormBuilder,
@@ -95,7 +99,7 @@ export class AddActivitiesComponent {
   }
 
   fetchCategories(): void {
-    this.http.get('http://localhost:8000/api/categories/activities/').subscribe(
+    this.http.get(`${this.API_URL}activities/`).subscribe(
       (response: any) => {
         this.categories = response;
       },
@@ -221,9 +225,10 @@ export class AddActivitiesComponent {
       }
     });
 
-    this.http.post('http://localhost:8000/api/activities/', formData).subscribe(
+    this.http.post(`${this.API_URL}activities/`, formData).subscribe(
       (response) => {
         console.log('Destination added successfully', response);
+        this.authSevices.fetchUserData();
         this.router.navigate(['/profile']);
       },
       (error) => {

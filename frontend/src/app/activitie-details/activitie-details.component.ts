@@ -5,6 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../environments/environment'; // Import the environment configuration
+
 
 interface FavoriteStatusResponse {
   is_favorite: boolean;
@@ -24,6 +26,7 @@ export class ActivitieDetailsComponent {
   private fb = inject(FormBuilder);
   public authService = inject(AuthService);
   private toast = inject(ToastrService);
+  private readonly API_URL = environment.apiUrl;
   isFavorite: boolean = false;
   activitie: any = {}; // Store hotel data
   activitieId: string | null = null;
@@ -37,7 +40,7 @@ export class ActivitieDetailsComponent {
 
   fetchActivitieDetails(activitieId: string): void {
     this.http
-      .get<Comment[]>(`http://127.0.0.1:8000/api/activities/${activitieId}/`)
+      .get<Comment[]>(`${this.API_URL}${activitieId}/`)
       .subscribe(
         (response: Comment[]) => {
           this.activitie = response;

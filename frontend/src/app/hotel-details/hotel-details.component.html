@@ -74,7 +74,7 @@
                     alt="Comment Author"
                   />}@else {
                   <img
-                    src="assets/img/blog/comment-author-1.jpg"
+                    src="https://res.cloudinary.com/dzpgrtewh/image/upload/v1732479196/vtcfemon7lbumeccd1xu.jpg"
                     alt="Comment Author"
                   />}
                 </div>
@@ -85,20 +85,10 @@
                       comment.created_at | date : "medium"
                     }}</span>
                     <!-- <span class="commented-time">08:56pm </span> -->
-                    <span class="comment-review">
-                      <i class="fa-solid fa-star"></i>
-                      <i class="fa-solid fa-star"></i>
-                      <i class="fa-solid fa-star"></i>
-                      <i class="fa-solid fa-star"></i>
-                      <i class="fa-solid fa-star"></i>
-                    </span>
                   </div>
                   <p class="text">
                     {{ comment.text }}
                   </p>
-                  <div class="reply_and_edit">
-                    <i class="fa-solid fa-thumbs-up"></i>
-                  </div>
                 </div>
               </div>
             </li>
@@ -110,10 +100,7 @@
         <div class="th-comment-form">
           <div class="row">
             <h3 class="blog-inner-title h4 mb-2">Leave a Reply</h3>
-            <p class="mb-25">
-              Your email address will not be published. Required fields are
-              marked
-            </p>
+
             <form
               [formGroup]="commentFormRegistred"
               (ngSubmit)="onSubmitRegistredComment()"
@@ -138,11 +125,7 @@
               </div>
 
               <div class="col-12 form-group mb-0">
-                <button
-                  class="th-btn"
-                  type="submit"
-                  [disabled]="commentFormRegistred.invalid"
-                >
+                <button class="th-btn" type="submit">
                   Send Message<img src="assets/img/icon/plane2.svg" alt="" />
                 </button>
               </div>
@@ -224,11 +207,7 @@
                 Comment is required.
               </div>
               <div class="col-12 form-group mb-0">
-                <button
-                  class="th-btn"
-                  type="submit"
-                  [disabled]="commentForm.invalid"
-                >
+                <button class="th-btn" type="submit">
                   Send Message<img src="assets/img/icon/plane2.svg" alt="" />
                 </button>
               </div>

@@ -1,41 +1,3 @@
-<!--==============================
-    Breadcumb
-============================== -->
-<div
-  class="breadcumb-wrapper"
-  [appSetBgImage]="'assets/img/hero/breadcum2.jpg'"
->
-  <div class="container">
-    <div class="breadcumb-content">
-      <h1 class="breadcumb-title">Tour Guide</h1>
-      <ul class="breadcumb-menu">
-        <li><a href="home-travel.html">Home</a></li>
-        <li>Guide</li>
-      </ul>
-    </div>
-  </div>
-</div>
-<!--==============================
-Team Area  
-==============================-->
-
-<div
-  class="shape-mockup movingX d-none d-xxl-block"
-  data-top="38%"
-  data-left="5%"
-  appShapeMockup
->
-  <img src="assets/img/shape/shape_3.png" alt="shape" />
-</div>
-<div
-  class="shape-mockup jump d-none d-xxl-block"
-  data-top="85%"
-  data-right="5%"
-  appShapeMockup
->
-  <img src="assets/img/shape/shape_2.png" alt="shape" />
-</div>
-
 @if (loading) {
 <app-loader></app-loader>
 }@else {
@@ -47,10 +9,22 @@ Team Area
       <div class="col-xl-4 col-md-6">
         <div class="th-team team-grid">
           <div class="team-img">
-            <img src="{{ traveler.cover }}" alt="Team" />
+            @if(traveler.cover){
+            <img src="{{ traveler.cover }}" alt="Team" />}@else {
+            <img
+              src="https://res.cloudinary.com/dzpgrtewh/image/upload/v1732479353/hknqokmuuybfjzfizloj.png"
+              alt="Team"
+            />
+            }
           </div>
           <div class="team-img2">
-            <img src="{{ traveler.profile_picture }}" alt="Team" />
+            @if(traveler.profile_picture){
+            <img src="{{ traveler.profile_picture }}" alt="Team" />}@else {
+            <img
+              src="https://res.cloudinary.com/dzpgrtewh/image/upload/v1732479196/vtcfemon7lbumeccd1xu.jpg"
+              alt="Team"
+            />
+            }
           </div>
           <div class="team-content">
             <div class="media-body">
@@ -76,21 +50,22 @@ Team Area
               </div>
 
               <div class="th-social">
-                <a target="_blank" href="https://facebook.com/"
-                  ><i class="fab fa-facebook-f"></i
-                ></a>
-                <a target="_blank" href="https://twitter.com/"
-                  ><i class="fab fa-twitter"></i
-                ></a>
-                <a target="_blank" href="https://linkedin.com/"
-                  ><i class="fab fa-linkedin-in"></i
-                ></a>
-                <a target="_blank" href="https://youtube.com/"
-                  ><i class="fab fa-youtube"></i
-                ></a>
-                <a target="_blank" href="https://instagram.com/"
-                  ><i class="fab fa-instagram"></i
-                ></a>
+                @if( traveler.facebook ){
+                <a target="_blank" href="{{ traveler.facebook }}"
+                  ><i class="fab fa-facebook-f"></i></a
+                >} @if( traveler.linkedin ){
+                <a target="_blank" href="{{ traveler.linkedin }}"
+                  ><i class="fab fa-linkedin-in"></i></a
+                >} @if( traveler.youtube ){
+                <a target="_blank" href="{{ traveler.youtube }}"
+                  ><i class="fab fa-youtube"></i></a
+                >} @if( traveler.instagram ){
+                <a target="_blank" href="{{ traveler.instagram }}"
+                  ><i class="fab fa-instagram"></i></a
+                >} @if( traveler.website ){
+                <a target="_blank" href="{{ traveler.website }}"
+                  ><i class="fab fa-link"></i></a
+                >}
               </div>
             </div>
           </div>
@@ -101,6 +76,4 @@ Team Area
     </div>
   </div>
 </section>
-
 }
-<app-top-destination></app-top-destination>

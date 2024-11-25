@@ -1,6 +1,6 @@
 from django.db.models import Avg
 from django.shortcuts import render
-from rest_framework import viewsets, generics
+from rest_framework import viewsets, generics, status
 from rest_framework.decorators import action
 from rest_framework.generics import ListAPIView, get_object_or_404
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny, IsAuthenticated
@@ -8,7 +8,8 @@ from rest_framework.response import Response
 
 from backend.activities.models import Activities
 from backend.activities.serializers import ActivitiesSerializer
-from backend.destinations.models import Destination, Category, DestinationRating, DestinationsComment
+from backend.destinations.models import Destination, Category, DestinationRating, DestinationsComment, \
+    FavoriteDestinations
 from backend.destinations.pagination import DestinationPagination
 from backend.destinations.serializers import DestinationSerializer, CategorySerializer, DestinationCommentSerializer
 from backend.hotels.models import Hotel
@@ -89,6 +90,27 @@ class DestinationViewSet(viewsets.ModelViewSet):
         top_destinations = Destination.objects.annotate(avg_rating=Avg('destination_ratings__rating')).order_by('-avg_rating')[:5]
         serializer = self.get_serializer(top_destinations, many=True)
         return Response(serializer.data)
+
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    def add_to_favorites(self, request, pk=None):
+        destination = self.get_object()
+        favorite, created = FavoriteDestinations.objects.get_or_create(user=request.user, destination=destination)
+        if created:
+            return Response({'status': 'hotel added to favorites'})
+        else:
+            return Response({'status': 'hotel already in favorites'})
+
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    def remove_from_favorites(self, request, pk=None):
+        destination = self.get_object()
+        FavoriteDestinations.objects.filter(user=request.user, destination=destination).delete()
+        return Response({'status': 'hotel removed from favorites'})
+
+    @action(detail=True, methods=['get'], permission_classes=[IsAuthenticated])
+    def is_favorite(self, request, pk=None):
+        destination = self.get_object()
+        is_favorite = FavoriteDestinations.objects.filter(user=request.user, destination=destination).exists()
+        return Response({'is_favorite': is_favorite}, status=status.HTTP_200_OK)
 
 class DestinationCategory(ListAPIView):
     queryset = Category.objects.all()

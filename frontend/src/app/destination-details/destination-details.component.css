@@ -3,3 +3,8 @@
   padding-top: 0px;
 }
 
+.page-meta.mt-50.mb-45 {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}

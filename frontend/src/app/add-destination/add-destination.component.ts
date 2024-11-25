@@ -37,6 +37,8 @@ import {
   FontSize,
   FontColor,
 } from 'ckeditor5';
+import { AuthService } from '../auth.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-add-destination',
@@ -68,6 +70,8 @@ export class AddDestinationComponent {
     gestureHandling: 'greedy',
   };
   geocoder = inject(MapGeocoder);
+  authSevices = inject(AuthService);
+  private readonly API_URL = environment.apiUrl;
 
   constructor(
     private fb: FormBuilder,
@@ -78,7 +82,7 @@ export class AddDestinationComponent {
     this.addDestinationForm = this.fb.group({
       title: ['', Validators.required],
       category: ['', Validators.required],
-      desciption: ['', Validators.required],
+      description: ['', Validators.required],
       image: ['', Validators.required],
       image2: [''],
       image3: [''],
@@ -148,7 +152,7 @@ export class AddDestinationComponent {
   }
 
   fetchCategories(): void {
-    this.http.get('http://localhost:8000/api/categories/').subscribe(
+    this.http.get(`${this.API_URL}categories/`).subscribe(
       (response: any) => {
         this.categories = response;
       },
@@ -282,16 +286,15 @@ export class AddDestinationComponent {
       }
     });
 
-    this.http
-      .post('http://localhost:8000/api/destinations/', formData)
-      .subscribe(
-        (response) => {
-          console.log('Destination added successfully', response);
-          this.router.navigate(['/profile']);
-        },
-        (error) => {
-          console.error('Failed to add destination', error);
-        }
-      );
+    this.http.post(`${this.API_URL}destinations/`, formData).subscribe(
+      (response) => {
+        console.log('Destination added successfully', response);
+        this.authSevices.fetchUserData();
+        this.router.navigate(['/profile']);
+      },
+      (error) => {
+        console.error('Failed to add destination', error);
+      }
+    );
   }
 }

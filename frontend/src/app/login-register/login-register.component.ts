@@ -145,7 +145,7 @@
 //   }
 // }
 
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 
@@ -153,6 +153,7 @@ import { passwordMatchValidator } from '../validators/password-match.validator';
 import { UserService } from '../user.service';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-login-register',
@@ -161,7 +162,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './login-register.component.html',
   styleUrls: ['./login-register.component.css'],
 })
-export class LoginRegisterComponent {
+export class LoginRegisterComponent implements OnInit {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private userService = inject(UserService);
@@ -185,6 +186,16 @@ export class LoginRegisterComponent {
     },
     { validators: passwordMatchValidator }
   );
+
+  ngOnInit(): void {
+    this.loginForm.valueChanges.subscribe(() => {
+      this.loginError = null; // Clear the error message when the user starts typing
+    });
+
+    this.registerForm.valueChanges.subscribe(() => {
+      this.registerError = null; // Clear the error message when the user starts typing
+    });
+  }
 
   selectTab(tab: string): void {
     this.selectedTab = tab;
@@ -290,10 +301,7 @@ export class LoginRegisterComponent {
       this.userService.register(email!, password!, role!).subscribe({
         next: (response) => {
           if (response) {
-            // Clear any previous errors
             this.registerError = null;
-
-            // Automatically log in with the registered credentials
             this.userService.login(email!, password!).subscribe({
               next: (loginResponse) => {
                 if (loginResponse?.access) {
@@ -318,20 +326,31 @@ export class LoginRegisterComponent {
                       }
                     });
                 } else {
+                  console.log('1');
                   this.registerError = 'Login failed after registration.';
                 }
               },
               error: () => {
+                console.log('2');
                 this.registerError = 'Login failed after registration.';
               },
             });
           } else {
+            console.log('3');
             this.registerError = 'Account with this email already exists.';
           }
         },
         error: (error) => {
-          console.log('Registration failed / From Login Component', error);
-          this.registerError = 'Account with this email already exists.';
+          if (
+            error.status === 400 &&
+            error.error.email[0] === 'Enter a valid email address.'
+          ) {
+            console.log('Enter a valid email address.');
+            this.registerError = 'Enter a valid email address.';
+          } else {
+            console.log('Registration failed / From Login Component', error);
+            this.registerError = 'Account with this email already exists.';
+          }
         },
       });
     }

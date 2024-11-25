@@ -6,16 +6,27 @@
         <div class="col-xl-4">
           <div class="th-team team-grid">
             <div class="team-img">
-              <img src="{{ travelerDetails?.cover }}" alt="Team" />
-            </div>
-            <div class="team-img2">
+              @if(travelerDetails.cover){
+              <img src="{{ travelerDetails.cover }}" alt="Team" />}@else {
               <img
-                src="https://res.cloudinary.com/drjgddl0y/{{
-                  travelerDetails?.profile_picture
-                }}"
+                src="https://res.cloudinary.com/dzpgrtewh/image/upload/v1732479353/hknqokmuuybfjzfizloj.png"
                 alt="Team"
               />
+              }
             </div>
+            <div class="team-img2">
+              @if(travelerDetails.profile_picture){
+              <img
+                src="{{ travelerDetails.profile_picture }}"
+                alt="Team"
+              />}@else {
+              <img
+                src="https://res.cloudinary.com/dzpgrtewh/image/upload/v1732479196/vtcfemon7lbumeccd1xu.jpg"
+                alt="Team"
+              />
+              }
+            </div>
+
             <div class="team-content">
               <div class="media-body">
                 <h3 class="box-title">
@@ -29,22 +40,21 @@
                 <span class="team-desig">{{ travelerDetails.occupation }}</span>
 
                 <div class="th-social">
-                  @if(travelerDetails.facebook){
+                  @if( travelerDetails.facebook ){
                   <a target="_blank" href="{{ travelerDetails.facebook }}"
-                    ><i class="fab fa-facebook-f"></i
-                  ></a>
-                  } @if(travelerDetails.website){
-                  <a target="_blank" href="{{ travelerDetails.website }}"
-                    ><i class="fab fa-link"></i></a
-                  >} @if(travelerDetails.linkedin){
+                    ><i class="fab fa-facebook-f"></i></a
+                  >} @if( travelerDetails.linkedin ){
                   <a target="_blank" href="{{ travelerDetails.linkedin }}"
                     ><i class="fab fa-linkedin-in"></i></a
-                  >} @if(travelerDetails.youtube){
+                  >} @if( travelerDetails.youtube ){
                   <a target="_blank" href="{{ travelerDetails.youtube }}"
                     ><i class="fab fa-youtube"></i></a
-                  >} @if(travelerDetails.instagram){
+                  >} @if( travelerDetails.instagram ){
                   <a target="_blank" href="{{ travelerDetails.instagram }}"
                     ><i class="fab fa-instagram"></i></a
+                  >} @if( travelerDetails.website ){
+                  <a target="_blank" href="{{ travelerDetails.website }}"
+                    ><i class="fab fa-link"></i></a
                   >}
                 </div>
               </div>
@@ -71,87 +81,43 @@
                       </div>
                     </div>
                   </div> -->
+                  <div class="row-by-two">
+                    <div class="about-contact-grid">
+                      <div class="about-contact-icon">
+                        <img src="assets/img/icon/location-dot2.svg" alt="" />
+                      </div>
+                      <div class="about-contact-details">
+                        <h6 class="box-title">Destinations</h6>
 
-                  <div class="col-sm-6 col-xl-3 counter-card-wrap">
-                    <div class="counter-card">
-                      <div class="counter-shape"><span></span></div>
-                      <div class="media-body">
-                        <h3 class="box-number">
-                          <span class="counter-number">{{
-                            travelerDetails.published_destinations_count
-                          }}</span>
-                        </h3>
-                        <h6 class="counter-title">Destinations</h6>
+                        <p class="about-contact-details-text">
+                          {{ travelerDetails.published_destinations_count }}
+                        </p>
                       </div>
                     </div>
-                  </div>
 
-                  <div class="col-sm-6 col-xl-3 counter-card-wrap">
-                    <div class="counter-card">
-                      <div class="counter-shape"><span></span></div>
-                      <div class="media-body">
-                        <h3 class="box-number">
-                          <span class="counter-number">{{
-                            travelerDetails.published_activities_count
-                          }}</span>
-                        </h3>
-                        <h6 class="counter-title">Activities</h6>
+                    <div class="about-contact-grid">
+                      <div style="font-size: 26px" class="about-contact-icon">
+                        <i class="fa-solid fa-person-walking"></i>
+                        <!-- <img src="assets/img/icon/mail.svg" alt="" /> -->
+                      </div>
+                      <div class="about-contact-details">
+                        <h6 class="box-title">Activities</h6>
+                        <p class="about-contact-details-text">
+                          {{ travelerDetails.published_activities_count }}
+                        </p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-
-            <app-destinations-by-user
-              [user]="travelerDetails.user"
-            ></app-destinations-by-user>
           </div>
         </div>
       </div>
-      <h2 class="box-title mb-30">Contact With Me</h2>
-      <div class="row gy-4 justify-content-center">
-        <div class="col-xl-4 col-lg-6">
-          <div class="about-contact-grid style2">
-            <div class="about-contact-icon">
-              <img src="assets/img/icon/location-dot2.svg" alt="" />
-            </div>
-            <div class="about-contact-details">
-              <h6 class="box-title">Our Address</h6>
 
-              <p class="about-contact-details-text">
-                {{ travelerDetails.city }}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-4 col-lg-6">
-          <div class="about-contact-grid">
-            <div class="about-contact-icon">
-              <img src="assets/img/icon/call.svg" alt="" />
-            </div>
-            <div class="about-contact-details">
-              <h6 class="box-title">Phone Number</h6>
-              <p class="about-contact-details-text">
-                <a href="tel:01234567890">{{ travelerDetails.phone_number }}</a>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-4 col-lg-6">
-          <div class="about-contact-grid">
-            <div class="about-contact-icon">
-              <img src="assets/img/icon/mail.svg" alt="" />
-            </div>
-            <div class="about-contact-details">
-              <h6 class="box-title">Email Address</h6>
-              <p class="about-contact-details-text">
-                <a>{{ travelerDetails.email }}</a>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <app-destinations-by-user
+        [user]="travelerDetails.user"
+      ></app-destinations-by-user>
     </div>
   </div>
 </section>

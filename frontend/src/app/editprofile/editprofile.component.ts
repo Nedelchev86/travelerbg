@@ -31,6 +31,7 @@ import {
   FontColor,
   ImageUpload,
 } from 'ckeditor5';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-editprofile',
@@ -47,6 +48,7 @@ export class EditProfileComponent implements OnInit {
   router = inject(Router);
   cloudinaryuploadService = inject(CloudinaryuploadService);
   public Editor = ClassicEditor;
+  private readonly API_URL = environment.apiUrl;
 
   public config = {
     toolbar: {
@@ -104,12 +106,10 @@ export class EditProfileComponent implements OnInit {
 
   ngOnInit(): void {
     // Fetch the current profile data and populate the form
-    this.http
-      .get('http://localhost:8000/api/traveler/update/')
-      .subscribe((data: any) => {
-        this.profileForm.patchValue(data);
-        console.log('Profile data fetched successfully', data);
-      });
+    this.http.get(`${this.API_URL}traveler/update/`).subscribe((data: any) => {
+      this.profileForm.patchValue(data);
+      console.log('Profile data fetched successfully', data);
+    });
   }
 
   // onFileChange(event: any, field: string): void {
@@ -182,10 +182,7 @@ export class EditProfileComponent implements OnInit {
       //   }
 
       this.http
-        .put<UserDetails>(
-          'http://localhost:8000/api/traveler/update/',
-          formData
-        )
+        .put<UserDetails>(`${this.API_URL}traveler/update/`, formData)
         .subscribe(
           (response) => {
             console.log('Profile updated successfully', response);

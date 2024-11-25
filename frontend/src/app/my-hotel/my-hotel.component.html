@@ -23,7 +23,7 @@
           <div class="th-product product-grid">
             <div class="product-img">
               <img src="{{ item.image }}" alt="Product Image" />
-              <span class="product-tag">Sale</span>
+              <!-- <span class="product-tag">Sale</span> -->
               <div class="actions">
                 <a
                   routerLink="/hotels/{{ item.id }}"
@@ -51,17 +51,21 @@
                 >
               </h3>
               <span class="price">{{ item.location }}</span>
-              <div class="woocommerce-product-rating">
-                <span class="count">(5.00 Review)</span>
+              <div
+                class="woocommerce-product-rating"
+                style="margin-bottom: 10px"
+              >
+                <span class="count">(ToDo comments)</span>
+              </div>
+              <div class="tour-rating">
                 <div
                   class="star-rating"
                   role="img"
                   aria-label="Rated 5.00 out of 5"
                 >
                   <span
-                    >Rated <strong class="rating">5.00</strong> out of 5 based
-                    on <span class="rating">1</span> customer rating</span
-                  >
+                    [style.width.%]="item.average_rating.toFixed(2) * 18"
+                  ></span>
                 </div>
               </div>
             </div>

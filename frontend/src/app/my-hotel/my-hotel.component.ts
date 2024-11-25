@@ -3,6 +3,8 @@ import { Component, inject } from '@angular/core';
 import { DeleteConfirmationModalComponent } from '../delete-confirmation-modal/delete-confirmation-modal.component';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../auth.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-my-hotel',
@@ -16,9 +18,11 @@ export class MyHotelComponent {
   http = inject(HttpClient);
   public data: Array<any> = [];
   itemIdToDelete: string | null = null;
+  authServices = inject(AuthService);
+  private readonly API_URL = environment.apiUrl;
 
   ngOnInit() {
-    this.http.get('http://localhost:8000/api/hotels/my/').subscribe({
+    this.http.get(`${this.API_URL}hotels/my/`).subscribe({
       next: (data: any) => {
         this.data = data;
         console.log(data);
@@ -41,10 +45,11 @@ export class MyHotelComponent {
     if (this.itemIdToDelete) {
       // Perform the delete action here
       this.http
-        .delete(`http://localhost:8000/api/hotels/${this.itemIdToDelete}/`)
+        .delete(`${this.API_URL}hotels/${this.itemIdToDelete}/`)
         .subscribe(
           (response) => {
             console.log('Item deleted:', this.itemIdToDelete);
+            this.authServices.fetchUserData();
             // Remove the deleted item from the data array
             this.data = this.data.filter(
               (item) => item.id !== this.itemIdToDelete

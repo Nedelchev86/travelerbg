@@ -4,12 +4,14 @@ import { AuthService } from './auth.service';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, map, of } from 'rxjs';
+import { environment } from '../environments/environment';
 
 export const editActivitiesGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const http = inject(HttpClient);
   const router = inject(Router);
   const toast = inject(ToastrService);
+  const API_URL = environment.apiUrl;
 
   const activitiesId = route.paramMap.get('id');
   if (!activitiesId) {
@@ -18,7 +20,7 @@ export const editActivitiesGuard: CanActivateFn = (route, state) => {
   }
 
   return http
-    .get<any>(`http://localhost:8000/api/activities/${activitiesId}`)
+    .get<any>(`${API_URL}activities/${activitiesId}`)
     .pipe(
       map((activitie) => {
         const currentUser = authService.currentUser();

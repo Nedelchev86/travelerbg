@@ -13,7 +13,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { CloudinaryuploadService } from '../shared/services/cloudinaryupload.service';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-
+import { environment } from '../../environments/environment';
 import {
   GoogleMap,
   MapAdvancedMarker,
@@ -58,7 +58,7 @@ export class HotelEditComponent {
     gestureHandling: 'greedy',
   };
   geocoder = inject(MapGeocoder);
-
+  private readonly API_URL = environment.apiUrl;
   private ckEditorConfigService = inject(CKEditorConfigService);
   public Editor = this.ckEditorConfigService.Editor;
   public config = this.ckEditorConfigService.config;
@@ -141,7 +141,7 @@ export class HotelEditComponent {
   }
 
   fetchCategories(): void {
-    this.http.get('http://localhost:8000/api/categories/hotels/').subscribe({
+    this.http.get(`${this.API_URL}categories/hotels/`).subscribe({
       next: (data: any) => {
         this.categories = data;
       },
@@ -169,7 +169,7 @@ export class HotelEditComponent {
   // }
 
   fetchHighlights(): void {
-    this.http.get('http://localhost:8000/api/highlights/').subscribe(
+    this.http.get(`${this.API_URL}highlights/`).subscribe(
       (response: any) => {
         this.highlights = response;
         // If hotel data is already loaded, mark the checked highlights
@@ -191,7 +191,7 @@ export class HotelEditComponent {
   }
 
   loadHotelData(hotelId: string): void {
-    this.http.get(`http://localhost:8000/api/hotels/${hotelId}/`).subscribe(
+    this.http.get(`${this.API_URL}hotels/${hotelId}/`).subscribe(
       (response: any) => {
         this.editHotelForm.patchValue(response);
         if (response.lat && response.lng) {
@@ -385,7 +385,7 @@ export class HotelEditComponent {
       });
 
       this.http
-        .put(`http://localhost:8000/api/hotels/${this.hotelId}/`, formData)
+        .put(`${this.API_URL}hotels/${this.hotelId}/`, formData)
         .subscribe((response) => {
           console.log('Hotel updated successfully', response);
           this.router.navigate(['/profile/my-hotels']);

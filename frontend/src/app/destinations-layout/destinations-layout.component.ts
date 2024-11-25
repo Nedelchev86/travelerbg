@@ -6,6 +6,7 @@ import { TopTravelersComponent } from '../top-travelers/top-travelers.component'
 import { TopHotelsComponent } from '../top-hotels/top-hotels.component';
 import { TopRatedDestinationsComponent } from '../top-rated-destinations/top-rated-destinations.component';
 import { BannerComponent } from '../shared/banner/banner.component';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-destinations-layout',
@@ -25,9 +26,10 @@ import { BannerComponent } from '../shared/banner/banner.component';
 export class DestinationsLayoutComponent implements OnInit {
   http = inject(HttpClient);
   categories: any = Array<any>();
+  private readonly API_URL = environment.apiUrl;
 
   ngOnInit(): void {
-    this.http.get('http://localhost:8000/api/categories/').subscribe({
+    this.http.get(`${this.API_URL}categories/`).subscribe({
       next: (data: any) => {
         this.categories = data;
         console.log(this.categories);

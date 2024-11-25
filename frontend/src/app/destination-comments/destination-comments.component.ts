@@ -10,6 +10,7 @@ import { AuthService } from '../auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-destination-comments',
@@ -29,12 +30,10 @@ export class DestinationCommentsComponent {
       email: ['', [Validators.required, Validators.email]],
       website: [''],
       text: ['', Validators.required],
-      saveInfo: [false],
     });
 
     this.commentFormRegistred = this.fb.group({
       text: ['', Validators.required],
-      saveInfo: [false],
     });
   }
   private http = inject(HttpClient);
@@ -42,6 +41,7 @@ export class DestinationCommentsComponent {
   private fb = inject(FormBuilder);
   public authService = inject(AuthService);
   private toast = inject(ToastrService);
+  private readonly API_URL = environment.apiUrl;
 
   ngOnInit(): void {
     console.log('Destination ID:', this.destinationId);
@@ -52,7 +52,7 @@ export class DestinationCommentsComponent {
 
   fetcComments(destinationId: string): void {
     this.http
-      .get(`http://127.0.0.1:8000/api/destinations/${destinationId}/comments/`)
+      .get(`${this.API_URL}destinations/${destinationId}/comments/`)
       .subscribe(
         (response: any) => {
           this.comments = response;
@@ -72,7 +72,7 @@ export class DestinationCommentsComponent {
       };
       this.http
         .post(
-          `http://127.0.0.1:8000/api/destinations/${this.destinationId}/comments/add/`,
+          `${this.API_URL}destinations/${this.destinationId}/comments/add/`,
           commentData
         )
         .subscribe(
@@ -85,6 +85,9 @@ export class DestinationCommentsComponent {
             console.error('Error posting comment:', error);
           }
         );
+    } else {
+      console.log('Invalid form');
+      this.commentForm.markAllAsTouched();
     }
   }
 
@@ -96,7 +99,7 @@ export class DestinationCommentsComponent {
       };
       this.http
         .post(
-          `http://127.0.0.1:8000/api/destinations/${this.destinationId}/comments/add/`,
+          `${this.API_URL}destinations/${this.destinationId}/comments/add/`,
           commentData
         )
         .subscribe(
@@ -109,6 +112,9 @@ export class DestinationCommentsComponent {
             console.error('Error posting comment:', error);
           }
         );
+    } else {
+      console.log('Invalid form');
+      this.commentFormRegistred.markAllAsTouched();
     }
   }
 }

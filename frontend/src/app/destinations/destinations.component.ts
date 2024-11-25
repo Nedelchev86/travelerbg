@@ -8,6 +8,7 @@ import { TopTravelersComponent } from '../top-travelers/top-travelers.component'
 import { RatingComponent } from '../rating/rating.component';
 import { AuthService } from '../auth.service';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-destinations',
@@ -17,8 +18,7 @@ import { ToastrService } from 'ngx-toastr';
     FormsModule,
     LoaderComponent,
     LoaderComponent,
-    TopTravelersComponent,
-    TopTravelersComponent,
+
     RatingComponent,
   ],
   templateUrl: './destinations.component.html',
@@ -34,6 +34,7 @@ export class DestinationsComponent {
   public totalPages: number = 1;
   public nextPageUrl: string | null = null;
   public previousPageUrl: string | null = null;
+  private readonly API_URL = environment.apiUrl;
   loading = true;
   searching = false;
   route = inject(ActivatedRoute);
@@ -46,9 +47,7 @@ export class DestinationsComponent {
     });
   }
 
-  fetchDestinations(
-    url: string = 'http://localhost:8000/api/destinations/'
-  ): void {
+  fetchDestinations(url: string = `${this.API_URL}destinations/`): void {
     this.loading = true;
     const params: any = {
       page: this.currentPage,
@@ -88,19 +87,17 @@ export class DestinationsComponent {
     };
     this.currentPage = 1;
 
-    this.httpClient
-      .get('http://localhost:8000/api/destinations/', { params })
-      .subscribe({
-        next: (data: any) => {
-          this.data = data.results;
-          console.log(data.results);
-          // this.searching = false;
-        },
-        error: (err) => {
-          console.log(err);
-          // this.searching = false;
-        },
-      });
+    this.httpClient.get(`${this.API_URL}destinations/`, { params }).subscribe({
+      next: (data: any) => {
+        this.data = data.results;
+        console.log(data.results);
+        // this.searching = false;
+      },
+      error: (err) => {
+        console.log(err);
+        // this.searching = false;
+      },
+    });
   }
 
   changePage(page: number): void {
@@ -132,7 +129,7 @@ export class DestinationsComponent {
     console.log('destination', destination);
     if (destination) {
       this.httpClient
-        .get(`http://localhost:8000/api/destinations/${destinationId}`)
+        .get(`${this.API_URL}destinations/${destinationId}`)
         .subscribe({
           next: (data: any) => {
             console.log('test', data);
@@ -158,7 +155,7 @@ export class DestinationsComponent {
     }
 
     this.httpClient
-      .post(`http://localhost:8000/api/destinations/${destinationId}/rate/`, {
+      .post(`${this.API_URL}destinations/${destinationId}/rate/`, {
         rating,
       })
       .subscribe({

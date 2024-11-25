@@ -8,6 +8,7 @@ import { SetBgImageDirective } from '../set-bg-image.directive';
 import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { LoaderComponent } from '../shared/loader/loader.component';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-top-destination',
@@ -21,8 +22,9 @@ export class TopDestinationComponent implements OnInit {
   loading = true;
   http = inject(HttpClient);
   top_destinations = Array<any>();
+  private readonly API_URL = environment.apiUrl;
   ngOnInit() {
-    this.http.get('http://localhost:8000/api/destinations/').subscribe({
+    this.http.get(`${this.API_URL}destinations/`).subscribe({
       next: (data: any) => {
         this.top_destinations = data.results;
         this.loading = false;

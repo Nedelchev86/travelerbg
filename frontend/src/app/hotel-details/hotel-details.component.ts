@@ -16,6 +16,7 @@ import { GoogleMap } from '@angular/google-maps';
 import { GoogleMapComponent } from '../google-map/google-map.component';
 import { SetBgImageDirective } from '../set-bg-image.directive';
 import { GalleryLightboxComponent } from '../gallery-lightbox/gallery-lightbox.component';
+import { environment } from '../../environments/environment';
 
 interface Images {
   imageSrc: string;
@@ -56,7 +57,7 @@ export class HotelDetailsComponent implements OnInit {
   commentForm: FormGroup;
   commentFormRegistred: FormGroup;
   galleryData: Images[] = [];
-
+  private readonly API_URL = environment.apiUrl;
   private http = inject(HttpClient);
   private route = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
@@ -94,32 +95,28 @@ export class HotelDetailsComponent implements OnInit {
   }
 
   fetchHotelDetails(hotelId: string): void {
-    this.http
-      .get<Comment[]>(`http://127.0.0.1:8000/api/hotels/${hotelId}/`)
-      .subscribe(
-        (response: Comment[]) => {
-          this.hotel = response;
-          this.galleryData = this.getFilteredImages();
-          this.checkIsFavorite(hotelId);
-        },
-        (error) => {
-          console.error('Error fetching hotel details:', error);
-        }
-      );
+    this.http.get<Comment[]>(`${this.API_URL}hotels/${hotelId}/`).subscribe(
+      (response: Comment[]) => {
+        this.hotel = response;
+        this.galleryData = this.getFilteredImages();
+        this.checkIsFavorite(hotelId);
+      },
+      (error) => {
+        console.error('Error fetching hotel details:', error);
+      }
+    );
   }
 
   fetcComments(hotelId: string): void {
-    this.http
-      .get(`http://127.0.0.1:8000/api/hotels/${hotelId}/comments/`)
-      .subscribe(
-        (response: any) => {
-          this.comments = response;
-          console.log(this.comments);
-        },
-        (error) => {
-          console.error('Error fetching comments details:', error);
-        }
-      );
+    this.http.get(`${this.API_URL}hotels/${hotelId}/comments/`).subscribe(
+      (response: any) => {
+        this.comments = response;
+        console.log(this.comments);
+      },
+      (error) => {
+        console.error('Error fetching comments details:', error);
+      }
+    );
   }
 
   onSubmitComment(): void {
@@ -130,7 +127,7 @@ export class HotelDetailsComponent implements OnInit {
       };
       this.http
         .post(
-          `http://127.0.0.1:8000/api/hotels/${this.hotelId}/comments/add/`,
+          `${this.API_URL}hotels/${this.hotelId}/comments/add/`,
           commentData
         )
         .subscribe(
@@ -143,6 +140,8 @@ export class HotelDetailsComponent implements OnInit {
             console.error('Error posting comment:', error);
           }
         );
+    } else {
+      this.commentForm.markAllAsTouched();
     }
   }
 
@@ -154,7 +153,7 @@ export class HotelDetailsComponent implements OnInit {
       };
       this.http
         .post(
-          `http://127.0.0.1:8000/api/hotels/${this.hotelId}/comments/add/`,
+          `${this.API_URL}hotels/${this.hotelId}/comments/add/`,
           commentData
         )
         .subscribe(
@@ -167,6 +166,8 @@ export class HotelDetailsComponent implements OnInit {
             console.error('Error posting comment:', error);
           }
         );
+    } else {
+      this.commentFormRegistred.markAllAsTouched();
     }
   }
 
@@ -177,7 +178,7 @@ export class HotelDetailsComponent implements OnInit {
     }
 
     this.http
-      .post(`http://localhost:8000/api/hotels/${this.hotelId}/rate/`, {
+      .post(`${this.API_URL}hotels/${this.hotelId}/rate/`, {
         rating,
       })
       .subscribe({
@@ -197,29 +198,30 @@ export class HotelDetailsComponent implements OnInit {
   }
   updateTravelerRating(rating: number): void {
     {
-      this.http
-        .get(`http://localhost:8000/api/hotels/${this.hotelId}`)
-        .subscribe({
-          next: (data: any) => {
-            this.hotel.average_rating = data.average_rating;
-            this.hotel.number_of_votes = data.number_of_votes;
-            console.log(data);
-          },
-          error: (err) => {
-            console.log(err);
-            this.toast.error(
-              'Error fetching travelers data',
-              'Cannot connect to server'
-            );
-          },
-        });
+      this.http.get(`${this.API_URL}hotels/${this.hotelId}`).subscribe({
+        next: (data: any) => {
+          this.hotel.average_rating = data.average_rating;
+          this.hotel.number_of_votes = data.number_of_votes;
+          console.log(data);
+        },
+        error: (err) => {
+          console.log(err);
+          this.toast.error(
+            'Error fetching travelers data',
+            'Cannot connect to server'
+          );
+        },
+      });
     }
   }
 
   checkIsFavorite(hotelId: string): void {
+    if (!this.authService.isLoggedIn()) {
+      return;
+    }
     this.http
       .get<FavoriteStatusResponse>(
-        `http://localhost:8000/api/hotels/${hotelId}/is_favorite/`
+        `${this.API_URL}hotels/${hotelId}/is_favorite/`
       )
       .subscribe({
         next: (response) => {
@@ -232,8 +234,12 @@ export class HotelDetailsComponent implements OnInit {
   }
 
   addToFavorites(hotelId: string): void {
+    if (!this.authService.isLoggedIn()) {
+      this.toast.error('Please login to add to favorites', 'Login required');
+      return;
+    }
     this.http
-      .post(`http://localhost:8000/api/hotels/${hotelId}/add_to_favorites/`, {})
+      .post(`${this.API_URL}hotels/${hotelId}/add_to_favorites/`, {})
       .subscribe({
         next: (response) => {
           this.isFavorite = true; // Set favorite status to true
@@ -247,10 +253,7 @@ export class HotelDetailsComponent implements OnInit {
   }
   removeFromFavorites(hotelId: string): void {
     this.http
-      .post(
-        `http://localhost:8000/api/hotels/${hotelId}/remove_from_favorites/`,
-        {}
-      )
+      .post(`${this.API_URL}hotels/${hotelId}/remove_from_favorites/`, {})
       .subscribe({
         next: (response) => {
           this.isFavorite = true; // Set favorite status to true

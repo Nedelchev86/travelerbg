@@ -6,7 +6,8 @@ from backend.activities.serializers import ActivitiesSerializer
 from backend.business.serializers import BusinessSerializer
 from backend.core.models import Tag
 from backend.core.serializers import TagSerializer
-from backend.destinations.models import Destination, Category, DestinationRating, DestinationsComment
+from backend.destinations.models import Destination, Category, DestinationRating, DestinationsComment, \
+    FavoriteDestinations
 from backend.hotels.models import Hotel
 from backend.hotels.serializers import HotelSerializer
 from backend.travelers.serializers import TravelerSerializer
@@ -18,8 +19,8 @@ class DestinationSerializer(serializers.ModelSerializer):
     related_hotels = serializers.SerializerMethodField()
     average_rating = serializers.SerializerMethodField()
     number_of_votes = serializers.SerializerMethodField()
-    lat = serializers.SerializerMethodField()
-    lng = serializers.SerializerMethodField()
+    # lat = serializers.SerializerMethodField()
+    # lng = serializers.SerializerMethodField()
 
 
     class Meta:
@@ -39,11 +40,11 @@ class DestinationSerializer(serializers.ModelSerializer):
     def get_number_of_votes(self, obj):
             return obj.number_of_votes()
 
-    def get_lat(self, obj):
-        return float(obj.lat) if obj.lat is not None else None
-
-    def get_lng(self, obj):
-        return float(obj.lng) if obj.lng is not None else None
+    # def get_lat(self, obj):
+    #     return float(obj.lat) if obj.lat is not None else None
+    #
+    # def get_lng(self, obj):
+    #     return float(obj.lng) if obj.lng is not None else None
 
     # def get_related_activities(self, obj):
     #     related_activities = obj.related_activities()
@@ -173,3 +174,9 @@ class DestinationCommentSerializer(serializers.ModelSerializer):
         elif obj.user.role == 'business':
             return BusinessSerializer(obj.user.business).data
         return UserSerializer(obj.user).data
+
+class FavoriteDestinationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FavoriteDestinations
+        fields = ['user', 'destination', 'created_at']
+        read_only_fields = ['created_at']

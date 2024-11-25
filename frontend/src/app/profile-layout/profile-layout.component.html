@@ -32,9 +32,11 @@
                 <a routerLink="/profile/my-hotels" routerLinkActive="active"
                   ><img src="assets/img/theme-img/map.svg" alt="" />My Hotels</a
                 >
-                <span>{{
-                  authService.currentUser()?.user?.published_hotels_count
-                }}</span>
+                <span
+                  >({{
+                    authService.currentUser()?.user?.published_hotels_count
+                  }})</span
+                >
               </li>
               <li>
                 <a

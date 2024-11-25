@@ -4,11 +4,13 @@ import { AuthService } from './auth.service';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, map, of } from 'rxjs';
+import { environment } from '../environments/environment';
 export const editHotelGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const http = inject(HttpClient);
   const router = inject(Router);
   const toast = inject(ToastrService);
+  const API_URL = environment.apiUrl;
 
   const hotelId = route.paramMap.get('id');
   if (!hotelId) {
@@ -16,7 +18,7 @@ export const editHotelGuard: CanActivateFn = (route, state) => {
     return of(false);
   }
 
-  return http.get<any>(`http://localhost:8000/api/hotels/${hotelId}`).pipe(
+  return http.get<any>(`${API_URL}hotels/${hotelId}`).pipe(
     map((hotel) => {
       const currentUser = authService.currentUser();
 

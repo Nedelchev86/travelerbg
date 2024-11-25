@@ -10,10 +10,25 @@
             <a class="page-tag" [routerLink]="['/travelers/', traveler.user]"
               >Author: {{ traveler.name }}</a
             >
-            <span class="ratting"
-              ><i class="fa-sharp fa-solid fa-star"></i><span>4.8</span></span
-            >
+            <div class="inline">
+              <app-rating
+                [rating]="data.average_rating"
+                [data]="data"
+                (rated)="rateTHotel($event)"
+              ></app-rating>
+            </div>
+            @if(!isFavorite){
+            <button (click)="addToFavorites(data.id)" class="ratting">
+              <i class="fa fa-heart"></i>
+              Add to Favorites</button
+            >}@else{
+            <button (click)="removeFromFavorites(data.id)" class="ratting">
+              <i class="fa fa-heart text-danger"></i>
+              Remove from Favorites
+            </button>
+            }
           </div>
+
           <h2 class="box-title">{{ data.name }}</h2>
           <p class="blog-text mb-30" [innerHTML]="data.description"></p>
         </div>

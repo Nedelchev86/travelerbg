@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../auth.service';
 import { RatingComponent } from '../rating/rating.component';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-hotels',
@@ -23,6 +24,7 @@ export class HotelsComponent {
   public previousPageUrl: string | null = null;
   public searchQuery: string = '';
   public categoryQuery: string = '';
+  private readonly API_URL = environment.apiUrl;
   route = inject(ActivatedRoute);
   authService = inject(AuthService);
   loading = true;
@@ -45,7 +47,7 @@ export class HotelsComponent {
     });
   }
 
-  fetchDestinations(url: string = 'http://localhost:8000/api/hotels/'): void {
+  fetchDestinations(url: string = `${this.API_URL}hotels/`): void {
     this.loading = true;
     const params: any = {
       page: this.currentPage,
@@ -106,22 +108,20 @@ export class HotelsComponent {
     const hotel = this.data.find((t) => t.id === hotelId);
     console.log('hotel', hotelId);
     if (hotel) {
-      this.httpClient
-        .get(`http://localhost:8000/api/hotels/${hotelId}`)
-        .subscribe({
-          next: (data: any) => {
-            console.log('test', data);
-            hotel.average_rating = data.average_rating;
-            hotel.number_of_votes = data.number_of_votes;
-          },
-          error: (err) => {
-            console.log(err);
-            this.toast.error(
-              'Error fetching travelers data',
-              'Cannot connect to server'
-            );
-          },
-        });
+      this.httpClient.get(`${this.API_URL}hotels/${hotelId}`).subscribe({
+        next: (data: any) => {
+          console.log('test', data);
+          hotel.average_rating = data.average_rating;
+          hotel.number_of_votes = data.number_of_votes;
+        },
+        error: (err) => {
+          console.log(err);
+          this.toast.error(
+            'Error fetching travelers data',
+            'Cannot connect to server'
+          );
+        },
+      });
     }
   }
 
@@ -132,7 +132,7 @@ export class HotelsComponent {
     }
 
     this.httpClient
-      .post(`http://localhost:8000/api/hotels/${hotelId}/rate/`, {
+      .post(`${this.API_URL}hotels/${hotelId}/rate/`, {
         rating,
       })
       .subscribe({

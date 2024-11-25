@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-destinations-by-user',
@@ -14,10 +15,11 @@ export class DestinationsByUserComponent implements OnInit {
   @Input() user: Number = 0;
   http = inject(HttpClient);
   destinations: any[] = [];
+  private readonly API_URL = environment.apiUrl;
 
   ngOnInit(): void {
     this.http
-      .get(`http://localhost:8000/api/destinations/by_user/${this.user}/`)
+      .get(`${this.API_URL}destinations/by_user/${this.user}/`)
       .subscribe(
         (data: any) => {
           console.log('User Destinations:', data);

@@ -16,8 +16,8 @@ class BusinessProfile(models.Model):
     location = models.CharField(max_length=40, null=False, blank=False)
     phone = models.CharField(max_length=20, null=True, blank=True, validators=[validate_phone_number])
     image = models.CharField(max_length=200, blank=False, null=False)
-    linkedin_url = models.URLField(max_length=200, null=True, blank=True)
-    facebook_url = models.URLField(max_length=200, null=True, blank=True)
+    linkedin = models.URLField(max_length=200, null=True, blank=True)
+    facebook = models.URLField(max_length=200, null=True, blank=True)
     activated = models.BooleanField(default=False)
 
 

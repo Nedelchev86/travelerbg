@@ -8,6 +8,7 @@ import { LoaderComponent } from '../shared/loader/loader.component';
 import { ToastrService } from 'ngx-toastr';
 import { RatingComponent } from '../rating/rating.component';
 import { TopDestinationComponent } from '../top-destination/top-destination.component';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-tralevers',
@@ -30,9 +31,10 @@ export class TraleversComponent {
   loading = true;
   toast = inject(ToastrService);
   authService = inject(AuthService);
+  private readonly API_URL = environment.apiUrl;
 
   ngOnInit() {
-    this.httpClient.get('http://localhost:8000/api/travelers/').subscribe({
+    this.httpClient.get(`${this.API_URL}travelers/`).subscribe({
       next: (data: any) => {
         this.data = data;
         this.loading = false;
@@ -55,7 +57,7 @@ export class TraleversComponent {
     }
 
     this.httpClient
-      .post(`http://localhost:8000/api/travelers/${travelerId}/rate/`, {
+      .post(`${this.API_URL}travelers/${travelerId}/rate/`, {
         rating,
       })
       .subscribe({
@@ -76,21 +78,19 @@ export class TraleversComponent {
   updateTravelerRating(travelerId: string, rating: number): void {
     const traveler = this.data.find((t) => t.user === travelerId);
     if (traveler) {
-      this.httpClient
-        .get(`http://localhost:8000/api/travelers/${travelerId}`)
-        .subscribe({
-          next: (data: any) => {
-            traveler.average_rating = data.average_rating;
-            traveler.number_of_votes = data.number_of_votes;
-          },
-          error: (err) => {
-            console.log(err);
-            this.toast.error(
-              'Error fetching travelers data',
-              'Cannot connect to server'
-            );
-          },
-        });
+      this.httpClient.get(`${this.API_URL}travelers/${travelerId}`).subscribe({
+        next: (data: any) => {
+          traveler.average_rating = data.average_rating;
+          traveler.number_of_votes = data.number_of_votes;
+        },
+        error: (err) => {
+          console.log(err);
+          this.toast.error(
+            'Error fetching travelers data',
+            'Cannot connect to server'
+          );
+        },
+      });
     }
   }
 }

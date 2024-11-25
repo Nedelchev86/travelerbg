@@ -120,20 +120,20 @@
               formControlName="basic_information"
             ></textarea> -->
             <ckeditor
-              id="desctiption"
-              description="description"
+              id="description"
               [editor]="Editor"
               [config]="config"
               id="description"
+              formControlName="description"
             ></ckeditor>
             <div
               *ngIf="
-                editDestinationForm.get('basic_information')?.touched &&
-                editDestinationForm.get('basic_information')?.invalid
+                editDestinationForm.get('description')?.touched &&
+                editDestinationForm.get('description')?.invalid
               "
               class="text-danger"
             >
-              Basic Information is required.
+              Description is required.
             </div>
           </div>
           <div class="form-group">

@@ -222,3 +222,7 @@ input {
 .text-style {
   white-space: pre-wrap;
 }
+
+.red {
+  color: red;
+}

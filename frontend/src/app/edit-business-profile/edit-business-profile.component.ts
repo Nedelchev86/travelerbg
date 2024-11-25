@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { CommonModule } from '@angular/common';
 import { CloudinaryuploadService } from '../shared/services/cloudinaryupload.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-edit-business-profile',
@@ -21,7 +22,7 @@ import { CloudinaryuploadService } from '../shared/services/cloudinaryupload.ser
 export class EditBusinessProfileComponent {
   editProfileForm: FormGroup;
   userId: string | null = null;
-
+  private readonly API_URL = environment.apiUrl;
   private fb = inject(FormBuilder);
   private http = inject(HttpClient);
   private route = inject(ActivatedRoute);
@@ -36,9 +37,8 @@ export class EditBusinessProfileComponent {
       location: ['', Validators.required],
       phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10,20}$/)]],
       image: [null, Validators.required],
-      linkedin_url: [''],
-      facebook_url: [''],
-      activated: [false],
+      linkedin: [''],
+      facebook: [''],
     });
   }
 
@@ -47,7 +47,7 @@ export class EditBusinessProfileComponent {
   }
 
   loadProfileData(): void {
-    this.http.get(`http://localhost:8000/api/user/`).subscribe(
+    this.http.get(`${this.API_URL}user/`).subscribe(
       (data: any) => {
         this.userId = data.user.user;
         this.editProfileForm.patchValue({
@@ -103,7 +103,7 @@ export class EditBusinessProfileComponent {
       });
 
       this.http
-        .put(`http://localhost:8000/api/business/${this.userId}/`, formData)
+        .put(`${this.API_URL}business/${this.userId}/`, formData)
         .subscribe(
           (response) => {
             console.log('Profile updated successfully', response);

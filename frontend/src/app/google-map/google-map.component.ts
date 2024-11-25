@@ -40,7 +40,6 @@ export class GoogleMapComponent implements OnChanges {
   geocoder = inject(MapGeocoder);
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('Lat:', this.lat, 'Lng:', this.lng);
     if (changes['location'] && changes['location'].currentValue) {
       console.log('ngOnChanges location:', this.location);
       this.geocodeAddress(this.location);
@@ -51,9 +50,8 @@ export class GoogleMapComponent implements OnChanges {
       changes['lng'] &&
       changes['lng'].currentValue
     ) {
-      console.log('ngOnChanges lat:', this.lat, 'lng:', this.lng);
-      this.center = { lat: this.lat, lng: this.lng };
-      this.markerPosition = { lat: this.lat, lng: this.lng };
+      this.center = { lat: Number(this.lat), lng: Number(this.lng) };
+      this.markerPosition = { lat: Number(this.lat), lng: Number(this.lng) };
     }
   }
 

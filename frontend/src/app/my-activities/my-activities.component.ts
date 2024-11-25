@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DeleteConfirmationModalComponent } from '../delete-confirmation-modal/delete-confirmation-modal.component';
+import { AuthService } from '../auth.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-my-activities',
@@ -14,11 +16,13 @@ import { DeleteConfirmationModalComponent } from '../delete-confirmation-modal/d
 export class MyActivitiesComponent {
   showModal = false;
   http = inject(HttpClient);
+  authServices = inject(AuthService);
   public activities: Array<any> = [];
+  private readonly API_URL = environment.apiUrl;
   itemIdToDelete: string | null = null;
 
   ngOnInit() {
-    this.http.get('http://localhost:8000/api/activities/my/').subscribe({
+    this.http.get(`${this.API_URL}activities/my/`).subscribe({
       next: (data: any) => {
         this.activities = data;
         console.log(data);
@@ -41,11 +45,12 @@ export class MyActivitiesComponent {
     if (this.itemIdToDelete) {
       // Perform the delete action here
       this.http
-        .delete(`http://localhost:8000/api/activities/${this.itemIdToDelete}/`)
+        .delete(`${this.API_URL}activities/${this.itemIdToDelete}/`)
         .subscribe(
           (response) => {
             console.log('Item deleted:', this.itemIdToDelete);
             // Remove the deleted item from the data array
+            this.authServices.fetchUserData();
             this.activities = this.activities.filter(
               (item) => item.id !== this.itemIdToDelete
             );

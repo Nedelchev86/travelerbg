@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { UserInterface } from '../user-interface';
 import { faFontAwesome, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -28,10 +29,11 @@ export class HeaderComponent {
   router = inject(Router);
   faTimes = faTimes;
   isBodyVisible = false;
+  private readonly API_URL = environment.apiUrl;
 
   ngOnInit(): void {
     if (localStorage.getItem('token')) {
-      this.http.get<UserInterface>('http://localhost:8000/api/user').subscribe({
+      this.http.get<UserInterface>(`${this.API_URL}user`).subscribe({
         next: (response) => {
           console.log('response', response);
           this.authService.currentUser.set(response);

@@ -14,7 +14,7 @@
             alt="Comment Author"
           />}@else {
           <img
-            src="assets/img/blog/comment-author-1.jpg"
+            src="https://res.cloudinary.com/dzpgrtewh/image/upload/v1732479196/vtcfemon7lbumeccd1xu.jpg"
             alt="Comment Author"
           />}
         </div>
@@ -39,9 +39,7 @@
 <div class="th-comment-form">
   <div class="row">
     <h3 class="blog-inner-title h4 mb-2">Leave a Reply</h3>
-    <p class="mb-25">
-      Your email address will not be published. Required fields are marked
-    </p>
+
     <form
       [formGroup]="commentFormRegistred"
       (ngSubmit)="onSubmitRegistredComment()"
@@ -54,14 +52,19 @@
           required
         ></textarea>
         <i class="far fa-pencil"></i>
+        <div
+          *ngIf="
+            commentFormRegistred.get('text')?.touched &&
+            commentFormRegistred.get('text')?.invalid
+          "
+          class="text-danger"
+        >
+          Comment is required.
+        </div>
       </div>
 
       <div class="col-12 form-group mb-0">
-        <button
-          class="th-btn"
-          type="submit"
-          [disabled]="commentFormRegistred.invalid"
-        >
+        <button class="th-btn" type="submit">
           Send Message<img src="assets/img/icon/plane2.svg" alt="" />
         </button>
       </div>
@@ -85,6 +88,14 @@
           required
         />
         <i class="far fa-user"></i>
+        <div
+          *ngIf="
+            commentForm.get('name')?.touched && commentForm.get('name')?.invalid
+          "
+          class="text-danger"
+        >
+          Name is required.
+        </div>
       </div>
       <div class="col-md-6 form-group">
         <input
@@ -95,6 +106,15 @@
           required
         />
         <i class="far fa-envelope"></i>
+        <div
+          *ngIf="
+            commentForm.get('email')?.touched &&
+            commentForm.get('email')?.invalid
+          "
+          class="text-danger"
+        >
+          Email is required.
+        </div>
       </div>
       <div class="col-12 form-group">
         <input
@@ -113,16 +133,17 @@
           required
         ></textarea>
         <i class="far fa-pencil"></i>
-      </div>
-      <div class="col-12 form-group">
-        <input type="checkbox" id="saveInfo" formControlName="saveInfo" />
-        <label for="saveInfo">
-          Save my name, email, and website in this browser for the next time I
-          comment.
-        </label>
+        <div
+          *ngIf="
+            commentForm.get('text')?.touched && commentForm.get('text')?.invalid
+          "
+          class="text-danger"
+        >
+          Comment is required.
+        </div>
       </div>
       <div class="col-12 form-group mb-0">
-        <button class="th-btn" type="submit" [disabled]="commentForm.invalid">
+        <button class="th-btn" type="submit">
           Send Message<img src="assets/img/icon/plane2.svg" alt="" />
         </button>
       </div>

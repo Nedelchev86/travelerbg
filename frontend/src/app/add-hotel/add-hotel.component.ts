@@ -38,6 +38,8 @@ import {
   FontSize,
   FontColor,
 } from 'ckeditor5';
+import { AuthService } from '../auth.service';
+import { environment } from '../../environments/environment';
 export interface Highlight {
   id: number;
   name: string;
@@ -261,6 +263,8 @@ export class AddHotelComponent implements OnInit {
   //     }
   //   }
   // }
+
+  authSevices = inject(AuthService);
   imagePreviews: { [key: string]: string } = {};
   addHotelForm: FormGroup;
   tags: FormArray;
@@ -280,6 +284,7 @@ export class AddHotelComponent implements OnInit {
   categories: any = Array<any>();
 
   public Editor = ClassicEditor;
+  private readonly API_URL = environment.apiUrl;
 
   public config = {
     toolbar: {
@@ -360,7 +365,7 @@ export class AddHotelComponent implements OnInit {
   }
 
   fetchCategories(): void {
-    this.http.get('http://localhost:8000/api/categories/hotels/').subscribe({
+    this.http.get(`${this.API_URL}categories/hotels/`).subscribe({
       next: (data: any) => {
         this.categories = data;
         console.log(this.categories);
@@ -370,22 +375,20 @@ export class AddHotelComponent implements OnInit {
   }
 
   fetchHighlights(): void {
-    this.http
-      .get<Highlight[]>('http://127.0.0.1:8000/api/highlights/')
-      .subscribe(
-        (response: Highlight[]) => {
-          this.highlights = response;
-          const highlightsFormArray = this.addHotelForm.get(
-            'highlights'
-          ) as FormArray;
-          this.highlights.forEach(() => {
-            highlightsFormArray.push(this.fb.control(false));
-          });
-        },
-        (error) => {
-          console.error('Error fetching highlights:', error);
-        }
-      );
+    this.http.get<Highlight[]>(`${this.API_URL}highlights/`).subscribe(
+      (response: Highlight[]) => {
+        this.highlights = response;
+        const highlightsFormArray = this.addHotelForm.get(
+          'highlights'
+        ) as FormArray;
+        this.highlights.forEach(() => {
+          highlightsFormArray.push(this.fb.control(false));
+        });
+      },
+      (error) => {
+        console.error('Error fetching highlights:', error);
+      }
+    );
   }
 
   addTag(tagName: string = ''): void {
@@ -564,9 +567,9 @@ export class AddHotelComponent implements OnInit {
       //         }
       //       });
 
-      this.http.post('http://localhost:8000/api/hotels/', formData).subscribe(
+      this.http.post(`${this.API_URL}hotels/`, formData).subscribe(
         (response) => {
-          console.log('Hotel added successfully', response);
+          this.authSevices.fetchUserData();
           this.router.navigate(['/profile']);
         },
         (error) => {

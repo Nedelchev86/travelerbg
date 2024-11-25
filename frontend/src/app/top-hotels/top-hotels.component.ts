@@ -8,6 +8,7 @@ import {
 import { LoaderComponent } from '../shared/loader/loader.component';
 import { RouterLink } from '@angular/router';
 import { SetBgImageDirective } from '../set-bg-image.directive';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-top-hotels',
@@ -19,11 +20,12 @@ import { SetBgImageDirective } from '../set-bg-image.directive';
 })
 export class TopHotelsComponent implements OnInit {
   constructor() {}
+  private readonly API_URL = environment.apiUrl;
   loading = true;
   hotels: any = [];
   http = inject(HttpClient);
   ngOnInit() {
-    this.http.get('http://localhost:8000/api/hotels/').subscribe({
+    this.http.get(`${this.API_URL}hotels/`).subscribe({
       next: (data: any) => {
         this.hotels = data.results;
         console.log(data);

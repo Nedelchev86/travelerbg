@@ -7,6 +7,7 @@ import {
 import { SetBgImageDirective } from '../set-bg-image.directive';
 import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-top-travelers',
@@ -19,8 +20,9 @@ import { RouterLink } from '@angular/router';
 export class TopTravelersComponent implements OnInit {
   http = inject(HttpClient);
   top_travelers = Array<any>();
+  private readonly API_URL = environment.apiUrl;
   ngOnInit() {
-    this.http.get('http://localhost:8000/api/travelers/top-rated/').subscribe({
+    this.http.get(`${this.API_URL}travelers/top-rated/`).subscribe({
       next: (data: any) => {
         this.top_travelers = data;
         console.log(this.top_travelers);

@@ -14,7 +14,9 @@ import { TopTravelersComponent } from '../top-travelers/top-travelers.component'
 import { TopDestinationComponent } from '../top-destination/top-destination.component';
 import { TopRatedDestinationsComponent } from '../top-rated-destinations/top-rated-destinations.component';
 import { HttpClient } from '@angular/common/http';
-import { BannerComponent } from "../shared/banner/banner.component";
+import { BannerComponent } from '../shared/banner/banner.component';
+import { ShapeMockupDirective } from '../shape-mockup.directive';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-hotels-layout',
@@ -24,27 +26,27 @@ import { BannerComponent } from "../shared/banner/banner.component";
     TopTravelersComponent,
     SetBgImageDirective,
     FormsModule,
-    HotelsComponent,
+
     TopTravelersComponent,
-    TopDestinationComponent,
+    ShapeMockupDirective,
     TopRatedDestinationsComponent,
     RouterLink,
     RouterLinkActive,
-    BannerComponent
-],
+    BannerComponent,
+  ],
   templateUrl: './hotels-layout.component.html',
   styleUrl: './hotels-layout.component.css',
 })
 export class HotelsLayoutComponent implements OnInit {
   searchQuery: string = '';
   categories: any = Array<any>();
-
+  private readonly API_URL = environment.apiUrl;
   http = inject(HttpClient);
 
   constructor(private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.http.get('http://localhost:8000/api/categories/hotels/').subscribe({
+    this.http.get(`${this.API_URL}categories/hotels/`).subscribe({
       next: (data: any) => {
         this.categories = data;
         console.log(this.categories);

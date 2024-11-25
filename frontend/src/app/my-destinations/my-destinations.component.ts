@@ -5,7 +5,7 @@ import { SetBgImageDirective } from '../set-bg-image.directive';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { DeleteConfirmationModalComponent } from '../delete-confirmation-modal/delete-confirmation-modal.component';
 import { CommonModule } from '@angular/common';
-
+import { environment } from '../../environments/environment';
 @Component({
   selector: 'app-my-destinations',
   standalone: true,
@@ -21,11 +21,13 @@ import { CommonModule } from '@angular/common';
 export class MyDestinationsComponent {
   showModal = false;
   http = inject(HttpClient);
+  authServices = inject(AuthService);
   public data: Array<any> = [];
   itemIdToDelete: string | null = null;
+  private readonly API_URL = environment.apiUrl;
 
   ngOnInit() {
-    this.http.get('http://localhost:8000/api/destinations/my/').subscribe({
+    this.http.get(`${this.API_URL}destinations/my/`).subscribe({
       next: (data: any) => {
         this.data = data;
         console.log(data);
@@ -48,13 +50,12 @@ export class MyDestinationsComponent {
     if (this.itemIdToDelete) {
       // Perform the delete action here
       this.http
-        .delete(
-          `http://localhost:8000/api/destinations/${this.itemIdToDelete}/`
-        )
+        .delete(`${this.API_URL}destinations/${this.itemIdToDelete}/`)
         .subscribe(
           (response) => {
             console.log('Item deleted:', this.itemIdToDelete);
             // Remove the deleted item from the data array
+            this.authServices.fetchUserData();
             this.data = this.data.filter(
               (item) => item.id !== this.itemIdToDelete
             );

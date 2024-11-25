@@ -36,6 +36,7 @@ import {
   FontColor,
 } from 'ckeditor5';
 import { CloudinaryuploadService } from '../shared/services/cloudinaryupload.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-edit-destination',
@@ -57,7 +58,7 @@ export class EditDestinationComponent implements OnInit {
   tags: FormArray;
   destinationId: string | null = null;
   imagePreviews: { [key: string]: string } = {};
-
+  private readonly API_URL = environment.apiUrl;
   public Editor = ClassicEditor;
   public config = {
     toolbar: {
@@ -119,7 +120,7 @@ export class EditDestinationComponent implements OnInit {
       title: ['', Validators.required],
       tags: this.fb.array([], this.minLengthArray(1)),
       category: ['', Validators.required],
-      basic_information: ['', Validators.required],
+      description: ['', Validators.required],
       image: ['', Validators.required],
       image2: [''],
       image3: [''],
@@ -151,7 +152,7 @@ export class EditDestinationComponent implements OnInit {
     };
   }
   fetchCategories(): void {
-    this.http.get('http://localhost:8000/api/categories/').subscribe(
+    this.http.get(`${this.API_URL}categories/`).subscribe(
       (response: any) => {
         this.categories = response;
       },
@@ -162,32 +163,30 @@ export class EditDestinationComponent implements OnInit {
   }
 
   getDestinationDetails(destinationId: string): void {
-    this.http
-      .get(`http://localhost:8000/api/destinations/${destinationId}/`)
-      .subscribe(
-        (response: any) => {
-          this.editDestinationForm.patchValue(response);
-          if (response.lat && response.lng) {
-            this.center = { lat: response.lat, lng: response.lng };
-            this.markerPosition = { lat: response.lat, lng: response.lng };
-          } else {
-            this.geocodeAddress(response.location);
-          }
-
-          response.tags.forEach((tag: { id: Number; name: string }) => {
-            this.tags.push(this.fb.control(tag.name, Validators.required));
-          });
-
-          this.imagePreviews['image'] = response.image;
-          this.imagePreviews['image2'] = response.image2;
-          this.imagePreviews['image3'] = response.image3;
-          this.imagePreviews['image4'] = response.image4;
-          this.imagePreviews['image5'] = response.image5;
-        },
-        (error) => {
-          console.error('Failed to fetch destination details', error);
+    this.http.get(`${this.API_URL}destinations/${destinationId}/`).subscribe(
+      (response: any) => {
+        this.editDestinationForm.patchValue(response);
+        if (response.lat && response.lng) {
+          this.center = { lat: response.lat, lng: response.lng };
+          this.markerPosition = { lat: response.lat, lng: response.lng };
+        } else {
+          this.geocodeAddress(response.location);
         }
-      );
+
+        response.tags.forEach((tag: { id: Number; name: string }) => {
+          this.tags.push(this.fb.control(tag.name, Validators.required));
+        });
+
+        this.imagePreviews['image'] = response.image;
+        this.imagePreviews['image2'] = response.image2;
+        this.imagePreviews['image3'] = response.image3;
+        this.imagePreviews['image4'] = response.image4;
+        this.imagePreviews['image5'] = response.image5;
+      },
+      (error) => {
+        console.error('Failed to fetch destination details', error);
+      }
+    );
   }
   //   this.http.get(`http://localhost:8000/api/destinations/${id}/`).subscribe(
   //     (data: any) => {
@@ -297,10 +296,7 @@ export class EditDestinationComponent implements OnInit {
     });
 
     this.http
-      .put(
-        `http://localhost:8000/api/destinations/${this.destinationId}/`,
-        formData
-      )
+      .put(`${this.API_URL}destinations/${this.destinationId}/`, formData)
       .subscribe(
         (response) => {
           console.log('Destination updated successfully', response);

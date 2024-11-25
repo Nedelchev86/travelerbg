@@ -29,15 +29,22 @@ import { EditActivitieComponent } from './edit-activitie/edit-activitie.componen
 import { editActivitiesGuard } from './edit-activities.guard';
 import { ActivitieDetailsComponent } from './activitie-details/activitie-details.component';
 import { ActivitiesLayoutComponent } from './activities-layout/activities-layout.component';
+import { isActivatedGuard } from './is-activated.guard';
+import { TravelersLayoutComponent } from './travelers-layout/travelers-layout.component';
+import { BookmarkedComponent } from './bookmarked/bookmarked.component';
 
 export const routes: Routes = [
   { path: '', component: MainComponent },
   {
     path: 'travelers',
     title: 'Travelers',
-    component: TraleversComponent,
+    component: TravelersLayoutComponent,
+    children: [
+      { path: '', component: TraleversComponent },
+      { path: ':travelerId', component: TravelersDetailsComponent },
+    ],
   },
-  { path: 'travelers/:travelerId', component: TravelersDetailsComponent },
+
   {
     path: 'destinations',
     title: 'Destinations',
@@ -73,7 +80,11 @@ export const routes: Routes = [
     children: [
       { path: '', component: ProfileComponent },
       { path: 'edit', component: EditProfileComponent },
-      { path: 'add-destination', component: AddDestinationComponent },
+      {
+        path: 'add-destination',
+        component: AddDestinationComponent,
+        canActivate: [isActivatedGuard],
+      },
       { path: 'my-destinations', component: MyDestinationsComponent },
       { path: 'my-hotels', component: MyHotelComponent },
       {
@@ -81,20 +92,29 @@ export const routes: Routes = [
         component: EditDestinationComponent,
         canActivate: [editDestinationGuard],
       },
-      { path: 'add-hotel', component: AddHotelComponent },
+      {
+        path: 'add-hotel',
+        component: AddHotelComponent,
+        canActivate: [isActivatedGuard],
+      },
       {
         path: 'edit-hotel/:id',
         component: HotelEditComponent,
-        canActivate: [editHotelGuard],
+        canActivate: [isActivatedGuard, editHotelGuard],
       },
       { path: 'edit-profile', component: EditBusinessProfileComponent },
-      { path: 'add-activities', component: AddActivitiesComponent },
+      {
+        path: 'add-activities',
+        component: AddActivitiesComponent,
+        canActivate: [isActivatedGuard],
+      },
       { path: 'my-activities', component: MyActivitiesComponent },
       {
         path: 'edit-activitie/:id',
         component: EditActivitieComponent,
         canActivate: [editActivitiesGuard],
       },
+      { path: 'bookmarked', component: BookmarkedComponent },
     ],
   },
 
