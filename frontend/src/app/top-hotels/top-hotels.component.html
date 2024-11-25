@@ -38,7 +38,7 @@
               </div>
               <div class="tour-content">
                 <h3 class="box-title">
-                  <a href="tour-details.html">{{ hotel.name }}</a>
+                  <a [routerLink]="['/hotels', hotel.id]">{{ hotel.name }}</a>
                 </h3>
                 <div class="tour-rating">
                   <div
@@ -46,13 +46,17 @@
                     role="img"
                     aria-label="Rated 5.00 out of 5"
                   >
-                    <span style="width: 100%"
-                      >Rated <strong class="rating">5.00</strong> out of 5 based
-                      on <span class="rating">4.8</span>(4.8 Rating)</span
-                    >
+                    <span
+                      [style.width.%]="hotel.average_rating.toFixed(2) * 18"
+                    ></span>
                   </div>
-                  <a href="tour-details.html" class="woocommerce-review-link"
-                    >(<span class="count">4.8</span> Rating)</a
+                  <a
+                    [routerLink]="['/hotels', hotel.id]"
+                    class="woocommerce-review-link"
+                    >(<span class="count">{{
+                      hotel.average_rating.toFixed(2)
+                    }}</span>
+                    Rating)</a
                   >
                 </div>
                 <h4 class="tour-box_price">
