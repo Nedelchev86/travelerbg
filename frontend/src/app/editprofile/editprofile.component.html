@@ -8,7 +8,7 @@
           class="woocommerce-form-login"
         >
           <div class="form-group">
-            <label>Name  <span class="red">*</span></label>
+            <label>Name <span class="red">*</span></label>
             <input
               type="text"
               class="form-control"
@@ -23,18 +23,21 @@
               class="text-danger"
             >
               <small *ngIf="profileForm.get('name')?.errors?.['required']"
-                >First Name is required.</small
+                >Name is required.</small
               >
               <small *ngIf="profileForm.get('name')?.errors?.['pattern']"
-                >First Name must start with an uppercase and contains only
+                >Name must start with an uppercase and contains only
                 letters.</small
+              >
+              <small *ngIf="profileForm.get('name')?.errors?.['maxLength']"
+                >Name must be maximum 30 letters.</small
               >
             </div>
           </div>
           <div class="row">
             <div class="col-md-6 form-group">
               <div class="form-group">
-                <label>City  <span class="red">*</span></label>
+                <label>City <span class="red">*</span></label>
                 <input
                   type="text"
                   class="form-control"
@@ -56,7 +59,7 @@
             </div>
             <div class="col-md-6 form-group">
               <div class="form-group">
-                <label>Occupation  <span class="red">*</span></label>
+                <label>Occupation <span class="red">*</span></label>
                 <input
                   type="text"
                   class="form-control"
@@ -134,19 +137,18 @@
             />
           </div>
           <div class="form-group">
-            <label>About  <span class="red">*</span></label>
+            <label>About <span class="red">*</span></label>
             <!-- <textarea
               class="form-control"
               formControlName="about"
               placeholder="About"
             ></textarea> -->
             <ckeditor
-            id="about"
-            formControlName="about"
-            [editor]="Editor"
-            [config]="config"
-  
-          ></ckeditor>
+              id="about"
+              formControlName="about"
+              [editor]="Editor"
+              [config]="config"
+            ></ckeditor>
             <div
               *ngIf="
                 profileForm.get('about')?.invalid &&
@@ -160,7 +162,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label>Phone Number  <span class="red">*</span></label>
+            <label>Phone Number <span class="red">*</span></label>
             <input
               type="text"
               class="form-control"

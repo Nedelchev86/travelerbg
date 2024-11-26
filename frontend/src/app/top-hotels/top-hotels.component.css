@@ -3,3 +3,7 @@
   height: 250px;
   object-fit: cover;
 }
+
+.swiper-slide {
+  min-width: 250px;
+}

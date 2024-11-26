@@ -87,7 +87,11 @@ class DestinationViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'], url_path='top-rated')
     def top_rated(self, request):
-        top_destinations = Destination.objects.annotate(avg_rating=Avg('destination_ratings__rating')).order_by('-avg_rating')[:5]
+        # top_destinations = Destination.objects.annotate(avg_rating=Avg('destination_ratings__rating')).order_by('-avg_rating')[:5]
+
+        top_destinations = Destination.objects.annotate(avg_rating=Avg('destination_ratings__rating')).filter(
+            avg_rating__gt=0).order_by('-avg_rating')[:5]
+
         serializer = self.get_serializer(top_destinations, many=True)
         return Response(serializer.data)
 
@@ -140,7 +144,7 @@ class DestinationCommentCreateView(generics.CreateAPIView):
         if self.request.user.is_authenticated:
             email = self.request.user.email
             if hasattr(self.request.user, 'traveler'):
-                name = f"{self.request.user.traveler.name} {self.request.user.traveler.name}"
+                name = f"{self.request.user.traveler.name}"
             elif hasattr(self.request.user, 'business'):
                 name = self.request.user.business.name
             else:

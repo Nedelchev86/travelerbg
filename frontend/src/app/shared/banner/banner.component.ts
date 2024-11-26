@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { SetBgImageDirective } from '../../set-bg-image.directive';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-banner',
   standalone: true,
-  imports: [SetBgImageDirective],
+  imports: [SetBgImageDirective, RouterLink],
   templateUrl: './banner.component.html',
   styleUrl: './banner.component.css',
 })

@@ -120,7 +120,7 @@ class HotelCommentCreateView(generics.CreateAPIView):
         if self.request.user.is_authenticated:
             email = self.request.user.email
             if hasattr(self.request.user, 'traveler'):
-                name = f"{self.request.user.traveler.name} {self.request.user.traveler.name}"
+                name = f"{self.request.user.traveler.name}"
             elif hasattr(self.request.user, 'business'):
                 name = self.request.user.business.name
             else:

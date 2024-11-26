@@ -89,7 +89,14 @@ export class EditProfileComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private http: HttpClient) {
     this.profileForm = this.fb.group({
-      name: ['', [Validators.required, Validators.pattern(/^[a-zA-Z\s]*$/)]],
+      name: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[a-zA-Z\s]*$/),
+          Validators.maxLength(30),
+        ],
+      ],
       city: ['', Validators.required],
       occupation: ['', Validators.required],
       website: [''],

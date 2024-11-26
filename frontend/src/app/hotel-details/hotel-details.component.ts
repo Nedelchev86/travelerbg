@@ -151,6 +151,7 @@ export class HotelDetailsComponent implements OnInit {
         ...this.commentFormRegistred.value,
         hotel: this.hotelId,
       };
+      console.log('comment data', commentData);
       this.http
         .post(
           `${this.API_URL}hotels/${this.hotelId}/comments/add/`,
