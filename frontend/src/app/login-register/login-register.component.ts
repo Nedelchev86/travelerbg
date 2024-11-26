@@ -150,7 +150,6 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 
 import { passwordMatchValidator } from '../validators/password-match.validator';
-import { UserService } from '../user.service';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../environments/environment';
@@ -167,7 +166,6 @@ export class LoginRegisterComponent implements OnInit {
 
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
-  private userService = inject(UserService);
   private toastr = inject(ToastrService);
 
   loginError: string | null = null;
@@ -206,42 +204,42 @@ export class LoginRegisterComponent implements OnInit {
     this.selectedTab = tab;
   }
 
-  onLoginSubmit(): void {
-    if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
-      this.userService.login(email!, password!).subscribe({
-        next: (response) => {
-          // Handle successful login response
-          if (response?.access) {
-            localStorage.setItem('token', response.access);
+  // onLoginSubmit(): void {
+  //   if (this.loginForm.valid) {
+  //     const { email, password } = this.loginForm.value;
+  //     this.userService.login(email!, password!).subscribe({
+  //       next: (response) => {
+  //         // Handle successful login response
+  //         if (response?.access) {
+  //           localStorage.setItem('token', response.access);
 
-            this.userService
-              .fetchUserData(response.access)
-              .subscribe((user) => {
-                if (user) {
-                  this.authService.updateCurrentUser(user);
-                  localStorage.setItem('currentUser', JSON.stringify(user));
-                  this.toastr.success('Login successful', 'Welcome!');
-                }
-              });
-          }
-        },
-        error: (error) => {
-          // Handle the 401 error and prevent it from being logged in the console
-          if (error.status === 401) {
-            this.loginError = 'Invalid email or password.';
-            // this.toastr.error(this.loginError, 'Login failed');
-          } else {
-            // Handle other errors, maybe display a different message
-            this.toastr.error(
-              'An error occurred. Please try again later.',
-              'Login failed'
-            );
-          }
-        },
-      });
-    }
-  }
+  //           this.userService
+  //             .fetchUserData(response.access)
+  //             .subscribe((user) => {
+  //               if (user) {
+  //                 this.authService.updateCurrentUser(user);
+  //                 localStorage.setItem('currentUser', JSON.stringify(user));
+  //                 this.toastr.success('Login successful', 'Welcome!');
+  //               }
+  //             });
+  //         }
+  //       },
+  //       error: (error) => {
+  //         // Handle the 401 error and prevent it from being logged in the console
+  //         if (error.status === 401) {
+  //           this.loginError = 'Invalid email or password.';
+  //           // this.toastr.error(this.loginError, 'Login failed');
+  //         } else {
+  //           // Handle other errors, maybe display a different message
+  //           this.toastr.error(
+  //             'An error occurred. Please try again later.',
+  //             'Login failed'
+  //           );
+  //         }
+  //       },
+  //     });
+  //   }
+  // }
 
   // onLoginSubmit(): void {
   //   if (this.loginForm.valid) {
@@ -299,75 +297,97 @@ export class LoginRegisterComponent implements OnInit {
   //   }
   // }
 
+  // onRegisterSubmit(): void {
+  //   if (this.registerForm.valid) {
+  //     const { email, password, role } = this.registerForm.value;
+
+  //     this.userService.register(email!, password!, role!).subscribe({
+  //       next: (response) => {
+  //         if (response) {
+  //           this.registerError = null;
+  //           this.userService.login(email!, password!).subscribe({
+  //             next: (loginResponse) => {
+  //               if (loginResponse?.access) {
+  //                 // Store the token and update current user data
+  //                 localStorage.setItem('token', loginResponse.access);
+  //                 this.userService
+  //                   .fetchUserData(loginResponse.access)
+  //                   .subscribe((user) => {
+  //                     if (user) {
+  //                       this.authService.updateCurrentUser(user);
+  //                       localStorage.setItem(
+  //                         'currentUser',
+  //                         JSON.stringify(user)
+  //                       );
+  //                       this.showToast(
+  //                         'Registration and login successful',
+  //                         'Welcome!'
+  //                       );
+
+  //                       // Reset the registration form
+  //                       this.registerForm.reset();
+  //                     }
+  //                   });
+  //               } else {
+  //                 console.log('1');
+  //                 this.registerError = 'Login failed after registration.';
+  //               }
+  //             },
+  //             error: () => {
+  //               console.log('2');
+  //               this.registerError = 'Login failed after registration.';
+  //             },
+  //           });
+  //         } else {
+  //           console.log('3');
+  //           this.registerError = 'Account with this email already exists.';
+  //         }
+  //       },
+  //       error: (error) => {
+  //         if (
+  //           error.status === 400 &&
+  //           error.error.email[0] === 'Enter a valid email address.'
+  //         ) {
+  //           console.log('Enter a valid email address.');
+  //           this.registerError = 'Enter a valid email address.';
+  //         } else {
+  //           console.log('Registration failed / From Login Component', error);
+  //           this.registerError = 'Account with this email already exists.';
+  //         }
+  //       },
+  //     });
+  //   }
+  // }
+
+  // private showToast(title: string, message: string) {
+  //   this.userService.toastr.success(message, title, {
+  //     positionClass: 'toast-bottom-right',
+  //     progressBar: true,
+  //     timeOut: 5000,
+  //     progressAnimation: 'decreasing',
+  //     closeButton: true,
+  //   });
+  // }
+
   onRegisterSubmit(): void {
+    console.log(this.registerForm.valid);
     if (this.registerForm.valid) {
-      const { email, password, role } = this.registerForm.value;
-
-      this.userService.register(email!, password!, role!).subscribe({
-        next: (response) => {
-          if (response) {
-            this.registerError = null;
-            this.userService.login(email!, password!).subscribe({
-              next: (loginResponse) => {
-                if (loginResponse?.access) {
-                  // Store the token and update current user data
-                  localStorage.setItem('token', loginResponse.access);
-                  this.userService
-                    .fetchUserData(loginResponse.access)
-                    .subscribe((user) => {
-                      if (user) {
-                        this.authService.updateCurrentUser(user);
-                        localStorage.setItem(
-                          'currentUser',
-                          JSON.stringify(user)
-                        );
-                        this.showToast(
-                          'Registration and login successful',
-                          'Welcome!'
-                        );
-
-                        // Reset the registration form
-                        this.registerForm.reset();
-                      }
-                    });
-                } else {
-                  console.log('1');
-                  this.registerError = 'Login failed after registration.';
-                }
-              },
-              error: () => {
-                console.log('2');
-                this.registerError = 'Login failed after registration.';
-              },
-            });
-          } else {
-            console.log('3');
-            this.registerError = 'Account with this email already exists.';
-          }
-        },
-        error: (error) => {
-          if (
-            error.status === 400 &&
-            error.error.email[0] === 'Enter a valid email address.'
-          ) {
-            console.log('Enter a valid email address.');
-            this.registerError = 'Enter a valid email address.';
-          } else {
-            console.log('Registration failed / From Login Component', error);
-            this.registerError = 'Account with this email already exists.';
-          }
-        },
-      });
+      this.authService.register(
+        this.registerForm.value as {
+          email: string;
+          password: string;
+          confirm_password: string;
+          role: string;
+        }
+      );
     }
   }
 
-  private showToast(title: string, message: string) {
-    this.userService.toastr.success(message, title, {
-      positionClass: 'toast-bottom-right',
-      progressBar: true,
-      timeOut: 5000,
-      progressAnimation: 'decreasing',
-      closeButton: true,
-    });
+  onLoginSubmit(): void {
+    if (this.loginForm.valid) {
+      this.authService.login(
+        this.loginForm.value as { email: string; password: string }
+      );
+    }
   }
 }

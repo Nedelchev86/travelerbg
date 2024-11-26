@@ -55,11 +55,7 @@ export class HeaderComponent {
   }
 
   logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('currentUser');
-    this.authService.currentUser.set(null);
-    this.authService.token.set(null);
-    this.router.navigate(['/']);
+    this.authService.logout();
   }
 
   toggleMobileMenu(): void {
