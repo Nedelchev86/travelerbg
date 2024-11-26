@@ -139,6 +139,7 @@ Sidemenu
 <div
   class="th-menu-wrapper onepage-nav"
   [ngClass]="{ 'th-body-visible': isBodyVisible }"
+  (click)="toggleMobileMenu()"
 >
   <div class="th-menu-area text-center">
     <button class="th-menu-toggle" (click)="toggleMobileMenu()">
@@ -167,7 +168,7 @@ Sidemenu
           <a routerLink="/activities">Activities</a>
         </li>
         <li>
-          <a routerLink="/contacs-us" routerLinkActive="active">Contact us</a>
+          <a routerLink="/contact-us" routerLinkActive="active">Contact us</a>
         </li>
       </ul>
     </div>
@@ -335,16 +336,14 @@ Sidemenu
                 Sign In / Register <i class="fa-regular fa-user"></i>
               </button>
             </div>
-            <div *ngIf="isLoginRegisterPopupVisible" class="modal-backdrop">
-              <div class="modal-content">
-                <button
-                  (click)="closeLoginRegisterPopup()"
-                  class="close-button"
-                >
-                  X
-                </button>
-                <app-login-register></app-login-register>
-              </div>
+            <div
+              *ngIf="isLoginRegisterPopupVisible"
+              class="modal-backdrop"
+        
+            >
+              <app-login-register
+                (close)="closeLoginRegisterPopup()"
+              ></app-login-register>
             </div>
           </div>
           }

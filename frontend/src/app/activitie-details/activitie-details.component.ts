@@ -7,7 +7,6 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../environments/environment'; // Import the environment configuration
 
-
 interface FavoriteStatusResponse {
   is_favorite: boolean;
 }
@@ -40,7 +39,7 @@ export class ActivitieDetailsComponent {
 
   fetchActivitieDetails(activitieId: string): void {
     this.http
-      .get<Comment[]>(`${this.API_URL}${activitieId}/`)
+      .get<Comment[]>(`${this.API_URL}activities/${activitieId}/`)
       .subscribe(
         (response: Comment[]) => {
           this.activitie = response;
@@ -57,7 +56,7 @@ export class ActivitieDetailsComponent {
     }
     this.http
       .get<FavoriteStatusResponse>(
-        `http://localhost:8000/api/activities/${activitieId}/is_favorite/`
+        `${this.API_URL}activities/${activitieId}/is_favorite/`
       )
       .subscribe({
         next: (response) => {
@@ -75,10 +74,7 @@ export class ActivitieDetailsComponent {
       return;
     }
     this.http
-      .post(
-        `http://localhost:8000/api/activities/${activityId}/add_to_favorites/`,
-        {}
-      )
+      .post(`${this.API_URL}activities/${activityId}/add_to_favorites/`, {})
       .subscribe({
         next: (response) => {
           this.isFavorite = true; // Set favorite status to true
@@ -93,7 +89,7 @@ export class ActivitieDetailsComponent {
   removeFromFavorites(activityId: string): void {
     this.http
       .post(
-        `http://localhost:8000/api/activities/${activityId}/remove_from_favorites/`,
+        `${this.API_URL}activities/${activityId}/remove_from_favorites/`,
         {}
       )
       .subscribe({

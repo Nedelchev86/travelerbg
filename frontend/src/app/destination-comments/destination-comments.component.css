@@ -1,0 +1,6 @@
+.comment-content {
+  word-wrap: break-word; /* Break long words */
+  word-break: break-word; /* Break long words */
+  overflow-wrap: break-word; /* Break long words */
+  white-space: pre-wrap; /* Preserve whitespace and wrap text */
+}

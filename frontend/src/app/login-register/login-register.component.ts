@@ -145,7 +145,7 @@
 //   }
 // }
 
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 
@@ -163,6 +163,8 @@ import { environment } from '../../environments/environment';
   styleUrls: ['./login-register.component.css'],
 })
 export class LoginRegisterComponent implements OnInit {
+  @Output() close = new EventEmitter<void>();
+
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private userService = inject(UserService);
@@ -186,6 +188,9 @@ export class LoginRegisterComponent implements OnInit {
     },
     { validators: passwordMatchValidator }
   );
+  closeModal() {
+    this.close.emit();
+  }
 
   ngOnInit(): void {
     this.loginForm.valueChanges.subscribe(() => {

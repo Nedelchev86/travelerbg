@@ -1,204 +1,206 @@
-<div id="login-form" class="popup-login-register">
-  <ul class="nav" id="pills-tab" role="tablist">
-    <li class="nav-item" role="presentation">
-      <button
+<div class="modal-content">
+  <button (click)="closeModal()" class="close-button">X</button>
+  <div id="login-form" class="popup-login-register">
+    <ul class="nav" id="pills-tab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button
+          [ngClass]="{ 'show active': selectedTab === 'login' }"
+          class="nav-menu"
+          (click)="selectTab('login')"
+        >
+          Login
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button
+          [ngClass]="{ 'show active': selectedTab === 'register' }"
+          class="nav-menu"
+          (click)="selectTab('register')"
+        >
+          Register
+        </button>
+      </li>
+    </ul>
+    <div class="tab-content" id="pills-tabContent">
+      <div
+        class="tab-pane fade"
         [ngClass]="{ 'show active': selectedTab === 'login' }"
-        class="nav-menu"
-        (click)="selectTab('login')"
+        id="pills-login"
+        role="tabpanel"
+        aria-labelledby="pills-login-tab"
       >
-        Login
-      </button>
-    </li>
-    <li class="nav-item" role="presentation">
-      <button
+        <h3 class="box-title mb-30">Sign in to your account</h3>
+        <div class="th-login-form">
+          <form
+            [formGroup]="loginForm"
+            (ngSubmit)="onLoginSubmit()"
+            class="login-form"
+          >
+            <div class="row">
+              <div class="form-group col-12">
+                <label>Email</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="email"
+                  required
+                />
+                <div
+                  *ngIf="
+                    loginForm.get('email')?.invalid &&
+                    loginForm.get('email')?.touched
+                  "
+                  class="text-danger"
+                >
+                  <small *ngIf="loginForm.get('email')?.errors?.['required']"
+                    >Email is required.</small
+                  >
+                  <small *ngIf="loginForm.get('email')?.errors?.['email']"
+                    >Invalid email format.</small
+                  >
+                </div>
+              </div>
+              <div class="form-group col-12">
+                <label>Password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  formControlName="password"
+                  required
+                />
+                <div
+                  *ngIf="
+                    loginForm.get('password')?.invalid &&
+                    loginForm.get('password')?.touched
+                  "
+                  class="text-danger"
+                >
+                  <small *ngIf="loginForm.get('password')?.errors?.['required']"
+                    >Password is required.</small
+                  >
+                  <small
+                    *ngIf="loginForm.get('password')?.errors?.['minlength']"
+                    >Password must be at least 6 characters long.</small
+                  >
+                </div>
+              </div>
+              <div *ngIf="loginError" class="text-danger">
+                <small>{{ loginError }}</small>
+              </div>
+              <div class="form-btn mb-20 col-12">
+                <button
+                  class="th-btn btn-fw th-radius2"
+                  type="submit"
+                  [disabled]="loginForm.invalid"
+                >
+                  Login
+                </button>
+              </div>
+            </div>
+
+            <p class="form-messages mb-0 mt-3"></p>
+          </form>
+        </div>
+      </div>
+      <div
+        class="tab-pane fade"
         [ngClass]="{ 'show active': selectedTab === 'register' }"
-        class="nav-menu"
-        (click)="selectTab('register')"
+        id="pills-register"
+        role="tabpanel"
+        aria-labelledby="pills-register-tab"
       >
-        Register
-      </button>
-    </li>
-  </ul>
-  <div class="tab-content" id="pills-tabContent">
-    <div
-      class="tab-pane fade"
-      [ngClass]="{ 'show active': selectedTab === 'login' }"
-      id="pills-login"
-      role="tabpanel"
-      aria-labelledby="pills-login-tab"
-    >
-      <h3 class="box-title mb-30">Sign in to your account</h3>
-      <div class="th-login-form">
+        <h3 class="th-form-title mb-30">Register a new account</h3>
         <form
-          [formGroup]="loginForm"
-          (ngSubmit)="onLoginSubmit()"
+          [formGroup]="registerForm"
+          (ngSubmit)="onRegisterSubmit()"
           class="login-form"
         >
           <div class="row">
             <div class="form-group col-12">
-              <label>Email</label>
+              <label for="email">Your email*</label>
               <input
-                type="text"
+                type="email"
                 class="form-control"
                 formControlName="email"
                 required
               />
               <div
                 *ngIf="
-                  loginForm.get('email')?.invalid &&
-                  loginForm.get('email')?.touched
+                  registerForm.get('email')?.invalid &&
+                  registerForm.get('email')?.touched
                 "
                 class="text-danger"
               >
-                <small *ngIf="loginForm.get('email')?.errors?.['required']"
+                <small *ngIf="registerForm.get('email')?.errors?.['required']"
                   >Email is required.</small
                 >
-                <small *ngIf="loginForm.get('email')?.errors?.['email']"
+                <small *ngIf="registerForm.get('email')?.errors?.['email']"
                   >Invalid email format.</small
                 >
               </div>
             </div>
             <div class="form-group col-12">
-              <label>Password</label>
+              <label for="password">Password</label>
               <input
                 type="password"
                 class="form-control"
                 formControlName="password"
                 required
               />
+            </div>
+            <div class="form-group col-12">
+              <label for="confirm_password">Confirm password</label>
+              <input
+                type="password"
+                class="form-control"
+                formControlName="confirm_password"
+                required
+              />
               <div
                 *ngIf="
-                  loginForm.get('password')?.invalid &&
-                  loginForm.get('password')?.touched
-                "
-                class="text-danger"
-              >
-                <small *ngIf="loginForm.get('password')?.errors?.['required']"
-                  >Password is required.</small
-                >
-                <small *ngIf="loginForm.get('password')?.errors?.['minlength']"
-                  >Password must be at least 6 characters long.</small
-                >
-              </div>
-            </div>
-            <div *ngIf="loginError" class="text-danger">
-              <small>{{ loginError }}</small>
-            </div>
-            <div class="form-btn mb-20 col-12">
-              <button
-                class="th-btn btn-fw th-radius2"
-                type="submit"
-                [disabled]="loginForm.invalid"
-              >
-                Login
-              </button>
-            </div>
-          </div>
-          <div id="forgot_url">
-            <a href="my-account.html">Forgot password?</a>
-          </div>
-          <p class="form-messages mb-0 mt-3"></p>
-        </form>
-      </div>
-    </div>
-    <div
-      class="tab-pane fade"
-      [ngClass]="{ 'show active': selectedTab === 'register' }"
-      id="pills-register"
-      role="tabpanel"
-      aria-labelledby="pills-register-tab"
-    >
-      <h3 class="th-form-title mb-30">Register a new account</h3>
-      <form
-        [formGroup]="registerForm"
-        (ngSubmit)="onRegisterSubmit()"
-        class="login-form"
-      >
-        <div class="row">
-          <div class="form-group col-12">
-            <label for="email">Your email*</label>
-            <input
-              type="email"
-              class="form-control"
-              formControlName="email"
-              required
-            />
-            <div
-              *ngIf="
-                registerForm.get('email')?.invalid &&
-                registerForm.get('email')?.touched
-              "
-              class="text-danger"
-            >
-              <small *ngIf="registerForm.get('email')?.errors?.['required']"
-                >Email is required.</small
-              >
-              <small *ngIf="registerForm.get('email')?.errors?.['email']"
-                >Invalid email format.</small
-              >
-            </div>
-          </div>
-          <div class="form-group col-12">
-            <label for="password">Password</label>
-            <input
-              type="password"
-              class="form-control"
-              formControlName="password"
-              required
-            />
-          </div>
-          <div class="form-group col-12">
-            <label for="confirm_password">Confirm password</label>
-            <input
-              type="password"
-              class="form-control"
-              formControlName="confirm_password"
-              required
-            />
-            <div
-              *ngIf="
                 registerForm.errors?.['passwordMismatch'] &&
                 registerForm.get('confirm_password')?.touched
               "
-              class="text-danger"
-            >
-              <small>Passwords do not match.</small>
-            </div>
-          </div>
-          <div class="form-group col-12">
-            <label for="role">Role</label>
-            <select class="form-control" formControlName="role" required>
-              <option value="" disabled>Select Role</option>
-              <option value="business">Business</option>
-              <option value="traveler">Traveler</option>
-            </select>
-            <div
-              *ngIf="
-                registerForm.get('role')?.invalid &&
-                registerForm.get('role')?.touched
-              "
-              class="text-danger"
-            >
-              <small *ngIf="registerForm.get('role')?.errors?.['required']"
-                >Role is required.</small
+                class="text-danger"
               >
+                <small>Passwords do not match.</small>
+              </div>
+            </div>
+            <div class="form-group col-12">
+              <label for="role">Role</label>
+              <select class="form-control" formControlName="role" required>
+                <option value="" disabled>Select Role</option>
+                <option value="business">Business</option>
+                <option value="traveler">Traveler</option>
+              </select>
+              <div
+                *ngIf="
+                  registerForm.get('role')?.invalid &&
+                  registerForm.get('role')?.touched
+                "
+                class="text-danger"
+              >
+                <small *ngIf="registerForm.get('role')?.errors?.['required']"
+                  >Role is required.</small
+                >
+              </div>
+            </div>
+            <p class="form-messages mb-0 mt-3"></p>
+            <div *ngIf="registerError" class="text-danger">
+              <small>{{ registerError }}</small>
+            </div>
+            <div class="form-btn mt-20 col-12">
+              <button
+                class="th-btn btn-fw th-radius2"
+                type="submit"
+                [disabled]="registerForm.invalid"
+              >
+                Sign up
+              </button>
             </div>
           </div>
-          <p class="form-messages mb-0 mt-3"></p>
-          <div *ngIf="registerError" class="text-danger">
-            <small>{{ registerError }}</small>
-          </div>
-          <div class="form-btn mt-20 col-12">
-            <button
-              class="th-btn btn-fw th-radius2"
-              type="submit"
-              [disabled]="registerForm.invalid"
-            >
-              Sign up
-            </button>
-          </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
 </div>
