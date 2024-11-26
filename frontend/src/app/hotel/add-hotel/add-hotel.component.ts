@@ -368,7 +368,6 @@ export class AddHotelComponent implements OnInit {
     this.http.get(`${this.API_URL}categories/hotels/`).subscribe({
       next: (data: any) => {
         this.categories = data;
-        console.log(this.categories);
       },
       error: (err) => console.log(err),
     });
@@ -422,12 +421,10 @@ export class AddHotelComponent implements OnInit {
   // }
 
   onFileChange(event: any, field: string): void {
-    console.log('changed');
     const file = event.target.files[0];
     if (file) {
       this.cloudinaryuploadService.uploadImage(file).subscribe(
         (response) => {
-          console.log('Image uploaded successfully:', response);
           this.addHotelForm.patchValue({
             [field]: response.secure_url,
           });

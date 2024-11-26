@@ -66,6 +66,7 @@ export class DestinationDetailsComponent implements OnInit {
   public traveler: any = {};
   private readonly API_URL = environment.apiUrl;
   isFavorite: boolean = false;
+  loading = true;
 
   ngOnInit() {
     // this.destinationId = this.route.snapshot.paramMap.get('destinationId');
@@ -76,7 +77,7 @@ export class DestinationDetailsComponent implements OnInit {
     this.route.params.subscribe((params) => {
       this.destinationId = params['destinationId'];
       if (this.destinationId) {
-        this.fetchHotelDetails(this.destinationId);
+        this.fetchDestinationDetails(this.destinationId);
       }
     });
   }
@@ -90,7 +91,7 @@ export class DestinationDetailsComponent implements OnInit {
     ].filter((item) => item.imageSrc);
   }
 
-  fetchHotelDetails(destinationId: string): void {
+  fetchDestinationDetails(destinationId: string): void {
     const params = {
       category: this.categoryQuery,
     };
@@ -102,7 +103,10 @@ export class DestinationDetailsComponent implements OnInit {
         this.getUserDetails(data.user);
         this.checkIsFavorite(destinationId);
       },
-      error: (err) => console.log(err),
+      error: (err) => {
+        this.loading = false;
+        console.log(err);
+      },
     });
   }
 
@@ -110,7 +114,7 @@ export class DestinationDetailsComponent implements OnInit {
     this.http.get(`${this.API_URL}travelers/${travelerId}`).subscribe({
       next: (data: any) => {
         this.traveler = data;
-        console.log('Traveler data:', data);
+        this.loading = false;
       },
       error: (err) => console.log('Failed to fetch user data', err),
     });
@@ -131,23 +135,22 @@ export class DestinationDetailsComponent implements OnInit {
     }
   }
 
-  addDestination(): void {
-    if (this.newDestination) {
-      this.geocodeAddress(this.newDestination);
-    }
-  }
+  // addDestination(): void {
+  //   if (this.newDestination) {
+  //     this.geocodeAddress(this.newDestination);
+  //   }
+  // }
 
-  onMapClick(event: google.maps.MapMouseEvent): void {
-    if (event.latLng) {
-      this.markerPosition = {
-        lat: event.latLng.lat(),
-        lng: event.latLng.lng(),
-      };
-      console.log(this.markerPosition);
-    }
-  }
+  // onMapClick(event: google.maps.MapMouseEvent): void {
+  //   if (event.latLng) {
+  //     this.markerPosition = {
+  //       lat: event.latLng.lat(),
+  //       lng: event.latLng.lng(),
+  //     };
+  //   }
+  // }
 
-  rateTHotel(rating: number): void {
+  rateDestination(rating: number): void {
     if (!this.authService.isLoggedIn()) {
       this.toast.error('Please login to rate travelers', 'Login required');
       return;
@@ -159,20 +162,15 @@ export class DestinationDetailsComponent implements OnInit {
       })
       .subscribe({
         next: (response) => {
-          console.log('Rating submitted successfully', response);
-          this.updateTravelerRating(rating);
+          this.updateDestinationRating(rating);
           this.toast.success('Rating submitted successfully');
         },
         error: (err) => {
-          console.log('Failed to submit rating', err),
-            this.toast.error(
-              'Please login to rate travelers',
-              'Login required'
-            );
+          this.toast.error('Please login to rate travelers', 'Login required');
         },
       });
   }
-  updateTravelerRating(rating: number): void {
+  updateDestinationRating(rating: number): void {
     {
       this.http
         .get(`${this.API_URL}destinations/${this.destinationId}`)
@@ -180,10 +178,8 @@ export class DestinationDetailsComponent implements OnInit {
           next: (data: any) => {
             this.data.average_rating = data.average_rating;
             this.data.number_of_votes = data.number_of_votes;
-            console.log(data);
           },
           error: (err) => {
-            console.log(err);
             this.toast.error(
               'Error fetching travelers data',
               'Cannot connect to server'

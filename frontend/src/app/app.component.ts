@@ -24,6 +24,7 @@ import {
   Paragraph,
   Undo,
 } from 'ckeditor5';
+import { NgxScrollTopComponent, NgxScrollTopDirective } from 'ngx-scrolltop';
 import { environment } from '../environments/environment';
 @Component({
   selector: 'app-root',
@@ -35,6 +36,7 @@ import { environment } from '../environments/environment';
     FooterComponent,
     CloudinaryModule,
     GoogleMapsModule,
+    NgxScrollTopComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './app.component.html',
@@ -62,21 +64,17 @@ export class AppComponent implements OnInit {
 
     if (!token) {
       console.log('User is not logged in');
-      this.authService.currentUser.set(null); // Clear any current user data
-      // Optionally, you could redirect to the login page here
-      return; // Exit early if no token exists
+      this.authService.currentUser.set(null);
+      return;
     }
 
     this.http.get<UserInterface>(`${this.API_URL}user/`).subscribe({
       next: (data) => {
-        console.log(data);
         this.authService.currentUser.set(data);
-        console.log('test', this.authService.currentUser());
       },
       error: (error) => {
         if (error.status === 401) {
           this.authService.currentUser.set(null);
-          console.log('test');
         }
       },
     });

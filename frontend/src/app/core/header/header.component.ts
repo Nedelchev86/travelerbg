@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, HostListener, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { LoginRegisterComponent } from '../../login-register/login-register.component';
 import { CommonModule } from '@angular/common';
@@ -31,19 +31,24 @@ export class HeaderComponent {
   isBodyVisible = false;
   private readonly API_URL = environment.apiUrl;
 
+  // isSticky = false;
+
+  // @HostListener('window:scroll', [])
+  // onScroll(): void {
+  //   this.isSticky = window.scrollY > 0; // Add class when scrolled
+  // }
+
   ngOnInit(): void {
-    if (localStorage.getItem('token')) {
-      this.http.get<UserInterface>(`${this.API_URL}user`).subscribe({
-        next: (response) => {
-          console.log('response', response);
-          this.authService.currentUser.set(response);
-          console.log('User data:', this.authService.currentUser());
-        },
-        error: () => {
-          this.authService.currentUser.set(null);
-        },
-      });
-    }
+    // if (localStorage.getItem('token')) {
+    //   this.http.get<UserInterface>(`${this.API_URL}user`).subscribe({
+    //     next: (response) => {
+    //       this.authService.currentUser.set(response);
+    //     },
+    //     error: () => {
+    //       this.authService.currentUser.set(null);
+    //     },
+    //   });
+    // }
   }
 
   openLoginRegisterPopup() {

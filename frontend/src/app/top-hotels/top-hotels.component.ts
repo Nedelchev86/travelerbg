@@ -28,7 +28,6 @@ export class TopHotelsComponent implements OnInit {
     this.http.get(`${this.API_URL}hotels/`).subscribe({
       next: (data: any) => {
         this.hotels = data.results;
-        console.log(data);
         this.loading = false;
       },
       error: (err) => {

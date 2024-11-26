@@ -49,7 +49,6 @@ export class HotelsLayoutComponent implements OnInit {
     this.http.get(`${this.API_URL}categories/hotels/`).subscribe({
       next: (data: any) => {
         this.categories = data;
-        console.log(this.categories);
       },
       error: (err) => console.log(err),
     });

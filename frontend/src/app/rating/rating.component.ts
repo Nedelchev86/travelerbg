@@ -41,7 +41,6 @@ export class RatingComponent implements OnChanges {
   hoverIndex: number | null = null;
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('changes', changes);
     if (changes['rating']) {
       this.updateStars();
     }
@@ -66,7 +65,6 @@ export class RatingComponent implements OnChanges {
   }
 
   private updateStars(): void {
-    console.log('this.rating', this.rating);
     this.stars = [];
     for (let i = 1; i <= 5; i++) {
       if (i <= this.rating) {

@@ -167,8 +167,14 @@ export class EditDestinationComponent implements OnInit {
       (response: any) => {
         this.editDestinationForm.patchValue(response);
         if (response.lat && response.lng) {
-          this.center = { lat: response.lat, lng: response.lng };
-          this.markerPosition = { lat: response.lat, lng: response.lng };
+          this.center = {
+            lat: Number(response.lat),
+            lng: Number(response.lng),
+          };
+          this.markerPosition = {
+            lat: Number(response.lat),
+            lng: Number(response.lng),
+          };
         } else {
           this.geocodeAddress(response.location);
         }
@@ -219,7 +225,6 @@ export class EditDestinationComponent implements OnInit {
   }
 
   geocodeAddress(address: string): void {
-    console.log('addres', address);
     this.geocoder.geocode({ address }).subscribe(({ results }) => {
       if (results.length > 0) {
         const location = results[0].geometry.location;
@@ -247,12 +252,10 @@ export class EditDestinationComponent implements OnInit {
   }
 
   onFileChange(event: any, field: string): void {
-    console.log('changed');
     const file = event.target.files[0];
     if (file) {
       this.cloudinaryuploadService.uploadImage(file).subscribe(
         (response) => {
-          console.log('Image uploaded successfully:', response);
           this.editDestinationForm.patchValue({
             [field]: response.secure_url,
           });
@@ -299,7 +302,6 @@ export class EditDestinationComponent implements OnInit {
       .put(`${this.API_URL}destinations/${this.destinationId}/`, formData)
       .subscribe(
         (response) => {
-          console.log('Destination updated successfully', response);
           this.router.navigate(['/profile/my-destinations']);
         },
         (error) => {

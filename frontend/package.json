@@ -26,6 +26,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "bootstrap": "^5.3.3",
+    "ngx-scrolltop": "^18.0.1",
     "ngx-toastr": "^19.0.0",
     "rxjs": "~7.8.0",
     "swiper": "^11.1.14",

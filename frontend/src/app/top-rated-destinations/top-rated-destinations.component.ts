@@ -22,7 +22,6 @@ export class TopRatedDestinationsComponent implements OnInit {
     this.http.get(`${this.API_URL}destinations/top-rated/`).subscribe({
       next: (data: any) => {
         this.destinations = data;
-        console.log(this.destinations);
       },
       error: (err) => console.log(err),
     });

@@ -25,7 +25,6 @@ export class MyHotelComponent {
     this.http.get(`${this.API_URL}hotels/my/`).subscribe({
       next: (data: any) => {
         this.data = data;
-        console.log(data);
       },
       error: (err) => console.log(err),
     });
@@ -48,7 +47,6 @@ export class MyHotelComponent {
         .delete(`${this.API_URL}hotels/${this.itemIdToDelete}/`)
         .subscribe(
           (response) => {
-            console.log('Item deleted:', this.itemIdToDelete);
             this.authServices.fetchUserData();
             // Remove the deleted item from the data array
             this.data = this.data.filter(

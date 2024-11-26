@@ -30,7 +30,6 @@ export class MyDestinationsComponent {
     this.http.get(`${this.API_URL}destinations/my/`).subscribe({
       next: (data: any) => {
         this.data = data;
-        console.log(data);
       },
       error: (err) => console.log(err),
     });
@@ -53,7 +52,6 @@ export class MyDestinationsComponent {
         .delete(`${this.API_URL}destinations/${this.itemIdToDelete}/`)
         .subscribe(
           (response) => {
-            console.log('Item deleted:', this.itemIdToDelete);
             // Remove the deleted item from the data array
             this.authServices.fetchUserData();
             this.data = this.data.filter(

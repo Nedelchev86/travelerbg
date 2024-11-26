@@ -112,7 +112,6 @@ export class HotelDetailsComponent implements OnInit {
     this.http.get(`${this.API_URL}hotels/${hotelId}/comments/`).subscribe(
       (response: any) => {
         this.comments = response;
-        console.log(this.comments);
       },
       (error) => {
         console.error('Error fetching comments details:', error);
@@ -133,7 +132,6 @@ export class HotelDetailsComponent implements OnInit {
         )
         .subscribe(
           (response) => {
-            console.log('Comment posted successfully', response);
             this.comments.push(response); // Add the new comment to the list
             this.commentForm.reset();
           },
@@ -152,7 +150,6 @@ export class HotelDetailsComponent implements OnInit {
         ...this.commentFormRegistred.value,
         hotel: this.hotelId,
       };
-      console.log('comment data', commentData);
       this.http
         .post(
           `${this.API_URL}hotels/${this.hotelId}/comments/add/`,
@@ -160,7 +157,6 @@ export class HotelDetailsComponent implements OnInit {
         )
         .subscribe(
           (response) => {
-            console.log('Comment posted successfully', response);
             this.comments.push(response); // Add the new comment to the list
             this.commentFormRegistred.reset();
           },
@@ -185,12 +181,10 @@ export class HotelDetailsComponent implements OnInit {
       })
       .subscribe({
         next: (response) => {
-          console.log('Rating submitted successfully', response);
           this.updateTravelerRating(rating);
           this.toast.success('Rating submitted successfully');
         },
         error: (err) => {
-          console.log('Failed to submit rating', err),
             this.toast.error(
               'Please login to rate travelers',
               'Login required'
@@ -204,10 +198,8 @@ export class HotelDetailsComponent implements OnInit {
         next: (data: any) => {
           this.hotel.average_rating = data.average_rating;
           this.hotel.number_of_votes = data.number_of_votes;
-          console.log(data);
         },
         error: (err) => {
-          console.log(err);
           this.toast.error(
             'Error fetching travelers data',
             'Cannot connect to server'

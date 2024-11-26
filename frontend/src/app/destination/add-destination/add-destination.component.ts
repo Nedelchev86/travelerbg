@@ -41,7 +41,6 @@ import { AuthService } from '../../auth.service';
 import { environment } from '../../../environments/environment';
 import { CloudinaryuploadService } from '../../shared/services/cloudinaryupload.service';
 
-
 @Component({
   selector: 'app-add-destination',
   standalone: true,
@@ -174,12 +173,10 @@ export class AddDestinationComponent {
   //   }
   // }
   onFileChange(event: any, field: string): void {
-    console.log('changed');
     const file = event.target.files[0];
     if (file) {
       this.cloudinaryuploadService.uploadImage(file).subscribe(
         (response) => {
-          console.log('Image uploaded successfully:', response);
           this.addDestinationForm.patchValue({
             [field]: response.secure_url,
           });
@@ -290,7 +287,6 @@ export class AddDestinationComponent {
 
     this.http.post(`${this.API_URL}destinations/`, formData).subscribe(
       (response) => {
-        console.log('Destination added successfully', response);
         this.authSevices.fetchUserData();
         this.router.navigate(['/profile']);
       },

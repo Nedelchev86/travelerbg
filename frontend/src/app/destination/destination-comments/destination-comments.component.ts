@@ -45,7 +45,6 @@ export class DestinationCommentsComponent {
   private readonly API_URL = environment.apiUrl;
 
   ngOnInit(): void {
-    console.log('Destination ID:', this.destinationId);
     if (this.destinationId) {
       this.fetcComments(this.destinationId);
     }
@@ -57,7 +56,6 @@ export class DestinationCommentsComponent {
       .subscribe(
         (response: any) => {
           this.comments = response;
-          console.log(this.comments);
         },
         (error) => {
           console.error('Error fetching comments details:', error);
@@ -78,7 +76,6 @@ export class DestinationCommentsComponent {
         )
         .subscribe(
           (response) => {
-            console.log('Comment posted successfully', response);
             this.comments.push(response); // Add the new comment to the list
             this.commentForm.reset();
           },
@@ -87,7 +84,6 @@ export class DestinationCommentsComponent {
           }
         );
     } else {
-      console.log('Invalid form');
       this.commentForm.markAllAsTouched();
     }
   }
@@ -105,7 +101,6 @@ export class DestinationCommentsComponent {
         )
         .subscribe(
           (response) => {
-            console.log('Comment posted successfully', response);
             this.comments.push(response); // Add the new comment to the list
             this.commentFormRegistred.reset();
           },
@@ -114,7 +109,6 @@ export class DestinationCommentsComponent {
           }
         );
     } else {
-      console.log('Invalid form');
       this.commentFormRegistred.markAllAsTouched();
     }
   }

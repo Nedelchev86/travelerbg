@@ -66,13 +66,11 @@ export class HotelsComponent {
       .get(url, { params: hasQueryParams ? {} : params })
       .subscribe({
         next: (data: any) => {
-          console.log('data', data);
           this.data = data.results;
           this.totalPages = Math.ceil(data.count / 9); // Assuming 9 items per page
           this.nextPageUrl = data.next;
           this.previousPageUrl = data.previous;
           this.loading = false;
-          console.log('loaded', data);
         },
         error: (err) => {
           console.log(err);
@@ -107,16 +105,13 @@ export class HotelsComponent {
 
   updateHotelRating(hotelId: string, rating: number): void {
     const hotel = this.data.find((t) => t.id === hotelId);
-    console.log('hotel', hotelId);
     if (hotel) {
       this.httpClient.get(`${this.API_URL}hotels/${hotelId}`).subscribe({
         next: (data: any) => {
-          console.log('test', data);
           hotel.average_rating = data.average_rating;
           hotel.number_of_votes = data.number_of_votes;
         },
         error: (err) => {
-          console.log(err);
           this.toast.error(
             'Error fetching travelers data',
             'Cannot connect to server'
@@ -138,16 +133,11 @@ export class HotelsComponent {
       })
       .subscribe({
         next: (response) => {
-          console.log('Rating submitted successfully', response);
           this.updateHotelRating(hotelId, rating);
           this.toast.success('Rating submitted successfully');
         },
         error: (err) => {
-          console.log('Failed to submit rating', err),
-            this.toast.error(
-              'Please login to rate travelers',
-              'Login required'
-            );
+          this.toast.error('Please login to rate travelers', 'Login required');
         },
       });
   }

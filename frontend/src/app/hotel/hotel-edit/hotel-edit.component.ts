@@ -23,7 +23,6 @@ import { environment } from '../../../environments/environment';
 import { CKEditorConfigService } from '../../shared/services/ckeditor-config.service';
 import { CloudinaryuploadService } from '../../shared/services/cloudinaryupload.service';
 
-
 export interface Highlight {
   id: number;
   name: string;
@@ -198,12 +197,17 @@ export class HotelEditComponent {
       (response: any) => {
         this.editHotelForm.patchValue(response);
         if (response.lat && response.lng) {
-          this.center = { lat: response.lat, lng: response.lng };
-          this.markerPosition = { lat: response.lat, lng: response.lng };
+          this.center = {
+            lat: Number(response.lat),
+            lng: Number(response.lng),
+          };
+          this.markerPosition = {
+            lat: Number(response.lat),
+            lng: Number(response.lng),
+          };
         } else {
           this.geocodeAddress(response.location);
         }
-        console.log('HotelData', response);
 
         response.tags.forEach((tag: { id: Number; name: string }) => {
           this.tags.push(this.fb.control(tag.name, Validators.required));
@@ -266,22 +270,18 @@ export class HotelEditComponent {
   }
 
   markCheckedHighlights(hotelHighlights: any[]): void {
-    console.log('hotelHighlights', hotelHighlights);
     const highlightsFormArray = this.editHotelForm.get(
       'highlights'
     ) as FormArray;
-    console.log('highlightsFormArray', highlightsFormArray.value);
     this.highlights.forEach((highlight) => {
-      console.log('highlight', highlight);
       const isChecked = hotelHighlights.some(
         (hotelHighlight) => hotelHighlight.id === highlight.id
       );
-      console.log(isChecked);
+
       if (isChecked) {
         highlightsFormArray.push(this.fb.control(highlight.id));
       }
     });
-    console.log('highlightsFormArray', highlightsFormArray.value);
   }
 
   onLocationChange(): void {
@@ -296,7 +296,6 @@ export class HotelEditComponent {
     if (file) {
       this.cloudinaryuploadService.uploadImage(file).subscribe(
         (response) => {
-          console.log('Image uploaded successfully:', response);
           this.editHotelForm.patchValue({
             [field]: response.secure_url,
           });
@@ -355,7 +354,6 @@ export class HotelEditComponent {
   }
 
   addTag(tagName: string = ''): void {
-    console.log('tgis.tags.value', this.tags.value);
     if (tagName && !this.tags.value.includes(tagName)) {
       this.tags.push(this.fb.control(tagName, Validators.required));
     }
@@ -390,7 +388,6 @@ export class HotelEditComponent {
       this.http
         .put(`${this.API_URL}hotels/${this.hotelId}/`, formData)
         .subscribe((response) => {
-          console.log('Hotel updated successfully', response);
           this.router.navigate(['/profile/my-hotels']);
         });
     } else {

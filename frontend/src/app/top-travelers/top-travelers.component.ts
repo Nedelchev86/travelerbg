@@ -25,7 +25,6 @@ export class TopTravelersComponent implements OnInit {
     this.http.get(`${this.API_URL}travelers/top-rated/`).subscribe({
       next: (data: any) => {
         this.top_travelers = data;
-        console.log(this.top_travelers);
       },
       error: (err) => console.log(err),
     });

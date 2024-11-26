@@ -2,3 +2,9 @@
 @import "ckeditor5-premium-features/ckeditor5-premium-features.css"; */
 
 @import "../../node_modules/ckeditor5/dist/ckeditor5.css";
+
+.scrolltop-button {
+  position: fixed;
+  right: 60px;
+  bottom: 60px;
+}

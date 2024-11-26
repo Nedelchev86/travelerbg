@@ -61,7 +61,6 @@ export class DestinationsComponent {
           this.nextPageUrl = data.next;
           this.previousPageUrl = data.previous;
           this.loading = false;
-          console.log('loaded', data);
         },
         error: (err) => {
           console.log(err);
@@ -81,7 +80,6 @@ export class DestinationsComponent {
     this.httpClient.get(`${this.API_URL}destinations/`, { params }).subscribe({
       next: (data: any) => {
         this.data = data.results;
-        console.log(data.results);
         // this.searching = false;
       },
       error: (err) => {
@@ -117,14 +115,11 @@ export class DestinationsComponent {
 
   updateDestinationRating(destinationId: string): void {
     const destination = this.data.find((t) => t.id === destinationId);
-    console.log('destination', destination);
     if (destination) {
       this.httpClient
         .get(`${this.API_URL}destinations/${destinationId}`)
         .subscribe({
           next: (data: any) => {
-            console.log('test', data);
-
             destination.average_rating = data.average_rating;
             destination.number_of_votes = data.number_of_votes;
           },
@@ -155,11 +150,7 @@ export class DestinationsComponent {
           this.toast.success('Rating submitted successfully');
         },
         error: (err) => {
-          console.log('Failed to submit rating', err),
-            this.toast.error(
-              'Please login to rate travelers',
-              'Login required'
-            );
+          this.toast.error('Please login to rate travelers', 'Login required');
         },
       });
   }
