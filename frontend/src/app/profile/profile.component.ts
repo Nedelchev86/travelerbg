@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { RouterLink } from '@angular/router';
-import { LoaderComponent } from '../shared/loader/loader.component';
+import { LoaderComponent } from '../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-profile',

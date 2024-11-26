@@ -6,19 +6,9 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
-import { HeaderComponent } from './header/header.component';
-import { FooterComponent } from './footer/footer.component';
-import { MainComponent } from './main/main.component';
-import { TraleversComponent } from './travelers/travelers.component';
-import { DestinationsComponent } from './destinations/destinations.component';
-import { DestinationDetailsComponent } from './destination-details/destination-details.component';
-import { ActivitiesComponent } from './activities/activities.component';
-import { LoginRegisterComponent } from './login-register/login-register.component';
-import { ProfileComponent } from './profile/profile.component';
-import { AddDestinationComponent } from './add-destination/add-destination.component';
-import { LoaderComponent } from './shared/loader/loader.component';
-import { RatingComponent } from './rating/rating.component';
-import { DestinationsByUserComponent } from './destinations-by-user/destinations-by-user.component';
+import { HeaderComponent } from './core/header/header.component';
+import { FooterComponent } from './core/footer/footer.component';
+
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { UserInterface } from './user-interface';

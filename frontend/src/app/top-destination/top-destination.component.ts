@@ -4,10 +4,10 @@ import {
   inject,
   OnInit,
 } from '@angular/core';
-import { SetBgImageDirective } from '../set-bg-image.directive';
+import { SetBgImageDirective } from '../directives/set-bg-image.directive';
 import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
-import { LoaderComponent } from '../shared/loader/loader.component';
+import { LoaderComponent } from '../shared/components/loader/loader.component';
 import { environment } from '../../environments/environment';
 
 @Component({

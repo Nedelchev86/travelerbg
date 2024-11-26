@@ -1,0 +1,353 @@
+<!-- <div class="magic-cursor relative z-10">
+  <div class="cursor"></div>
+  <div class="cursor-follower"></div>
+</div> -->
+
+<!--==============================
+Sidemenu
+============================== -->
+<div class="sidemenu-wrapper sidemenu-info">
+  <div class="sidemenu-content">
+    <button class="closeButton sideMenuCls">
+      <i class="far fa-times"></i>
+    </button>
+    <div class="widget">
+      <div class="th-widget-about">
+        <div class="about-logo">
+          <a routerLink="/"><img src="/assets/img/logo2.svg" alt="Tourm" /></a>
+        </div>
+        <p class="about-text">
+          Rapidiously myocardinate cross-platform intellectual capital model.
+          Appropriately create interactive infrastructures
+        </p>
+        <div class="th-social">
+          <a href="https://www.facebook.com/"
+            ><i class="fab fa-facebook-f"></i
+          ></a>
+          <a href="https://www.twitter.com/"><i class="fab fa-twitter"></i></a>
+          <a href="https://www.linkedin.com/"
+            ><i class="fab fa-linkedin-in"></i
+          ></a>
+          <a href="https://www.whatsapp.com/"
+            ><i class="fab fa-whatsapp"></i
+          ></a>
+        </div>
+      </div>
+    </div>
+    <div class="widget">
+      <h3 class="widget_title">Recent Posts</h3>
+      <div class="recent-post-wrap">
+        <div class="recent-post">
+          <div class="media-img">
+            <a href="blog-details.html"
+              ><img src="/assets/img/blog/recent-post-1-1.jpg" alt="Blog Image"
+            /></a>
+          </div>
+          <div class="media-body">
+            <div class="recent-post-meta">
+              <a href="blog.html"
+                ><i class="far fa-calendar"></i>24 Jun , 2024</a
+              >
+            </div>
+            <h4 class="post-title">
+              <a class="text-inherit" href="blog-details.html"
+                >Where Vision Meets Concrete Reality</a
+              >
+            </h4>
+          </div>
+        </div>
+        <div class="recent-post">
+          <div class="media-img">
+            <a href="blog-details.html"
+              ><img src="/assets/img/blog/recent-post-1-2.jpg" alt="Blog Image"
+            /></a>
+          </div>
+          <div class="media-body">
+            <div class="recent-post-meta">
+              <a href="blog.html"
+                ><i class="far fa-calendar"></i>22 Jun , 2024</a
+              >
+            </div>
+            <h4 class="post-title">
+              <a class="text-inherit" href="blog-details.html"
+                >Raising the Bar in Construction.</a
+              >
+            </h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="widget">
+      <h3 class="widget_title">Get In Touch</h3>
+      <div class="th-widget-contact">
+        <div class="info-box_text">
+          <div class="icon">
+            <img src="/assets/img/icon/phone.svg" alt="img" />
+          </div>
+          <div class="details">
+            <p>
+              <a href="tel:+01234567890" class="info-box_link"
+                >+01 234 567 890</a
+              >
+            </p>
+            <p>
+              <a href="tel:+09876543210" class="info-box_link"
+                >+09 876 543 210</a
+              >
+            </p>
+          </div>
+        </div>
+        <div class="info-box_text">
+          <div class="icon">
+            <img src="/assets/img/icon/envelope.svg" alt="img" />
+          </div>
+          <div class="details">
+            <p>
+              <a href="mailto:mailinfo00@tourm.com" class="info-box_link"
+                >tihomir.nedelchev86 at abv.bg</a
+              >
+            </p>
+            <p>
+              <a href="mailto:support24@tourm.com" class="info-box_link"
+                >tihomir.nedelchev86 at abv.bg</a
+              >
+            </p>
+          </div>
+        </div>
+        <div class="info-box_text">
+          <div class="icon">
+            <img src="/assets/img/icon/location-dot.svg" alt="img" />
+          </div>
+          <div class="details">
+            <p>789 Inner Lane, Holy park, California, USA</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="popup-search-box">
+  <button class="searchClose"><i class="fal fa-times"></i></button>
+  <form action="#">
+    <input type="text" placeholder="What are you looking for?" />
+    <button type="submit"><i class="fal fa-search"></i></button>
+  </form>
+</div>
+<!--==============================
+  Mobile Menu
+  ============================== -->
+<div
+  class="th-menu-wrapper onepage-nav"
+  [ngClass]="{ 'th-body-visible': isBodyVisible }"
+  (click)="toggleMobileMenu()"
+>
+  <div class="th-menu-area text-center">
+    <button class="th-menu-toggle" (click)="toggleMobileMenu()">
+      <i class="fal fa-times"></i>
+    </button>
+    <div class="mobile-logo">
+      <a routerLink="/"><img src="/assets/img/logo.png" alt="Tourm" /></a>
+    </div>
+    <div class="th-mobile-menu">
+      <ul>
+        <li>
+          <a routerLink="" routerLinkActive="active">Home</a>
+        </li>
+        <li>
+          <a routerLink="/travelers" routerLinkActive="active">Travelers</a>
+        </li>
+        <li>
+          <a routerLink="/destinations" routerLinkActive="active"
+            >Destinations</a
+          >
+        </li>
+        <li>
+          <a routerLink="/hotels" routerLinkActive="active">Hotels</a>
+        </li>
+        <li>
+          <a routerLink="/activities">Activities</a>
+        </li>
+        <li>
+          <a routerLink="/contact-us" routerLinkActive="active">Contact us</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!--==============================
+  Header Area
+  ==============================-->
+<header class="th-header header-layout1">
+  <div class="sticky-wrapper">
+    <!-- Main Menu Area -->
+    <div class="menu-area">
+      <div class="container th-container">
+        <div class="row align-items-center justify-content-between">
+          <div class="col-auto">
+            <div class="header-logo">
+              <a routerLink="/"
+                ><img src="/assets/img/logo.png" alt="Tourm"
+              /></a>
+            </div>
+          </div>
+          <div class="col-auto me-xl-auto">
+            <nav class="main-menu d-none d-xl-inline-block">
+              <ul>
+                <li class="menu-item-has-children">
+                  <a
+                    routerLink="/"
+                    routerLinkActive="active"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                    >Home</a
+                  >
+                  <!-- <ul class="sub-menu"> -->
+                  <!-- <li><a routerLink="/">Home Travel</a></li> -->
+                  <!-- <li><a href="home-tour.html">Home Tour</a></li>
+                      <li><a href="home-agency.html">Home Agency</a></li> -->
+                  <!-- </ul> -->
+                </li>
+                <li>
+                  <a routerLink="/travelers" routerLinkActive="active"
+                    >Travelers</a
+                  >
+                </li>
+                <li class="menu-item-has-children">
+                  <a routerLink="destinations" routerLinkActive="active"
+                    >Destination</a
+                  >
+                  <!-- <ul class="sub-menu"> -->
+                  <!-- <li> -->
+                  <!-- <a routerLink="/destinations"> Destination</a>
+                        <a class="button" routerLink="/destination"
+                          >Crisis Center</a
+                        > -->
+                  <!-- </li> -->
+                  <!-- <li><a href="destination.html">Destination</a></li> -->
+                  <!-- <li> -->
+                  <!-- <a href="destination-details.html">Destination Details</a> -->
+                  <!-- </li> -->
+                  <!-- </ul> -->
+                </li>
+                <li class="menu-item-has-children">
+                  <a routerLink="/hotels" routerLinkActive="active">Hotels</a>
+                  <!-- <ul class="sub-menu">
+                      <li><a href="service.html">Services</a></li>
+                      <li><a href="service-details.html">Service Details</a></li>
+                    </ul> -->
+                </li>
+                <li class="menu-item-has-children">
+                  <a routerLink="/activities" routerLinkActive="active"
+                    >Activities</a
+                  >
+                  <!-- <ul class="sub-menu">
+                      <li><a href="activities.html">activities</a></li>
+                      <li>
+                        <a href="activities-details.html">activities Details</a>
+                      </li>
+                    </ul> -->
+                  <!-- </li>
+                <li class="menu-item-has-children">
+                  <a href="#">Pages</a>
+                  <ul class="sub-menu">
+                    <li class="menu-item-has-children">
+                      <a href="#">Shop</a>
+                      <ul class="sub-menu">
+                        <li><a href="shop.html">Shop</a></li>
+                        <li><a href="shop-details.html">Shop Details</a></li>
+                        <li><a href="cart.html">Cart Page</a></li>
+                        <li><a href="checkout.html">Checkout</a></li>
+                        <li><a href="wishlist.html">Wishlist</a></li>
+                      </ul>
+                    </li>
+
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="tour.html">Our Tour</a></li>
+                    <li><a href="tour-details.html">Tour Details</a></li>
+                    <li><a href="tour-guide.html">Tour Guider</a></li>
+                    <li>
+                      <a href="tour-guider-details.html">Tour Guider Details</a>
+                    </li>
+                    <li><a href="faq.html">Faq Page</a></li>
+                    <li><a href="price.html">Price Package</a></li>
+                    <li><a routerLink="/hotels/post">Post Hotel</a></li>
+                  </ul>
+                </li>
+                <li class="menu-item-has-children">
+                  <a href="#">Blog</a>
+                  <ul class="sub-menu">
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="blog-details.html">Blog Details</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="contact.html">Contact us</a>
+                </li> -->
+                </li>
+                <li class="menu-item-has-children">
+                  <a routerLink="/contact-us" routerLinkActive="active"
+                    >Contact Us</a
+                  >
+                  <!-- <ul class="sub-menu">
+                      <li><a href="service.html">Services</a></li>
+                      <li><a href="service-details.html">Service Details</a></li>
+                    </ul> -->
+                </li>
+              </ul>
+            </nav>
+            <button
+              type="button"
+              class="th-menu-toggle d-block d-xl-none"
+              (click)="toggleMobileMenu()"
+            >
+              <i class="far fa-bars"></i>
+            </button>
+          </div>
+
+          @if (authService.currentUser()) {
+          @if(authService.currentUser()?.user?.profile_picture) {
+          <div class="inline-block">
+            <a routerLink="/profile" class="col-auto d-xl-block"
+              ><img
+                class="square"
+                src="{{ authService.currentUser()?.user?.profile_picture }}"
+                alt=""
+                width="40px"
+            /></a>
+          </div>
+          }@else {
+          <div class="circle">
+            <a routerLink="/profile" class="circle-inner">{{
+              authService.currentUser()?.email?.charAt(0)?.toUpperCase()
+            }}</a>
+          </div>
+          }
+
+          <div class="col-auto d-xl-block">
+            <div class="header-button">
+              <button (click)="logout()" class="th-btn style3">
+                Logout <i class="fa-regular fa-user"></i>
+              </button>
+            </div>
+          </div>
+          }@else {
+          <div class="col-auto d-xl-block">
+            <div class="header-button">
+              <button (click)="openLoginRegisterPopup()" class="th-btn style3">
+                Sign In / Register <i class="fa-regular fa-user"></i>
+              </button>
+            </div>
+
+            @if(isLoginRegisterPopupVisible){
+
+            <app-login-register
+              (close)="closeLoginRegisterPopup()"
+            ></app-login-register
+            >}
+          </div>
+          }
+        </div>
+      </div>
+      <!-- <div class="logo-bg" data-mask-src="/assets/img/logo_bg_mask.png"></div> -->
+    </div>
+  </div>
+</header>

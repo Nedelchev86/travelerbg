@@ -5,9 +5,9 @@ import {
   inject,
   OnInit,
 } from '@angular/core';
-import { LoaderComponent } from '../shared/loader/loader.component';
+import { LoaderComponent } from '../shared/components/loader/loader.component';
 import { RouterLink } from '@angular/router';
-import { SetBgImageDirective } from '../set-bg-image.directive';
+import { SetBgImageDirective } from '../directives/set-bg-image.directive';
 import { environment } from '../../environments/environment';
 
 @Component({

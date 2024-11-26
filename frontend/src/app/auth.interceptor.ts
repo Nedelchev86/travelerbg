@@ -105,7 +105,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         error.error?.detail === 'Given token not valid for any token type'
       ) {
         localStorage.removeItem('token');
-        localStorage.removeItem('currentUser');
+        localStorage.removeItem('user');
         authService.currentUser.set(null);
         authService.token.set(null);
         router.navigate(['/']);
