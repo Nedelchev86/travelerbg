@@ -18,4 +18,5 @@ import { BannerComponent } from '../shared/banner/banner.component';
 })
 export class ProfileLayoutComponent {
   authService = inject(AuthService);
+
 }

@@ -8,7 +8,7 @@ export const isActivatedGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   const toastr = inject(ToastrService);
 
-  const currentUser = authService.isActivated();
+  const currentUser = authService.currentUser()?.user.activated;
   console.log(currentUser);
   if (currentUser) {
     return true;
