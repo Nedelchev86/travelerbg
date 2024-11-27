@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { environment } from '../../environments/environment';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-top-rated-destinations',
@@ -11,6 +12,17 @@ import { environment } from '../../environments/environment';
   templateUrl: './top-rated-destinations.component.html',
   styleUrl: './top-rated-destinations.component.css',
   providers: [DatePipe],
+  animations: [
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(20px)' }),
+        animate(
+          '1000ms ease-in',
+          style({ opacity: 2, transform: 'translateY(0)' })
+        ),
+      ]),
+    ]),
+  ],
 })
 export class TopRatedDestinationsComponent implements OnInit {
   http = inject(HttpClient);
