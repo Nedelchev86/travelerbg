@@ -1,0 +1,9 @@
+.breadcumb-wrapper {
+    position: relative;
+    background-color: var(--title-color);
+    background-position: left top;
+    padding: 40px;
+    overflow: hidden;
+    text-align: center;
+  }
+  
