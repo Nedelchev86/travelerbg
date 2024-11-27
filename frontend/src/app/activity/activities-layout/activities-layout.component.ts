@@ -3,11 +3,12 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { SetBgImageDirective } from '../../directives/set-bg-image.directive';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { BreadcumbComponent } from "../../shared/components/breadcumb/breadcumb.component";
 
 @Component({
   selector: 'app-activities-layout',
   standalone: true,
-  imports: [RouterOutlet, SetBgImageDirective, RouterLink],
+  imports: [RouterOutlet, SetBgImageDirective, RouterLink, BreadcumbComponent],
   templateUrl: './activities-layout.component.html',
   styleUrl: './activities-layout.component.css',
 })
