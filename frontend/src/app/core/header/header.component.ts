@@ -52,7 +52,12 @@ export class HeaderComponent {
   }
 
   openLoginRegisterPopup() {
+    console.log('openLoginRegisterPopup', this.isBodyVisible);
+    if (this.isBodyVisible) {
+      this.isBodyVisible = false;
+    }
     this.isLoginRegisterPopupVisible = true;
+    console.log('openLoginRegisterPopup2', this.isBodyVisible);
   }
 
   closeLoginRegisterPopup() {

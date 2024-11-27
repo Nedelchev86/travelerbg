@@ -378,6 +378,11 @@
             />
           </div> -->
           <button class="th-btn" type="submit">Add Destination</button>
+          <div *ngIf="editDestinationForm.invalid" class="text-danger">
+            <small *ngIf="editDestinationForm.invalid"
+              >Please fill all required fields.
+            </small>
+          </div>
         </form>
       </div>
     </div>

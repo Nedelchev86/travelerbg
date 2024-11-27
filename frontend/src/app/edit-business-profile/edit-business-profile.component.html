@@ -134,6 +134,11 @@
           >
             Update Profile
           </button>
+          <div *ngIf="editProfileForm.invalid" class="text-danger">
+            <small *ngIf="editProfileForm.invalid"
+              >Please fill all required fields.
+            </small>
+          </div>
         </form>
       </div>
     </div>

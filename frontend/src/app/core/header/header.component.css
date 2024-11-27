@@ -108,3 +108,35 @@ header.sticky {
   background-color: white;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+
+.margin-from-menu {
+  margin-top: 90px;
+}
+
+@media (max-width: 1299px) {
+  .header-logo {
+    max-width: 200px;
+  }
+
+  /* .hide-small-screen {
+    display: none;
+  } */
+}
+
+@media (max-width: 1000px) {
+  .th-btn.style3.screen {
+    display: none;
+  }
+  .header-button .th-btn.style3 {
+    width: 120px;
+    height: 46px;
+  }
+  .header-logo {
+    max-width: 120px;
+  }
+}
+
+.th-btn.style3.center {
+  margin-left: 30px;
+  margin-top: 20px;
+}

@@ -538,7 +538,12 @@
               ></map-advanced-marker>
             </google-map>
           </div>
-          <button class="th-btn" type="submit">Update Destination</button>
+          <button class="th-btn" type="submit">Add Destination</button>
+          <div *ngIf="addDestinationForm.invalid" class="text-danger">
+            <small *ngIf="addDestinationForm.invalid"
+              >Please fill all required fields.
+            </small>
+          </div>
         </form>
       </div>
     </div>

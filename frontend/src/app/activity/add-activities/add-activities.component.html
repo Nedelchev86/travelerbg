@@ -309,6 +309,11 @@
             </google-map>
           </div>
           <button class="th-btn" type="submit">Add Activitie</button>
+          <div *ngIf="addActivitieForm.invalid" class="text-danger">
+            <small *ngIf="addActivitieForm.invalid"
+              >Please fill all required fields.
+            </small>
+          </div>
         </form>
       </div>
     </div>

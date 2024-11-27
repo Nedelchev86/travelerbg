@@ -201,6 +201,12 @@
           <div class="form-group">
             <button type="submit" class="th-btn">Update Profile</button>
           </div>
+
+          <div *ngIf="profileForm.invalid" class="text-danger">
+            <small *ngIf="profileForm.invalid"
+              >Please fill all required fields.
+            </small>
+          </div>
         </form>
       </div>
     </div>

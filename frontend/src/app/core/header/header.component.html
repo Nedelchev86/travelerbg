@@ -36,6 +36,11 @@
           <a routerLink="/contact-us" routerLinkActive="active">Contact us</a>
         </li>
       </ul>
+      @if (authService.currentUser()) {
+      <button (click)="logout()" class="th-btn style3 center">
+        Logout <i class="fa-regular fa-user"></i>
+      </button>
+      }
     </div>
   </div>
 </div>
@@ -119,7 +124,7 @@
 
           <div class="col-auto d-xl-block">
             <div class="header-button">
-              <button (click)="logout()" class="th-btn style3">
+              <button (click)="logout()" class="th-btn style3 screen">
                 Logout <i class="fa-regular fa-user"></i>
               </button>
             </div>
@@ -145,3 +150,4 @@
     </div>
   </div>
 </header>
+<div class="margin-from-menu"></div>

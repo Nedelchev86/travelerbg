@@ -676,6 +676,11 @@
             </div>
           </div>
           <button class="th-btn submit-btn" type="submit">Add Hotel</button>
+          <div *ngIf="addHotelForm.invalid" class="text-danger">
+            <small *ngIf="addHotelForm.invalid"
+              >Please fill all required fields.
+            </small>
+          </div>
         </form>
       </div>
     </div>

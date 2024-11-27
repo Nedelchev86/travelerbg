@@ -373,6 +373,11 @@
           >
             Update Hotel
           </button>
+          <div *ngIf="editHotelForm.invalid" class="text-danger">
+            <small *ngIf="editHotelForm.invalid"
+              >Please fill all required fields.
+            </small>
+          </div>
         </form>
       </div>
     </div>
