@@ -1,4 +1,8 @@
 <app-header />
+
+<div [ngClass]="{ 'home-page': !showBreadcrumb }">
+  <app-breadcumb></app-breadcumb>
+</div>
 <router-outlet></router-outlet>
 <ngx-scrolltop
   [size]="70"

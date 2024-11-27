@@ -1,221 +1,225 @@
-<div class="container">
-  <div class="row">
-    <div class="col-xxl-12 col-lg-12">
-      <div class="page-single">
-        <div class="service-img"><img src="{{ hotel.image }}" alt="" /></div>
-        <div class="page-content">
-          <div class="page-meta mt-50 mb-45">
-            <div class="inline">
-              <app-rating
-                [rating]="hotel.average_rating"
-                [data]="hotel"
-                (rated)="rateTHotel($event)"
-              ></app-rating>
+<section class="space">
+  <div class="container">
+    <div class="row">
+      <div class="col-xxl-12 col-lg-12">
+        <div class="page-single">
+          <div class="service-img"><img src="{{ hotel.image }}" alt="" /></div>
+          <div class="page-content">
+            <div class="page-meta mt-50 mb-45">
+              <div class="inline">
+                <app-rating
+                  [rating]="hotel.average_rating"
+                  [data]="hotel"
+                  (rated)="rateTHotel($event)"
+                ></app-rating>
+              </div>
+              @if(!isFavorite){
+              <button (click)="addToFavorites(hotel.id)" class="ratting">
+                <i class="fa fa-heart"></i>
+                Add to Favorites</button
+              >}@else{
+              <button (click)="removeFromFavorites(hotel.id)" class="ratting">
+                <i class="fa fa-heart text-danger"></i>
+                Remove from Favorites
+              </button>
+              }
             </div>
-            @if(!isFavorite){
-            <button (click)="addToFavorites(hotel.id)" class="ratting">
-              <i class="fa fa-heart"></i>
-              Add to Favorites</button
-            >}@else{
-            <button (click)="removeFromFavorites(hotel.id)" class="ratting">
-              <i class="fa fa-heart text-danger"></i>
-              Remove from Favorites
-            </button>
-            }
-          </div>
-          <h2 class="box-title">{{ hotel.name }}</h2>
-          <p
-            class="box-text mb-30 text-style"
-            [innerHTML]="hotel.description"
-          ></p>
+            <h2 class="box-title">{{ hotel.name }}</h2>
+            <p
+              class="box-text mb-30 text-style"
+              [innerHTML]="hotel.description"
+            ></p>
 
-          <div class="service-inner-img mb-40">
-            <img src="{{ hotel.image2 }}" alt="" />
-          </div>
-          <h2 class="box-title">Highlights</h2>
-          <div class="destination-checklist">
-            <div class="checklist">
-              <ul>
-                @for (highlight of hotel.highlights; track highlight.id) {
-                <li>{{ highlight.name }}</li>
-                }
-              </ul>
+            <div class="service-inner-img mb-40">
+              <img src="{{ hotel.image2 }}" alt="" />
+            </div>
+            <h2 class="box-title">Highlights</h2>
+            <div class="destination-checklist">
+              <div class="checklist">
+                <ul>
+                  @for (highlight of hotel.highlights; track highlight.id) {
+                  <li>{{ highlight.name }}</li>
+                  }
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="destination-gallery-wrapper">
-          @if (galleryData.length > 0) {
-          <app-gallery-lightbox
-            [galleryData]="galleryData"
-          ></app-gallery-lightbox
-          >}
-        </div>
-        <div class="destination-gallery-wrapper">
-          <app-google-map
-            [location]="hotel.location"
-            [lat]="hotel?.lat"
-            [lng]="hotel?.lng"
-          ></app-google-map>
-        </div>
+          <div class="destination-gallery-wrapper">
+            @if (galleryData.length > 0) {
+            <app-gallery-lightbox
+              [galleryData]="galleryData"
+            ></app-gallery-lightbox
+            >}
+          </div>
+          <div class="destination-gallery-wrapper">
+            <app-google-map
+              [location]="hotel.location"
+              [lat]="hotel?.lat"
+              [lng]="hotel?.lng"
+            ></app-google-map>
+          </div>
 
-        <div class="th-comments-wrap style2">
-          <h2 class="blog-inner-title h4">Comments ({{ comments.length }})</h2>
-          <ul class="comment-list">
-            @for (comment of comments; track comment.id) {
-            <li class="th-comment-item">
-              <div class="th-post-comment">
-                <div class="comment-avater">
-                  @if (comment.user?.profile_picture) {
-                  <img
-                    src="{{ comment.user?.profile_picture }}"
-                    alt="Comment Author"
-                  />}@else if(comment.user?.image){<img
-                    src="{{ comment.user?.image }}"
-                    alt="Comment Author"
-                  />}@else {
-                  <img
-                    src="https://res.cloudinary.com/dzpgrtewh/image/upload/v1732479196/vtcfemon7lbumeccd1xu.jpg"
-                    alt="Comment Author"
-                  />}
-                </div>
-                <div class="comment-content">
-                  <h3 class="name">{{ comment.name }}</h3>
-                  <div class="commented-wrapp">
-                    <span class="commented-on">{{
-                      comment.created_at | date : "medium"
-                    }}</span>
-                    <!-- <span class="commented-time">08:56pm </span> -->
+          <div class="th-comments-wrap style2">
+            <h2 class="blog-inner-title h4">
+              Comments ({{ comments.length }})
+            </h2>
+            <ul class="comment-list">
+              @for (comment of comments; track comment.id) {
+              <li class="th-comment-item">
+                <div class="th-post-comment">
+                  <div class="comment-avater">
+                    @if (comment.user?.profile_picture) {
+                    <img
+                      src="{{ comment.user?.profile_picture }}"
+                      alt="Comment Author"
+                    />}@else if(comment.user?.image){<img
+                      src="{{ comment.user?.image }}"
+                      alt="Comment Author"
+                    />}@else {
+                    <img
+                      src="https://res.cloudinary.com/dzpgrtewh/image/upload/v1732479196/vtcfemon7lbumeccd1xu.jpg"
+                      alt="Comment Author"
+                    />}
                   </div>
-                  <p class="text comment-content">
-                    {{ comment.text }}
-                  </p>
+                  <div class="comment-content">
+                    <h3 class="name">{{ comment.name }}</h3>
+                    <div class="commented-wrapp">
+                      <span class="commented-on">{{
+                        comment.created_at | date : "medium"
+                      }}</span>
+                      <!-- <span class="commented-time">08:56pm </span> -->
+                    </div>
+                    <p class="text comment-content">
+                      {{ comment.text }}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </li>
-            }
-          </ul>
-        </div>
-
-        @if(authService.isLoggedIn()) {
-        <div class="th-comment-form">
-          <div class="row">
-            <h3 class="blog-inner-title h4 mb-2">Leave a Reply</h3>
-
-            <form
-              [formGroup]="commentFormRegistred"
-              (ngSubmit)="onSubmitRegistredComment()"
-            >
-              <div class="col-12 form-group">
-                <textarea
-                  placeholder="Comment*"
-                  class="form-control"
-                  formControlName="text"
-                  required
-                ></textarea>
-                <i class="far fa-pencil"></i>
-              </div>
-              <div
-                *ngIf="
-                  commentFormRegistred.get('text')?.touched &&
-                  commentFormRegistred.get('text')?.invalid
-                "
-                class="text-danger"
-              >
-                Comment is required.
-              </div>
-
-              <div class="col-12 form-group mb-0">
-                <button class="th-btn" type="submit">
-                  Send Message<img src="assets/img/icon/plane2.svg" alt="" />
-                </button>
-              </div>
-            </form>
+              </li>
+              }
+            </ul>
           </div>
-        </div>
-        }@else {
-        <div class="th-comment-form">
-          <div class="row">
-            <h3 class="blog-inner-title h4 mb-2">Leave a Reply</h3>
-            <p class="mb-25">
-              Your email address will not be published. Required fields are
-              marked
-            </p>
-            <form [formGroup]="commentForm" (ngSubmit)="onSubmitComment()">
-              <div class="col-md-6 form-group">
-                <input
-                  type="text"
-                  placeholder="Full Name*"
-                  class="form-control"
-                  formControlName="name"
-                  required
-                />
-                <i class="far fa-user"></i>
-              </div>
-              <div
-                *ngIf="
-                  commentForm.get('name')?.touched &&
-                  commentForm.get('name')?.invalid
-                "
-                class="text-danger"
+
+          @if(authService.isLoggedIn()) {
+          <div class="th-comment-form">
+            <div class="row">
+              <h3 class="blog-inner-title h4 mb-2">Leave a Reply</h3>
+
+              <form
+                [formGroup]="commentFormRegistred"
+                (ngSubmit)="onSubmitRegistredComment()"
               >
-                Name is required.
-              </div>
-              <div class="col-md-6 form-group">
-                <input
-                  type="email"
-                  placeholder="Your Email*"
-                  class="form-control"
-                  formControlName="email"
-                  required
-                />
-                <i class="far fa-envelope"></i>
-              </div>
-              <div
-                *ngIf="
-                  commentForm.get('email')?.touched &&
-                  commentForm.get('email')?.invalid
-                "
-                class="text-danger"
-              >
-                Email is required.
-              </div>
-              <div class="col-12 form-group">
-                <input
-                  type="text"
-                  placeholder="Website"
-                  class="form-control"
-                  formControlName="website"
-                />
-                <i class="far fa-globe"></i>
-              </div>
-              <div class="col-12 form-group">
-                <textarea
-                  placeholder="Comment*"
-                  class="form-control"
-                  formControlName="text"
-                  required
-                ></textarea>
-                <i class="far fa-pencil"></i>
-              </div>
-              <div
-                *ngIf="
-                  commentForm.get('text')?.touched &&
-                  commentForm.get('text')?.invalid
-                "
-                class="text-danger"
-              >
-                Comment is required.
-              </div>
-              <div class="col-12 form-group mb-0">
-                <button class="th-btn" type="submit">
-                  Send Message<img src="assets/img/icon/plane2.svg" alt="" />
-                </button>
-              </div>
-            </form>
+                <div class="col-12 form-group">
+                  <textarea
+                    placeholder="Comment*"
+                    class="form-control"
+                    formControlName="text"
+                    required
+                  ></textarea>
+                  <i class="far fa-pencil"></i>
+                </div>
+                <div
+                  *ngIf="
+                    commentFormRegistred.get('text')?.touched &&
+                    commentFormRegistred.get('text')?.invalid
+                  "
+                  class="text-danger"
+                >
+                  Comment is required.
+                </div>
+
+                <div class="col-12 form-group mb-0">
+                  <button class="th-btn" type="submit">
+                    Send Message<img src="assets/img/icon/plane2.svg" alt="" />
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
+          }@else {
+          <div class="th-comment-form">
+            <div class="row">
+              <h3 class="blog-inner-title h4 mb-2">Leave a Reply</h3>
+              <p class="mb-25">
+                Your email address will not be published. Required fields are
+                marked
+              </p>
+              <form [formGroup]="commentForm" (ngSubmit)="onSubmitComment()">
+                <div class="col-md-6 form-group">
+                  <input
+                    type="text"
+                    placeholder="Full Name*"
+                    class="form-control"
+                    formControlName="name"
+                    required
+                  />
+                  <i class="far fa-user"></i>
+                </div>
+                <div
+                  *ngIf="
+                    commentForm.get('name')?.touched &&
+                    commentForm.get('name')?.invalid
+                  "
+                  class="text-danger"
+                >
+                  Name is required.
+                </div>
+                <div class="col-md-6 form-group">
+                  <input
+                    type="email"
+                    placeholder="Your Email*"
+                    class="form-control"
+                    formControlName="email"
+                    required
+                  />
+                  <i class="far fa-envelope"></i>
+                </div>
+                <div
+                  *ngIf="
+                    commentForm.get('email')?.touched &&
+                    commentForm.get('email')?.invalid
+                  "
+                  class="text-danger"
+                >
+                  Email is required.
+                </div>
+                <div class="col-12 form-group">
+                  <input
+                    type="text"
+                    placeholder="Website"
+                    class="form-control"
+                    formControlName="website"
+                  />
+                  <i class="far fa-globe"></i>
+                </div>
+                <div class="col-12 form-group">
+                  <textarea
+                    placeholder="Comment*"
+                    class="form-control"
+                    formControlName="text"
+                    required
+                  ></textarea>
+                  <i class="far fa-pencil"></i>
+                </div>
+                <div
+                  *ngIf="
+                    commentForm.get('text')?.touched &&
+                    commentForm.get('text')?.invalid
+                  "
+                  class="text-danger"
+                >
+                  Comment is required.
+                </div>
+                <div class="col-12 form-group mb-0">
+                  <button class="th-btn" type="submit">
+                    Send Message<img src="assets/img/icon/plane2.svg" alt="" />
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          }
         </div>
-        }
       </div>
     </div>
   </div>
-</div>
+</section>

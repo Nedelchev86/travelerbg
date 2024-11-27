@@ -17,6 +17,7 @@ import { HttpClient } from '@angular/common/http';
 import { BannerComponent } from '../../shared/components/banner/banner.component';
 import { ShapeMockupDirective } from '../../directives/shape-mockup.directive';
 import { environment } from '../../../environments/environment';
+import { BreadcumbComponent } from "../../shared/components/breadcumb/breadcumb.component";
 
 @Component({
   selector: 'app-hotels-layout',
@@ -26,14 +27,14 @@ import { environment } from '../../../environments/environment';
     TopTravelersComponent,
     SetBgImageDirective,
     FormsModule,
-
     TopTravelersComponent,
     ShapeMockupDirective,
     TopRatedDestinationsComponent,
     RouterLink,
     RouterLinkActive,
     BannerComponent,
-  ],
+    BreadcumbComponent
+],
   templateUrl: './hotels-layout.component.html',
   styleUrl: './hotels-layout.component.css',
 })

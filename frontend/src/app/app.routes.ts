@@ -37,87 +37,159 @@ import { AddActivitiesComponent } from './activity/add-activities/add-activities
 import { MyActivitiesComponent } from './activity/my-activities/my-activities.component';
 
 export const routes: Routes = [
-  { path: '', component: MainComponent },
+  {
+    path: '',
+    component: MainComponent,
+    data: { breadcrumb: 'Home' },
+    title: 'TravelerBg',
+  },
   {
     path: 'travelers',
-    title: 'Travelers',
     component: TravelersLayoutComponent,
+    title: 'Travelers',
+    data: { breadcrumb: 'Travelers' },
     children: [
-      { path: '', component: TraleversComponent },
-      { path: ':travelerId', component: TravelersDetailsComponent },
+      {
+        path: '',
+        component: TraleversComponent,
+        data: { breadcrumb: 'Travelers' },
+      },
+      {
+        path: ':travelerId',
+        component: TravelersDetailsComponent,
+        data: { breadcrumb: 'Traveler Details' },
+      },
     ],
   },
 
   {
     path: 'destinations',
     title: 'Destinations',
+    data: { breadcrumb: 'Destinations' },
     component: DestinationsLayoutComponent,
     children: [
-      { path: '', component: DestinationsComponent },
-      { path: ':destinationId', component: DestinationDetailsComponent },
+      {
+        path: '',
+        component: DestinationsComponent,
+        data: { breadcrumb: 'Destinations' },
+      },
+      {
+        path: ':destinationId',
+        component: DestinationDetailsComponent,
+        data: { breadcrumb: 'Destination Details' },
+      },
     ],
   },
   {
     path: 'hotels',
     title: 'Hotels',
     component: HotelsLayoutComponent,
+    data: { breadcrumb: 'Hotels' },
     children: [
-      { path: '', component: HotelsComponent },
-      { path: ':hotelId', component: HotelDetailsComponent },
+      { path: '', component: HotelsComponent, data: { breadcrumb: 'Hotels' } },
+      {
+        path: ':hotelId',
+        component: HotelDetailsComponent,
+        data: { breadcrumb: 'Hotel Details' },
+      },
     ],
   },
   {
     path: 'activities',
     title: 'Activities',
     component: ActivitiesLayoutComponent,
+    data: { breadcrumb: 'Activities' },
     children: [
-      { path: '', component: ActivitiesComponent },
-      { path: ':activitieId', component: ActivitieDetailsComponent },
+      {
+        path: '',
+        component: ActivitiesComponent,
+      },
+      {
+        path: ':activitieId',
+        component: ActivitieDetailsComponent,
+        data: { breadcrumb: 'Activity Details' },
+      },
     ],
   },
   {
     path: 'profile',
     title: 'Profile',
     component: ProfileLayoutComponent,
+    data: { breadcrumb: 'Profile' },
     canActivate: [AuthGuard],
     children: [
-      { path: '', component: ProfileComponent },
-      { path: 'edit', component: EditProfileComponent },
+      {
+        path: '',
+        component: ProfileComponent,
+        data: { breadcrumb: 'Profile' },
+      },
+      {
+        path: 'edit',
+        component: EditProfileComponent,
+        data: { breadcrumb: 'Edit Profile' },
+      },
       {
         path: 'add-destination',
         component: AddDestinationComponent,
+        data: { breadcrumb: 'Add destination' },
         canActivate: [isActivatedGuard],
       },
-      { path: 'my-destinations', component: MyDestinationsComponent },
-      { path: 'my-hotels', component: MyHotelComponent },
+      {
+        path: 'my-destinations',
+        component: MyDestinationsComponent,
+        data: { breadcrumb: 'My Destinations' },
+      },
+      {
+        path: 'my-hotels',
+        component: MyHotelComponent,
+        data: { breadcrumb: 'My Hotels' },
+      },
       {
         path: 'edit-destination/:id',
         component: EditDestinationComponent,
         canActivate: [editDestinationGuard],
+        data: { breadcrumb: 'Edit Destination' },
       },
       {
         path: 'add-hotel',
         component: AddHotelComponent,
         canActivate: [isActivatedGuard],
+        data: { breadcrumb: 'Add Hotel' },
       },
       {
         path: 'edit-hotel/:id',
         component: HotelEditComponent,
         canActivate: [isActivatedGuard, editHotelGuard],
+        data: { breadcrumb: 'Edit Hotel' },
       },
-      { path: 'edit-profile', component: EditBusinessProfileComponent },
+      {
+        path: 'edit-profile',
+        component: EditBusinessProfileComponent,
+        data: { breadcrumb: 'Edit Profile' },
+      },
+
       {
         path: 'add-activities',
         component: AddActivitiesComponent,
         canActivate: [isActivatedGuard],
+        data: { breadcrumb: 'Add Activities' },
       },
-      { path: 'my-activities', component: MyActivitiesComponent },
+      {
+        path: 'my-activities',
+        component: MyActivitiesComponent,
+        data: { breadcrumb: 'My activity' },
+      },
       {
         path: 'edit-activitie/:id',
         component: EditActivitieComponent,
         canActivate: [editActivitiesGuard],
+        data: { breadcrumb: 'Edit Activity' },
       },
-      { path: 'bookmarked', component: BookmarkedComponent },
+      {
+        path: 'bookmarked',
+        component: BookmarkedComponent,
+        data: { breadcrumb: 'Bookmarked' },
+      },
     ],
   },
 
@@ -125,6 +197,7 @@ export const routes: Routes = [
     path: 'contact-us',
     title: 'Contact Us',
     component: ContactComponent,
+    data: { breadcrumb: 'Contsct Us' },
   },
   {
     path: '**',

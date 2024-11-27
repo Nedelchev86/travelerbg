@@ -7,6 +7,7 @@ import { LoaderComponent } from '../../shared/components/loader/loader.component
 import { RatingComponent } from '../../rating/rating.component';
 import { AuthService } from '../../auth.service';
 import { environment } from '../../../environments/environment';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-destinations',
@@ -14,6 +15,24 @@ import { environment } from '../../../environments/environment';
   imports: [RouterLink, FormsModule, LoaderComponent, RatingComponent],
   templateUrl: './destinations.component.html',
   styleUrl: './destinations.component.css',
+  animations: [
+    trigger('fadeInOut', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('600ms ease-in', style({ opacity: 1 })),
+      ]),
+      transition(':leave', [animate('300ms ease-out', style({ opacity: 0 }))]),
+    ]),
+    trigger('slideIn', [
+      transition(':enter', [
+        style({ transform: 'translateY(20px)', opacity: 0 }),
+        animate(
+          '500ms ease-in',
+          style({ transform: 'translateY(0)', opacity: 1 })
+        ),
+      ]),
+    ]),
+  ],
 })
 export class DestinationsComponent {
   httpClient = inject(HttpClient);

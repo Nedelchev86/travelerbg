@@ -2384,7 +2384,7 @@ hr.title-line {
 
 /*------------------- 3.4. Common -------------------*/
 .shape-mockup-wrap {
-  z-index: 2;
+  /* z-index: 2; */
   position: relative;
 }
 

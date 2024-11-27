@@ -5,7 +5,13 @@ import {
   OnInit,
   ViewEncapsulation,
 } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import {
+  NavigationEnd,
+  Router,
+  RouterLink,
+  RouterModule,
+  RouterOutlet,
+} from '@angular/router';
 import { HeaderComponent } from './core/header/header.component';
 import { FooterComponent } from './core/footer/footer.component';
 
@@ -26,6 +32,10 @@ import {
 } from 'ckeditor5';
 import { NgxScrollTopComponent, NgxScrollTopDirective } from 'ngx-scrolltop';
 import { environment } from '../environments/environment';
+import { BreadcumbComponent } from './shared/components/breadcumb/breadcumb.component';
+import { filter } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -37,6 +47,8 @@ import { environment } from '../environments/environment';
     CloudinaryModule,
     GoogleMapsModule,
     NgxScrollTopComponent,
+    CommonModule,
+    BreadcumbComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './app.component.html',
@@ -44,9 +56,20 @@ import { environment } from '../environments/environment';
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
-  title = 'frontend';
+  title = 'TravelerBG';
   http = inject(HttpClient);
   authService = inject(AuthService);
+  showBreadcrumb = true;
+
+  constructor(private router: Router) {
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        console.log(event.urlAfterRedirects);
+        console.log(event.urlAfterRedirects !== '/');
+        this.showBreadcrumb = event.urlAfterRedirects !== '/';
+      });
+  }
 
   private readonly API_URL = environment.apiUrl;
   public Editor = ClassicEditor;

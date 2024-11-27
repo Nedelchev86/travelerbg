@@ -7,6 +7,7 @@ import { TopHotelsComponent } from '../../top-hotels/top-hotels.component';
 import { TopRatedDestinationsComponent } from '../../top-rated-destinations/top-rated-destinations.component';
 import { BannerComponent } from '../../shared/components/banner/banner.component';
 import { environment } from '../../../environments/environment';
+import { BreadcumbComponent } from '../../shared/components/breadcumb/breadcumb.component';
 
 @Component({
   selector: 'app-destinations-layout',
@@ -14,10 +15,11 @@ import { environment } from '../../../environments/environment';
   imports: [
     RouterOutlet,
     RouterLink,
-    SetBgImageDirective,
+
     TopHotelsComponent,
     TopRatedDestinationsComponent,
     BannerComponent,
+    BreadcumbComponent,
   ],
   templateUrl: './destinations-layout.component.html',
   styleUrl: './destinations-layout.component.css',

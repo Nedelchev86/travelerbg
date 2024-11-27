@@ -32,4 +32,17 @@
   display: flex;
   justify-content: center;
   background: rgba(0, 0, 0, 0.8);
+  overflow: auto;
+}
+
+select,
+.form-control,
+.form-select,
+textarea,
+input {
+  height: 46px;
+}
+.fa-close {
+  color: red;
+  font-size: 30px;
 }
