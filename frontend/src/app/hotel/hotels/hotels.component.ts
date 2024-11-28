@@ -7,13 +7,33 @@ import { SetBgImageDirective } from '../../directives/set-bg-image.directive';
 import { RatingComponent } from '../../rating/rating.component';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../auth.service';
+import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
+import { LoaderComponent } from "../../shared/components/loader/loader.component";
 
 @Component({
   selector: 'app-hotels',
   standalone: true,
-  imports: [RouterLink, RatingComponent],
+  imports: [RouterLink, RatingComponent, LoaderComponent],
   templateUrl: './hotels.component.html',
   styleUrl: './hotels.component.css',
+  animations: [
+    trigger('listAnimation', [
+      transition('* => *', [
+        // Initial state for the elements
+        query(':enter', [style({ opacity: 0 })], { optional: true }),
+        // Stagger the elements with an animation
+        query(
+          ':enter',
+          [
+            stagger('400ms', [
+              animate('1000ms ease-out', style({ opacity: 1 })),
+            ]),
+          ],
+          { optional: true }
+        ),
+      ]),
+    ]),
+  ],
 })
 export class HotelsComponent {
   private httpClient = inject(HttpClient);

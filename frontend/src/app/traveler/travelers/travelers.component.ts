@@ -9,6 +9,14 @@ import { TopDestinationComponent } from '../../top-destination/top-destination.c
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../auth.service';
 import { environment } from '../../../environments/environment';
+import {
+  animate,
+  query,
+  stagger,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 
 @Component({
   selector: 'app-tralevers',
@@ -16,6 +24,24 @@ import { environment } from '../../../environments/environment';
   imports: [RouterLink, LoaderComponent, RatingComponent],
   templateUrl: './travelers.component.html',
   styleUrl: './travelers.component.css',
+  animations: [
+    trigger('listAnimation', [
+      transition('* => *', [
+        // Initial state for the elements
+        query(':enter', [style({ opacity: 0 })], { optional: true }),
+        // Stagger the elements with an animation
+        query(
+          ':enter',
+          [
+            stagger('400ms', [
+              animate('1000ms ease-out', style({ opacity: 1 })),
+            ]),
+          ],
+          { optional: true }
+        ),
+      ]),
+    ]),
+  ],
 })
 export class TraleversComponent {
   httpClient = inject(HttpClient);
