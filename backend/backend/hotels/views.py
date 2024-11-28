@@ -77,7 +77,7 @@ class HotelViewSet(viewsets.ModelViewSet):
         else:
             return Response({'status': 'hotel already in favorites'})
 
-    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    @action(detail=True, methods=['delete'], permission_classes=[IsAuthenticated])
     def remove_from_favorites(self, request, pk=None):
         hotel = self.get_object()
         FavoriteHotels.objects.filter(user=request.user, hotel=hotel).delete()

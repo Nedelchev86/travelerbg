@@ -185,10 +185,7 @@ export class HotelDetailsComponent implements OnInit {
           this.toast.success('Rating submitted successfully');
         },
         error: (err) => {
-            this.toast.error(
-              'Please login to rate travelers',
-              'Login required'
-            );
+          this.toast.error('Please login to rate travelers', 'Login required');
         },
       });
   }
@@ -247,7 +244,7 @@ export class HotelDetailsComponent implements OnInit {
   }
   removeFromFavorites(hotelId: string): void {
     this.http
-      .post(`${this.API_URL}hotels/${hotelId}/remove_from_favorites/`, {})
+      .delete(`${this.API_URL}hotels/${hotelId}/remove_from_favorites/`)
       .subscribe({
         next: (response) => {
           this.isFavorite = true; // Set favorite status to true

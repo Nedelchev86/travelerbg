@@ -8,12 +8,10 @@ import { EditProfileComponent } from './editprofile/editprofile.component';
 import { ProfileLayoutComponent } from './profile-layout/profile-layout.component';
 import { MyDestinationsComponent } from './destination/my-destinations/my-destinations.component';
 import { ContactComponent } from './core/contact/contact.component';
-
 import { AuthGuard } from './guards/auth.guard';
 import { DestinationsLayoutComponent } from './destination/destinations-layout/destinations-layout.component';
 import { AddHotelComponent } from './hotel/add-hotel/add-hotel.component';
 import { MyHotelComponent } from './hotel/my-hotel/my-hotel.component';
-
 import { HotelsLayoutComponent } from './hotel/hotels-layout/hotels-layout.component';
 import { EditBusinessProfileComponent } from './edit-business-profile/edit-business-profile.component';
 import { editDestinationGuard } from './guards/edit-destination.guard';
@@ -22,9 +20,7 @@ import { EditActivitieComponent } from './edit-activitie/edit-activitie.componen
 import { editActivitiesGuard } from './guards/edit-activities.guard';
 import { ActivitieDetailsComponent } from './activity/activitie-details/activitie-details.component';
 import { ActivitiesLayoutComponent } from './activity/activities-layout/activities-layout.component';
-
 import { TravelersLayoutComponent } from './traveler/travelers-layout/travelers-layout.component';
-import { BookmarkedComponent } from './bookmarked/bookmarked.component';
 import { DestinationsComponent } from './destination/destinations/destinations.component';
 import { EditDestinationComponent } from './destination/edit-destination/edit-destination.component';
 import { AddDestinationComponent } from './destination/add-destination/add-destination.component';
@@ -35,6 +31,7 @@ import { MainComponent } from './core/main/main.component';
 import { isActivatedGuard } from './guards/is-activated.guard';
 import { AddActivitiesComponent } from './activity/add-activities/add-activities.component';
 import { MyActivitiesComponent } from './activity/my-activities/my-activities.component';
+import { BookmarksComponent } from './bookmarks/bookmarks.component';
 
 export const routes: Routes = [
   {
@@ -187,7 +184,7 @@ export const routes: Routes = [
       },
       {
         path: 'bookmarked',
-        component: BookmarkedComponent,
+        component: BookmarksComponent,
         data: { breadcrumb: 'Bookmarked' },
       },
     ],

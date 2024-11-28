@@ -35,7 +35,7 @@ class ActivitiesViewSet(viewsets.ModelViewSet):
         else:
             return Response({'status': 'activity already in favorites'})
 
-    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    @action(detail=True, methods=['delete'], permission_classes=[IsAuthenticated])
     def remove_from_favorites(self, request, pk=None):
         activity = self.get_object()
         FavoriteActivity.objects.filter(user=request.user, activity=activity).delete()

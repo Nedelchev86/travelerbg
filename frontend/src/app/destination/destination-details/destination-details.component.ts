@@ -229,9 +229,8 @@ export class DestinationDetailsComponent implements OnInit {
   }
   removeFromFavorites(destinationId: string): void {
     this.http
-      .post(
-        `${this.API_URL}destinations/${destinationId}/remove_from_favorites/`,
-        {}
+      .delete(
+        `${this.API_URL}destinations/${destinationId}/remove_from_favorites/`
       )
       .subscribe({
         next: (response) => {

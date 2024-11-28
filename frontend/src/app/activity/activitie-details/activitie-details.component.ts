@@ -88,10 +88,7 @@ export class ActivitieDetailsComponent {
   }
   removeFromFavorites(activityId: string): void {
     this.http
-      .post(
-        `${this.API_URL}activities/${activityId}/remove_from_favorites/`,
-        {}
-      )
+      .delete(`${this.API_URL}activities/${activityId}/remove_from_favorites/`)
       .subscribe({
         next: (response) => {
           this.isFavorite = true; // Set favorite status to true

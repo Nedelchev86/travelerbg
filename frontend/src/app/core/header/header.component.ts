@@ -8,7 +8,13 @@ import { UserInterface } from '../../user-interface';
 import { faFontAwesome, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { environment } from '../../../environments/environment';
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 
 @Component({
   selector: 'app-header',
@@ -24,24 +30,33 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
   styleUrl: './header.component.css',
   animations: [
     trigger('fadeInOut', [
-      state('void', style({
-        opacity: 0,
-        transform: 'translateY(-20px)'
-      })),
+      state(
+        'void',
+        style({
+          opacity: 0,
+          transform: 'translateY(-20px)',
+        })
+      ),
       transition(':enter', [
-        animate('0.5s ease-in', style({
-          opacity: 1,
-          transform: 'translateY(0)'
-        }))
+        animate(
+          '0.5s ease-in',
+          style({
+            opacity: 1,
+            transform: 'translateY(0)',
+          })
+        ),
       ]),
       transition(':leave', [
-        animate('0.5s ease-out', style({
-          opacity: 0,
-          transform: 'translateY(-20px)'
-        }))
-      ])
-    ])
-  ]
+        animate(
+          '0.5s ease-out',
+          style({
+            opacity: 0,
+            transform: 'translateY(-20px)',
+          })
+        ),
+      ]),
+    ]),
+  ],
 })
 export class HeaderComponent {
   isLoginRegisterPopupVisible = false;
@@ -73,12 +88,10 @@ export class HeaderComponent {
   }
 
   openLoginRegisterPopup() {
-    console.log('openLoginRegisterPopup', this.isBodyVisible);
-    if (this.isBodyVisible) {
-      this.isBodyVisible = false;
-    }
+    // if (this.isBodyVisible) {
+    //   this.isBodyVisible = false;
+    // }
     this.isLoginRegisterPopupVisible = true;
-    console.log('openLoginRegisterPopup2', this.isBodyVisible);
   }
 
   closeLoginRegisterPopup() {
