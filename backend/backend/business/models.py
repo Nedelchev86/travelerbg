@@ -27,10 +27,13 @@ class BusinessProfile(models.Model):
     def count_published_activities(self):
         return Activities.objects.filter(user=self.user).count()
 
+
     def __str__(self):
         if self.name:
             return self.name
         return str(self.user)
+
+
 
     # @property
     # def get_all_applicant(self):

@@ -1,4 +1,7 @@
-<section class="space">
+@if(loading){
+<app-loader></app-loader>
+}@else{
+<section class="space" @fadeSlideIn>
   <div class="container">
     <div class="row">
       <div class="page-single">
@@ -47,119 +50,12 @@
             [lng]="data.lng"
           ></app-google-map>
         </div>
-        <!-- <div class="th-comments-wrap style2">
-          <h2 class="blog-inner-title h4">Reviews (3)</h2>
-          <ul class="comment-list">
-            <li class="th-comment-item">
-              <div class="th-post-comment">
-                <div class="comment-avater">
-                  <img
-                    src="../../assets/img/blog/comment-author-1.jpg"
-                    alt="Comment Author"
-                  />
-                </div>
-                <div class="comment-content">
-                  <h3 class="name">Adam Jhon</h3>
-                  <div class="commented-wrapp">
-                    <span class="commented-on">20 Jun, 2024</span>
-                    <span class="commented-time">08:56pm </span>
-                    <span class="comment-review">
-                      <i class="fa-solid fa-star"></i>
-                      <i class="fa-solid fa-star"></i>
-                      <i class="fa-solid fa-star"></i>
-                      <i class="fa-solid fa-star"></i>
-                      <i class="fa-solid fa-star"></i>
-                    </span>
-                  </div>
-                  <p class="text">
-                    Credibly pontificate transparent quality vectors with
-                    quality mindshare. Efficiently architect worldwide strategic
-                    theme areas after user.
-                  </p>
-                  <div class="reply_and_edit">
-                    <i class="fa-solid fa-thumbs-up"></i>
-                  </div>
-                </div>
-              </div>
-              <ul class="children">
-                <li class="th-comment-item">
-                  <div class="th-post-comment">
-                    <div class="comment-avater">
-                      <img
-                        src="../../assets/img/blog/comment-author-4.jpg"
-                        alt="Comment Author"
-                      />
-                    </div>
-                    <div class="comment-content">
-                      <div class="">
-                        <h3 class="name">Maria Willson</h3>
-                        <div class="commented-wrapp">
-                          <span class="commented-on">23 Jun, 2024</span>
-                          <span class="commented-time">08:56pm </span>
-                          <span class="comment-review">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                          </span>
-                        </div>
-                      </div>
-                      <p class="text">
-                        It is different from airport transfer or port transfer,
-                        which are services that pick you up
-                      </p>
-                      <div class="reply_and_edit">
-                        <i class="fa-solid fa-thumbs-up"></i>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </li>
-            <li class="th-comment-item">
-              <div class="th-post-comment">
-                <div class="comment-avater">
-                  <img
-                    src="../../assets/img/blog/comment-author-5.jpg"
-                    alt="Comment Author"
-                  />
-                </div>
-                <div class="comment-content">
-                  <div class="">
-                    <h3 class="name">Michel Edwards</h3>
-                    <div class="commented-wrapp">
-                      <span class="commented-on">27 Jun, 2024</span>
-                      <span class="commented-time">08:56pm </span>
-                      <span class="comment-review">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                      </span>
-                    </div>
-                  </div>
-                  <p class="text">
-                    Credibly pontificate transparent quality vectors with
-                    quality mindshare. Efficiently architect worldwide strategic
-                    theme areas after user.
-                  </p>
-                  <div class="reply_and_edit">
-                    <i class="fa-solid fa-thumbs-up"></i>
-                  </div>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div> -->
 
         <app-destination-comments
           [destinationId]="destinationId"
         ></app-destination-comments>
-        <!-- Comment end -->
-        <!-- Comment Form -->
       </div>
     </div>
   </div>
 </section>
+}

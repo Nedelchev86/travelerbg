@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit } from '@angular/core';
 
 import { AuthService } from '../auth.service';
 import { environment } from '../../environments/environment';
@@ -26,17 +26,23 @@ export class BookmarksComponent implements OnInit {
   error: string | null = null;
 
   ngOnInit() {
-    const userId: number = this.authService.currentUser().user.user;
-    console.log(userId);
-    if (userId) {
-      this.fetchFavorites(userId);
+    const user = this.authService.currentUser();
+    if (user) {
+      let userType: string;
+      if (user.user_type === 'traveler') {
+        userType = 'travelers';
+      } else {
+        userType = 'business';
+      }
+      const userId = user.user.user;
+      this.fetchFavorites(userId, userType);
     }
   }
 
-  fetchFavorites(userId: number): void {
+  fetchFavorites(userId: number, userType: string): void {
     this.loading = true;
 
-    this.http.get(`${this.apiUrl}travelers/${userId}/favorites/`).subscribe({
+    this.http.get(`${this.apiUrl}${userType}/${userId}/favorites/`).subscribe({
       next: (response: any) => {
         this.favorites_destinations = response.favorite_destinations;
         this.favorites_hotels = response.favorite_hotels;

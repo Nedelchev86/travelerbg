@@ -17,6 +17,8 @@ import { environment } from '../../../environments/environment';
 import { DestinationCommentsComponent } from '../destination-comments/destination-comments.component';
 import { GalleryLightboxComponent } from '../../shared/components/gallery-lightbox/gallery-lightbox.component';
 import { GoogleMapComponent } from '../../shared/components/google-map/google-map.component';
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 interface Images {
   imageSrc: string;
@@ -38,9 +40,21 @@ interface FavoriteStatusResponse {
     GalleryLightboxComponent,
     RouterLink,
     RatingComponent,
+    LoaderComponent,
   ],
   templateUrl: './destination-details.component.html',
   styleUrl: './destination-details.component.css',
+  animations: [
+    trigger('fadeSlideIn', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(20px)' }),
+        animate(
+          '1200ms ease-out',
+          style({ opacity: 1, transform: 'translateY(0)' })
+        ),
+      ]),
+    ]),
+  ],
 })
 export class DestinationDetailsComponent implements OnInit {
   destinationId: string | null = null;
@@ -77,6 +91,7 @@ export class DestinationDetailsComponent implements OnInit {
     this.route.params.subscribe((params) => {
       this.destinationId = params['destinationId'];
       if (this.destinationId) {
+        this.loading = true;
         this.fetchDestinationDetails(this.destinationId);
       }
     });
@@ -199,6 +214,7 @@ export class DestinationDetailsComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.isFavorite = response?.['is_favorite'] || false;
+          this.loading = true;
         },
         error: (err) => {
           console.error('Failed to check favorite status', err);
