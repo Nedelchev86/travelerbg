@@ -32,6 +32,7 @@ import { isActivatedGuard } from './guards/is-activated.guard';
 import { AddActivitiesComponent } from './activity/add-activities/add-activities.component';
 import { MyActivitiesComponent } from './activity/my-activities/my-activities.component';
 import { BookmarksComponent } from './bookmarks/bookmarks.component';
+import { PageNotFoundComponent } from './core/page-not-found/page-not-found.component';
 
 export const routes: Routes = [
   {
@@ -196,8 +197,9 @@ export const routes: Routes = [
     component: ContactComponent,
     data: { breadcrumb: 'Contsct Us' },
   },
+  { path: '404', component: PageNotFoundComponent },
   {
     path: '**',
-    redirectTo: '',
+    redirectTo: '/404',
   },
 ];
