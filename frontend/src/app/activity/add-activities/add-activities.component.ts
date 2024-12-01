@@ -112,12 +112,10 @@ export class AddActivitiesComponent {
   }
 
   onFileChange(event: any, field: string): void {
-    console.log('changed');
     const file = event.target.files[0];
     if (file) {
       this.cloudinaryuploadService.uploadImage(file).subscribe(
         (response) => {
-          console.log('Image uploaded successfully:', response);
           this.addActivitieForm.patchValue({
             [field]: response.secure_url,
           });
@@ -167,24 +165,6 @@ export class AddActivitiesComponent {
     });
   }
 
-  // onSubmit() {
-  //   const formData = new FormData();
-  //   Object.keys(this.addDestinationForm.controls).forEach((key) => {
-  //     formData.append(key, this.addDestinationForm.get(key)?.value);
-  //   });
-  //   console.log('Form data', formData.getAll);
-  //   this.http
-  //     .post('http://localhost:8000/api/destinations/', formData)
-  //     .subscribe(
-  //       (response) => {
-  //         console.log('Destination added successfully', response);
-  //         this.router.navigate(['/profile']);
-  //       },
-  //       (error) => {
-  //         console.error('Failed to add destination', error);
-  //       }
-  //     );
-  // }
   addNewTag(): void {
     const newTag = this.addActivitieForm.get('newTag')?.value;
     if (newTag) {
@@ -204,7 +184,6 @@ export class AddActivitiesComponent {
   }
 
   onSubmit() {
-    console.log(this.addActivitieForm.value);
     if (this.addActivitieForm.invalid) {
       this.addActivitieForm.markAllAsTouched();
       return;
@@ -229,7 +208,6 @@ export class AddActivitiesComponent {
 
     this.http.post(`${this.API_URL}activities/`, formData).subscribe(
       (response) => {
-        console.log('Destination added successfully', response);
         this.authSevices.fetchUserData();
         this.router.navigate(['/profile']);
       },

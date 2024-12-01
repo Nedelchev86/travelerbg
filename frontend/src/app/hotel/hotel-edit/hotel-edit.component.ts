@@ -175,7 +175,6 @@ export class HotelEditComponent {
       (response: any) => {
         this.highlights = response;
         // If hotel data is already loaded, mark the checked highlights
-        console.log('HIghlights', this.highlights);
       },
       (error) => {
         console.error('Error fetching highlights:', error);

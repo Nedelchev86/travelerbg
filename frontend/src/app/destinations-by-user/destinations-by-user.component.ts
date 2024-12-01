@@ -22,7 +22,6 @@ export class DestinationsByUserComponent implements OnInit {
       .get(`${this.API_URL}destinations/by_user/${this.user}/`)
       .subscribe(
         (data: any) => {
-          console.log('User Destinations:', data);
           this.destinations = data;
         },
         (error) => {

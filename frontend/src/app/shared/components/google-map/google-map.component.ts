@@ -14,7 +14,6 @@ import {
 } from '@angular/google-maps';
 import { SetBgImageDirective } from '../../../directives/set-bg-image.directive';
 
-
 @Component({
   selector: 'app-google-map',
   standalone: true,
@@ -42,7 +41,6 @@ export class GoogleMapComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['location'] && changes['location'].currentValue) {
-      console.log('ngOnChanges location:', this.location);
       this.geocodeAddress(this.location);
     }
     if (

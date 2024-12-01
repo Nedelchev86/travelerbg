@@ -115,7 +115,6 @@ export class EditProfileComponent implements OnInit {
     // Fetch the current profile data and populate the form
     this.http.get(`${this.API_URL}traveler/update/`).subscribe((data: any) => {
       this.profileForm.patchValue(data);
-      console.log('Profile data fetched successfully', data);
     });
   }
 
@@ -129,12 +128,10 @@ export class EditProfileComponent implements OnInit {
   // }
 
   onFileChange(event: any, field: string): void {
-    console.log('changed');
     const file = event.target.files[0];
     if (file) {
       this.cloudinaryuploadService.uploadImage(file).subscribe(
         (response) => {
-          console.log('Image uploaded successfully:', response);
           this.profileForm.patchValue({
             [field]: response.secure_url,
           });
@@ -164,36 +161,11 @@ export class EditProfileComponent implements OnInit {
           formData.append(key, controlValue);
         }
       });
-      // console.log('Profile form submitted', this.profileForm.value);
-      // if (this.profileForm.valid) {
-      //   const formData = new FormData();
-      //   formData.append('name', this.profileForm.value.name);
-      //   formData.append('city', this.profileForm.value.city);
-      //   formData.append('nationality', this.profileForm.value.nationality);
-      //   formData.append('occupation', this.profileForm.value.occupation);
-      //   formData.append('website', this.profileForm.value.website || '');
-      //   formData.append('linkedin', this.profileForm.value.linkedin || '');
-      //   formData.append('facebook', this.profileForm.value.facebook || '');
-      //   formData.append('github', this.profileForm.value.github || '');
-      //   formData.append('about', this.profileForm.value.about);
-      //   formData.append(
-      //     'phone_number',
-      //     this.profileForm.value.phone_number || ''
-      //   );
-
-      //   if (this.profilePicture) {
-      //     formData.append('profile_picture', this.profilePicture);
-      //   }
-      //   if (this.cover) {
-      //     formData.append('cover', this.cover);
-      //   }
 
       this.http
         .put<UserDetails>(`${this.API_URL}traveler/update/`, formData)
         .subscribe(
           (response) => {
-            console.log('Profile updated successfully', response);
-
             this.authService.fetchUserData();
             this.router.navigate(['/profile']);
           },

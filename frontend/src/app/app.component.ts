@@ -65,8 +65,6 @@ export class AppComponent implements OnInit {
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
-        console.log(event.urlAfterRedirects);
-        console.log(event.urlAfterRedirects !== '/');
         this.showBreadcrumb = event.urlAfterRedirects !== '/';
       });
   }
@@ -86,7 +84,6 @@ export class AppComponent implements OnInit {
     const token = localStorage.getItem('token');
 
     if (!token) {
-      console.log('User is not logged in');
       this.authService.currentUser.set(null);
       return;
     }

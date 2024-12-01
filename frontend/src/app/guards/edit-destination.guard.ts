@@ -22,8 +22,7 @@ export const editDestinationGuard: CanActivateFn = (route, state) => {
   return http.get<any>(`${API_URL}destinations/${destinationId}`).pipe(
     map((destination) => {
       const currentUser = authService.currentUser();
-      console.log('currentUser', currentUser);
-      console.log('destination', destination);
+
       if (destination.user === currentUser?.user.user) {
         return true;
       } else {

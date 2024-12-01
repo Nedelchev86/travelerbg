@@ -35,21 +35,4 @@ export class TopDestinationComponent implements OnInit {
       },
     });
   }
-  // ngAfterViewInit() {
-  //   this.loadScript('assets/js/test.js');
-  // }
-
-  // loadScript(src: string) {
-  //   const script = document.createElement('script');
-  //   script.src = src;
-  //   script.type = 'text/javascript';
-  //   script.async = true;
-  //   script.onload = () => {
-  //     console.log('Script loaded successfully.');
-  //   };
-  //   script.onerror = () => {
-  //     console.error('Error loading script.');
-  //   };
-  //   document.body.appendChild(script);
-  // }
 }

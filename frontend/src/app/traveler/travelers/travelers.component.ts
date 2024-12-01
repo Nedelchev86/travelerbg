@@ -56,7 +56,6 @@ export class TraleversComponent {
       next: (data: any) => {
         this.data = data;
         this.loading = false;
-        console.log(data);
       },
       error: (err) => {
         console.log(err);
@@ -80,12 +79,10 @@ export class TraleversComponent {
       })
       .subscribe({
         next: (response) => {
-          console.log('Rating submitted successfully', response);
           this.updateTravelerRating(travelerId, rating);
           this.toast.success('Rating submitted successfully');
         },
         error: (err) => {
-          console.log('Failed to submit rating', err),
             this.toast.error(
               'Please login to rate travelers',
               'Login required'
@@ -102,7 +99,6 @@ export class TraleversComponent {
           traveler.number_of_votes = data.number_of_votes;
         },
         error: (err) => {
-          console.log(err);
           this.toast.error(
             'Error fetching travelers data',
             'Cannot connect to server'

@@ -23,7 +23,6 @@ export class TravelersDetailsComponent implements OnInit {
   private readonly API_URL = environment.apiUrl;
 
   ngOnInit() {
-    console.log('Traveler ID:', this.travelerId);
     this.http.get(`${this.API_URL}travelers/${this.travelerId}/`).subscribe(
       (data: any) => {
         this.travelerDetails = data;
@@ -45,12 +44,10 @@ export class TravelersDetailsComponent implements OnInit {
       })
       .subscribe({
         next: (response) => {
-          console.log('Rating submitted successfully', response);
           this.updateTravelerRating(travelerId, rating);
           this.toast.success('Rating submitted successfully');
         },
         error: (err) => {
-          console.log('Failed to submit rating', err),
             this.toast.error(
               'Please login to rate travelers',
               'Login required'
@@ -66,7 +63,6 @@ export class TravelersDetailsComponent implements OnInit {
           this.travelerDetails.users_rated = data.users_rated;
         },
         error: (err) => {
-          console.log(err);
           this.toast.error(
             'Error fetching travelers data',
             'Cannot connect to server'

@@ -25,7 +25,6 @@ export class MyActivitiesComponent {
     this.http.get(`${this.API_URL}activities/my/`).subscribe({
       next: (data: any) => {
         this.activities = data;
-        console.log(data);
       },
       error: (err) => console.log(err),
     });
@@ -48,7 +47,6 @@ export class MyActivitiesComponent {
         .delete(`${this.API_URL}activities/${this.itemIdToDelete}/`)
         .subscribe(
           (response) => {
-            console.log('Item deleted:', this.itemIdToDelete);
             // Remove the deleted item from the data array
             this.authServices.fetchUserData();
             this.activities = this.activities.filter(

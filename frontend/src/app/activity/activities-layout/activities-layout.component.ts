@@ -21,7 +21,6 @@ export class ActivitiesLayoutComponent implements OnInit {
     this.http.get(`${this.API_URL}categories/activities`).subscribe({
       next: (data: any) => {
         this.categories = data;
-        console.log(this.categories);
       },
       error: (err) => console.log(err),
     });

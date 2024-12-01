@@ -56,7 +56,6 @@ export class GalleryLightboxComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    console.log(this.galleryData);
     this.totalImageCount = this.galleryData.length;
   }
 

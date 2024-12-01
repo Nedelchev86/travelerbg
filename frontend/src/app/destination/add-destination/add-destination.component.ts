@@ -163,15 +163,7 @@ export class AddDestinationComponent {
     );
   }
 
-  // onFileChange(event: any, field: string) {
-  //   if (event.target.files.length > 0) {
-  //     const file = event.target.files[0];
-  //     this.addDestinationForm.patchValue({
-  //       [field]: file,
-  //     });
 
-  //   }
-  // }
   onFileChange(event: any, field: string): void {
     const file = event.target.files[0];
     if (file) {
@@ -226,24 +218,6 @@ export class AddDestinationComponent {
     });
   }
 
-  // onSubmit() {
-  //   const formData = new FormData();
-  //   Object.keys(this.addDestinationForm.controls).forEach((key) => {
-  //     formData.append(key, this.addDestinationForm.get(key)?.value);
-  //   });
-  //   console.log('Form data', formData.getAll);
-  //   this.http
-  //     .post('http://localhost:8000/api/destinations/', formData)
-  //     .subscribe(
-  //       (response) => {
-  //         console.log('Destination added successfully', response);
-  //         this.router.navigate(['/profile']);
-  //       },
-  //       (error) => {
-  //         console.error('Failed to add destination', error);
-  //       }
-  //     );
-  // }
   addNewTag(): void {
     const newTag = this.addDestinationForm.get('newTag')?.value;
     if (newTag) {
