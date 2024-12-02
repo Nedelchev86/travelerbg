@@ -54,6 +54,12 @@
             </div>
           </div>
         </div>
+        }@empty {
+        <div class="col-12">
+          <div class="alert alert-warning" role="alert">
+            No destinations found.
+          </div>
+        </div>
         }
       </div>
     </div>
@@ -84,7 +90,7 @@
                 <a
                   routerLink="/destinations/{{ hotel.id }}"
                   routerLinkActive="active"
-                  >{{ hotel.title }}</a
+                  >{{ hotel.name }}</a
                 >
               </h3>
               <span class="price">{{ hotel.location }}</span>
@@ -107,6 +113,10 @@
               </div>
             </div>
           </div>
+        </div>
+        }@empty {
+        <div class="col-12">
+          <div class="alert alert-warning" role="alert">No hotels found.</div>
         </div>
         }
       </div>
@@ -162,6 +172,12 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+        }@empty {
+        <div class="col-12">
+          <div class="alert alert-warning" role="alert">
+            No activities found.
           </div>
         </div>
         }

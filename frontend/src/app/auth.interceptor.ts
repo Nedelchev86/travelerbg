@@ -37,6 +37,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           'Token expired or invalid. Please log in again.',
           'Unauthorized'
         );
+      } else {
+        toastr.error(error.errodetail, 'Unauthorized');
+        return throwError(() => error);
       }
       return throwError(() => error);
     })

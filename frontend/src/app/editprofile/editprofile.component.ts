@@ -32,15 +32,17 @@ import {
   ImageUpload,
 } from 'ckeditor5';
 import { environment } from '../../environments/environment';
+import { LoaderComponent } from "../shared/components/loader/loader.component";
 
 @Component({
   selector: 'app-editprofile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CKEditorModule],
+  imports: [CommonModule, ReactiveFormsModule, CKEditorModule, LoaderComponent],
   templateUrl: './editprofile.component.html',
   styleUrl: './editprofile.component.css',
 })
 export class EditProfileComponent implements OnInit {
+  loading = true;
   profileForm: FormGroup;
   profilePicture: File | null = null;
   cover: File | null = null;
@@ -115,6 +117,7 @@ export class EditProfileComponent implements OnInit {
     // Fetch the current profile data and populate the form
     this.http.get(`${this.API_URL}traveler/update/`).subscribe((data: any) => {
       this.profileForm.patchValue(data);
+      this.loading = false;
     });
   }
 
