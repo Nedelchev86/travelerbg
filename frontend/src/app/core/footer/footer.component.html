@@ -13,13 +13,29 @@
               </h2>
             </div>
             <div class="col-lg-7">
-              <form class="newsletter-form">
+              <form
+                [formGroup]="subscribeForm"
+                class="newsletter-form"
+                (ngSubmit)="onSubmit()"
+              >
                 <input
+                  formControlName="email"
                   class="form-control"
                   type="email"
                   placeholder="Enter Email"
-                  required=""
+                  required
                 />
+                <div
+                  *ngIf="
+                    subscribeForm.get('email')?.invalid &&
+                    subscribeForm.get('email')?.touched
+                  "
+                  class="text-danger"
+                >
+                  <small *ngIf="subscribeForm.get('email')?.errors?.['required']"
+                    >Email is required.</small
+                  >
+                </div>
                 <button type="submit" class="th-btn style3">
                   Subscribe Now <img src="/assets/img/icon/plane.svg" alt="" />
                 </button>

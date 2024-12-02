@@ -1,0 +1,48 @@
+.tab-pane {
+  transition: opacity 0.5s ease-in-out;
+}
+
+.tab-pane.fade {
+  opacity: 0;
+}
+
+.tab-pane.fade.show {
+  opacity: 1;
+}
+
+.close-button {
+  position: absolute;
+  color: black;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 1200;
+}
+
+.modal-content {
+  position: relative;
+  max-width: 90%;
+  margin-top: 50px;
+}
+
+.modal-backdrop {
+  display: flex;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.8);
+  overflow: auto;
+}
+
+select,
+.form-control,
+.form-select,
+textarea,
+input {
+  height: 46px;
+}
+.fa-close {
+  color: red;
+  font-size: 30px;
+}

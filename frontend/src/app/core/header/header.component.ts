@@ -1,6 +1,6 @@
 import { Component, HostListener, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
-import { LoginRegisterComponent } from '../../login-register/login-register.component';
+import { LoginRegisterComponent } from '../../user/login-register/login-register.component';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../auth.service';
 import { HttpClient } from '@angular/common/http';

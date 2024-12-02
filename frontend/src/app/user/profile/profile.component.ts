@@ -5,9 +5,9 @@ import {
   inject,
   OnInit,
 } from '@angular/core';
-import { AuthService } from '../auth.service';
+
 import { RouterLink } from '@angular/router';
-import { LoaderComponent } from '../shared/components/loader/loader.component';
+import { AuthService } from '../../auth.service';
 
 @Component({
   selector: 'app-profile',
