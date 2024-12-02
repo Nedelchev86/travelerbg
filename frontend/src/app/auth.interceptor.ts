@@ -4,10 +4,12 @@ import { AuthService } from './auth.service';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { ErrorService } from './error.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = localStorage.getItem('token') ?? '';
   const authService = inject(AuthService);
+  const errorService = inject(ErrorService);
   const router = inject(Router);
   authService.token.set(token);
   const toastr = inject(ToastrService);
@@ -23,7 +25,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   }
   return next(req).pipe(
     catchError((error) => {
-      console.log('error', error);
       if (
         error.status === 401 &&
         error.error?.detail === 'Given token not valid for any token type'
@@ -38,8 +39,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           'Unauthorized'
         );
       } else {
-        toastr.error(error.errodetail, 'Unauthorized');
-        return throwError(() => error);
+        errorService.handleHttpError(error); 
       }
       return throwError(() => error);
     })

@@ -3,9 +3,8 @@ import { TraleversComponent } from './traveler/travelers/travelers.component';
 import { TravelersDetailsComponent } from './traveler/travelers-details/travelers-details.component';
 import { DestinationDetailsComponent } from './destination/destination-details/destination-details.component';
 import { ActivitiesComponent } from './activity/activities/activities.component';
-import { ProfileComponent } from './profile/profile.component';
-import { EditProfileComponent } from './editprofile/editprofile.component';
-import { ProfileLayoutComponent } from './profile-layout/profile-layout.component';
+import { EditProfileComponent } from './user/editprofile/editprofile.component';
+import { ProfileLayoutComponent } from './user/profile-layout/profile-layout.component';
 import { MyDestinationsComponent } from './destination/my-destinations/my-destinations.component';
 import { ContactComponent } from './core/contact/contact.component';
 import { AuthGuard } from './guards/auth.guard';
@@ -13,10 +12,10 @@ import { DestinationsLayoutComponent } from './destination/destinations-layout/d
 import { AddHotelComponent } from './hotel/add-hotel/add-hotel.component';
 import { MyHotelComponent } from './hotel/my-hotel/my-hotel.component';
 import { HotelsLayoutComponent } from './hotel/hotels-layout/hotels-layout.component';
-import { EditBusinessProfileComponent } from './edit-business-profile/edit-business-profile.component';
+import { EditBusinessProfileComponent } from './user/edit-business-profile/edit-business-profile.component';
 import { editDestinationGuard } from './guards/edit-destination.guard';
 import { editHotelGuard } from './guards/edit-hotel.guard';
-import { EditActivitieComponent } from './edit-activitie/edit-activitie.component';
+import { EditActivitieComponent } from './activity/edit-activitie/edit-activitie.component';
 import { editActivitiesGuard } from './guards/edit-activities.guard';
 import { ActivitieDetailsComponent } from './activity/activitie-details/activitie-details.component';
 import { ActivitiesLayoutComponent } from './activity/activities-layout/activities-layout.component';
@@ -33,6 +32,7 @@ import { AddActivitiesComponent } from './activity/add-activities/add-activities
 import { MyActivitiesComponent } from './activity/my-activities/my-activities.component';
 import { BookmarksComponent } from './bookmarks/bookmarks.component';
 import { PageNotFoundComponent } from './core/page-not-found/page-not-found.component';
+import { ProfileComponent } from './user/profile/profile.component';
 
 export const routes: Routes = [
   {
