@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://orca-app-x6eo8.ondigitalocean.app/api/',
+  apiUrl: process.env['API_BASE_UR'] || 'https://orca-app-x6eo8.ondigitalocean.app/api/',
+
 };
