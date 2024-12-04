@@ -1,0 +1,65 @@
+<!-- <div class="rating">
+  <span>
+    <i
+      (click)="rate(1)"
+      class="fa"
+      [class.fa-star]="1 < rating"
+      [class.fa-star]="1 >= rating"
+    ></i>
+  </span>
+  <span>
+    <i
+      (click)="rate(2)"
+      class="fa"
+      [class.fa-star]="2 < rating"
+      [class.fa-star]="2 >= rating"
+    ></i>
+  </span>
+  <span>
+    <i
+      (click)="rate(3)"
+      class="fa"
+      [class.fa-star]="3 < rating"
+      [class.fa-star]="3 >= rating"
+    ></i>
+  </span>
+  <span>
+    <i
+      (click)="rate(4)"
+      class="fa"
+      [class.fa-star]="4 < rating"
+      [class.fa-star]="4 >= rating"
+    ></i>
+  </span>
+  <span>
+    <i
+      (click)="rate(5)"
+      class="fa"
+      [class.fa-star]="5 < rating"
+      [class.fa-star]="5 >= rating"
+    ></i>
+  </span>
+</div> -->
+
+<div class="rating">
+  <span
+    *ngFor="let star of stars; let i = index"
+    (mouseenter)="setHover(i)"
+    (mouseleave)="clearHover()"
+  >
+    <fa-icon
+      [icon]="star.icon"
+      [ngClass]="{
+        'full-star': i <= rating - 1,
+        'half-star': i <= rating - 0.5,
+        'empty-star': i > rating - 1,
+        'hovered-star': hoverIndex !== null && i <= hoverIndex
+      }"
+      (click)="rate(i + 1)"
+    ></fa-icon>
+  </span>
+  <span class="rating-text rating2"
+    >{{ data.average_rating?.toFixed(2) }} from
+    {{ data.number_of_votes }} users</span
+  >
+</div>
