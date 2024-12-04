@@ -1,3 +1,8 @@
+### Demo Links
+
+- Demo on DigitalOcean - <a href="https://travelerbg.eu/" target="_blank">https://travelerbg.eu/</a>
+- Demo on Render / DB on aiven.io - <a href="https://travelerbg.onrender.com/" target="_blank">https://travelerbg.onrender.com/</a> (Free instance will spin down with inactivity, which can delay requests by 50 seconds or more)
+
 Description
 This project is a web application that serves two main user types: travelers and business owners. The platform allows users to add, manage, and explore various destinations, hotels, and activities. It aims to provide a seamless experience for both travelers looking for new adventures and business owners wanting to promote their services.
 
