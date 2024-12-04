@@ -42,11 +42,7 @@
               </div>
             </div>
             <div class="col-md-6 form-group">
-              <button
-                type="button"
-                class="th-btn style3"
-                (click)="addNewTag()"
-              >
+              <button type="button" class="th-btn style3" (click)="addNewTag()">
                 Add Tag
               </button>
             </div>
@@ -96,11 +92,10 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="basic_information"
+            <label for="description"
               >Description <span class="red">*</span></label
             >
             <ckeditor
-              id="desciption"
               formControlName="description"
               [editor]="Editor"
               [config]="config"
@@ -118,11 +113,10 @@
           </div>
 
           <div class="form-group">
-            <label for="basic_information"
+            <label for="highlights"
               >Highlights <span class="red">*</span></label
             >
             <ckeditor
-              id="highlights"
               formControlName="highlights"
               [editor]="Editor"
               [config]="config"
@@ -132,7 +126,9 @@
           <div class="row">
             <div class="col-md-4 form-group">
               <div class="form-group">
-                <label for="cost">Duration <span class="red">*</span></label>
+                <label for="duration"
+                  >Duration <span class="red">*</span></label
+                >
                 <input
                   class="form-control"
                   id="duration"
@@ -143,7 +139,7 @@
             </div>
             <div class="col-md-4 form-group">
               <div class="form-group">
-                <label for="cost">Price <span class="red">*</span></label>
+                <label for="price">Price <span class="red">*</span></label>
                 <input
                   class="form-control"
                   id="price"

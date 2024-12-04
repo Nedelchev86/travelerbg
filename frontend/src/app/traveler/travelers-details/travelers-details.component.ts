@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, inject, Input, OnInit } from '@angular/core';
 
 import { ToastrService } from 'ngx-toastr';
-import { RatingComponent } from '../../rating/rating.component';
+import { RatingComponent } from '../../shared/components/rating/rating.component';
 import { DestinationsByUserComponent } from '../../destinations-by-user/destinations-by-user.component';
 import { AuthService } from '../../auth.service';
 import { environment } from '../../../environments/environment';
@@ -48,10 +48,7 @@ export class TravelersDetailsComponent implements OnInit {
           this.toast.success('Rating submitted successfully');
         },
         error: (err) => {
-            this.toast.error(
-              'Please login to rate travelers',
-              'Login required'
-            );
+          this.toast.error('Please login to rate travelers', 'Login required');
         },
       });
   }

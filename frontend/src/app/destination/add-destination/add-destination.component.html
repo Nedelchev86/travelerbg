@@ -282,11 +282,10 @@
               formControlName="basic_information"
             ></textarea> -->
             <ckeditor
-              id="desciption"
+              id="description"
               formControlName="description"
               [editor]="Editor"
               [config]="config"
-              id="description"
             ></ckeditor>
             <div
               *ngIf="
@@ -300,7 +299,7 @@
           </div>
 
           <div class="form-group">
-            <label for="cost">Duration <span class="red">*</span></label>
+            <label for="time">Duration <span class="red">*</span></label>
             <input
               class="form-control"
               id="time"

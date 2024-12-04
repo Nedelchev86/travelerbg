@@ -4,11 +4,18 @@ import { Component, inject, Input } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { SetBgImageDirective } from '../../directives/set-bg-image.directive';
-import { RatingComponent } from '../../rating/rating.component';
+import { RatingComponent } from '../../shared/components/rating/rating.component';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../auth.service';
-import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
-import { LoaderComponent } from "../../shared/components/loader/loader.component";
+import {
+  animate,
+  query,
+  stagger,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-hotels',

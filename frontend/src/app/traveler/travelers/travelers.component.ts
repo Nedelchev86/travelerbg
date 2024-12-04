@@ -4,8 +4,8 @@ import { SetBgImageDirective } from '../../directives/set-bg-image.directive';
 import { RouterLink } from '@angular/router';
 import { ShapeMockupDirective } from '../../directives/shape-mockup.directive';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
-import { RatingComponent } from '../../rating/rating.component';
-import { TopDestinationComponent } from '../../top-destination/top-destination.component';
+import { RatingComponent } from '../../shared/components/rating/rating.component';
+
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../auth.service';
 import { environment } from '../../../environments/environment';
@@ -83,10 +83,7 @@ export class TraleversComponent {
           this.toast.success('Rating submitted successfully');
         },
         error: (err) => {
-            this.toast.error(
-              'Please login to rate travelers',
-              'Login required'
-            );
+          this.toast.error('Please login to rate travelers', 'Login required');
         },
       });
   }

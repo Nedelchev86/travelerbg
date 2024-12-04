@@ -2,12 +2,12 @@ import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 import { HttpClient } from '@angular/common/http';
-import { SetBgImageDirective } from '../../directives/set-bg-image.directive';
-import { TopHotelsComponent } from '../../top-hotels/top-hotels.component';
-import { TopRatedDestinationsComponent } from '../../top-rated-destinations/top-rated-destinations.component';
+
+import { TopRatedDestinationsComponent } from '../top-rated-destinations/top-rated-destinations.component';
 import { BannerComponent } from '../../shared/components/banner/banner.component';
 import { environment } from '../../../environments/environment';
 import { BreadcumbComponent } from '../../shared/components/breadcumb/breadcumb.component';
+import { TopHotelsComponent } from '../../hotel/top-hotels/top-hotels.component';
 
 @Component({
   selector: 'app-destinations-layout',

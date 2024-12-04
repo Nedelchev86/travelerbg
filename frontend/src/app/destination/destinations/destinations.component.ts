@@ -4,7 +4,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
-import { RatingComponent } from '../../rating/rating.component';
+import { RatingComponent } from '../../shared/components/rating/rating.component';
 import { AuthService } from '../../auth.service';
 import { environment } from '../../../environments/environment';
 import { animate, style, transition, trigger } from '@angular/animations';

@@ -12,13 +12,13 @@ import { FormsModule } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../auth.service';
-import { RatingComponent } from '../../rating/rating.component';
 import { environment } from '../../../environments/environment';
 import { DestinationCommentsComponent } from '../destination-comments/destination-comments.component';
 import { GalleryLightboxComponent } from '../../shared/components/gallery-lightbox/gallery-lightbox.component';
 import { GoogleMapComponent } from '../../shared/components/google-map/google-map.component';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { RatingComponent } from '../../shared/components/rating/rating.component';
 
 interface Images {
   imageSrc: string;

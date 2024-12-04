@@ -10,14 +10,14 @@ import { SetBgImageDirective } from '../../directives/set-bg-image.directive';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HotelsComponent } from '../hotels/hotels.component';
-import { TopTravelersComponent } from '../../top-travelers/top-travelers.component';
-import { TopDestinationComponent } from '../../top-destination/top-destination.component';
-import { TopRatedDestinationsComponent } from '../../top-rated-destinations/top-rated-destinations.component';
+
+import { TopRatedDestinationsComponent } from '../../destination/top-rated-destinations/top-rated-destinations.component';
 import { HttpClient } from '@angular/common/http';
 import { BannerComponent } from '../../shared/components/banner/banner.component';
 import { ShapeMockupDirective } from '../../directives/shape-mockup.directive';
 import { environment } from '../../../environments/environment';
-import { BreadcumbComponent } from "../../shared/components/breadcumb/breadcumb.component";
+import { BreadcumbComponent } from '../../shared/components/breadcumb/breadcumb.component';
+import { TopTravelersComponent } from '../../traveler/top-travelers/top-travelers.component';
 
 @Component({
   selector: 'app-hotels-layout',
@@ -25,7 +25,7 @@ import { BreadcumbComponent } from "../../shared/components/breadcumb/breadcumb.
   imports: [
     RouterOutlet,
     TopTravelersComponent,
-    SetBgImageDirective,
+
     FormsModule,
     TopTravelersComponent,
     ShapeMockupDirective,
@@ -33,8 +33,8 @@ import { BreadcumbComponent } from "../../shared/components/breadcumb/breadcumb.
     RouterLink,
     RouterLinkActive,
     BannerComponent,
-    BreadcumbComponent
-],
+    BreadcumbComponent,
+  ],
   templateUrl: './hotels-layout.component.html',
   styleUrl: './hotels-layout.component.css',
 })

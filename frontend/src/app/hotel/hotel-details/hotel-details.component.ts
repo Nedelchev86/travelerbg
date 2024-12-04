@@ -12,7 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 
 import { CommonModule } from '@angular/common';
 import { GoogleMap } from '@angular/google-maps';
-import { RatingComponent } from '../../rating/rating.component';
+import { RatingComponent } from '../../shared/components/rating/rating.component';
 
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../auth.service';

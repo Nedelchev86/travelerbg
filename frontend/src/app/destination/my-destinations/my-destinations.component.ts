@@ -3,7 +3,7 @@ import { AuthService } from '../../auth.service';
 import { HttpClient } from '@angular/common/http';
 import { SetBgImageDirective } from '../../directives/set-bg-image.directive';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { DeleteConfirmationModalComponent } from '../../delete-confirmation-modal/delete-confirmation-modal.component';
+import { DeleteConfirmationModalComponent } from '../../shared/components/delete-confirmation-modal/delete-confirmation-modal.component';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../environments/environment';
 @Component({
