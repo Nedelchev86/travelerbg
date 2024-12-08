@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -9,11 +9,8 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
-import { UserDetails } from '../../user-interface';
 import { CloudinaryuploadService } from '../../shared/services/cloudinaryupload.service';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-
-import { environment } from '../../../environments/environment';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import { ToastrService } from 'ngx-toastr';
 import { CKEditorConfigService } from '../../shared/services/ckeditor-config.service';
@@ -32,8 +29,8 @@ export class EditProfileComponent implements OnInit {
   public config = this.ckEditorConfigService.config;
   public loading = true;
   public profileForm: FormGroup;
-  // profilePicture: File | null = null;
-  // cover: File | null = null;
+  public imagePreviews: { [key: string]: string } = {};
+
 
   constructor(
     private fb: FormBuilder,
@@ -68,26 +65,45 @@ export class EditProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.travelerService.getProfileData().subscribe((data: any) => {
-      this.profileForm.patchValue(data);
-      this.loading = false;
+    this.travelerService.getProfileData().subscribe({
+      next: (data: any) => {
+        console.log(data);
+        this.profileForm.patchValue(data);
+        this.imagePreviews['profile_picture'] = data.profile_picture;
+        this.imagePreviews['cover'] = data.cover;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Failed to load profile data', err);
+        this.toast.error('Failed to load profile data');
+        this.loading = false;
+      },
     });
   }
 
   onFileChange(event: any, field: string): void {
     const file = event.target.files[0];
     if (file) {
-      this.cloudinaryuploadService.uploadImage(file).subscribe(
-        (response) => {
+      this.cloudinaryuploadService.uploadImage(file).subscribe({
+        next: (response) => {
           this.profileForm.patchValue({
             [field]: response.secure_url,
           });
+          this.imagePreviews[field] = response.secure_url;
         },
-        (error) => {
+        error: (error) => {
           console.error('Error uploading image:', error);
-        }
-      );
+          this.toast.error('Error uploading image');
+        },
+      });
     }
+  }
+
+  removeImage(field: string): void {
+    this.profileForm.patchValue({
+      [field]: null,
+    });
+    delete this.imagePreviews[field];
   }
 
   onSubmit(): void {
@@ -116,6 +132,7 @@ export class EditProfileComponent implements OnInit {
     this.travelerService.updateProfileData(formData).subscribe(
       (response) => {
         this.authService.fetchUserData();
+        this.toast.success('Profile updated successfully');
         this.router.navigate(['/profile']);
       },
       (error: HttpErrorResponse) => {

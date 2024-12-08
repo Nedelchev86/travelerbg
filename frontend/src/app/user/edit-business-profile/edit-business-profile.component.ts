@@ -1,19 +1,18 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { CloudinaryuploadService } from '../../shared/services/cloudinaryupload.service';
-import { environment } from '../../../environments/environment';
-import { BussinessDetails } from '../../user-interface';
 import { BusinessService } from '../../services/business.service';
-import { LoaderComponent } from "../../shared/components/loader/loader.component";
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-edit-business-profile',
@@ -26,6 +25,7 @@ export class EditBusinessProfileComponent {
   public editProfileForm: FormGroup;
   public userId: number | null = null;
   public loading = false;
+  public imagePreviews: { [key: string]: string } = {};
 
   constructor(
     private fb: FormBuilder,
@@ -33,7 +33,8 @@ export class EditBusinessProfileComponent {
     private router: Router,
     private authService: AuthService,
     private cloudinaryuploadService: CloudinaryuploadService,
-    private businessService: BusinessService
+    private businessService: BusinessService,
+    private toast: ToastrService
   ) {
     this.editProfileForm = this.fb.group({
       name: [
@@ -59,33 +60,46 @@ export class EditBusinessProfileComponent {
   }
 
   loadProfileData(): void {
-    this.businessService.getProfileData().subscribe(
-      (data: any) => {
+    this.businessService.getProfileData().subscribe({
+      next: (data: any) => {
+        this.imagePreviews['image'] = data.user.image;
         this.userId = data.user.user;
         this.editProfileForm.patchValue(data.user);
         this.loading = false;
       },
-      (error) => {
-        console.error('Failed to load profile data', error);
+      error: (err) => {
+        console.error('Failed to load profile data', err);
+        this.toast.error('Failed to load profile data');
         this.loading = false;
-      }
-    );
+      },
+    });
   }
+
   onFileChange(event: any, field: string): void {
     const file = event.target.files[0];
     if (file) {
-      this.cloudinaryuploadService.uploadImage(file).subscribe(
-        (response) => {
+      this.cloudinaryuploadService.uploadImage(file).subscribe({
+        next: (response) => {
           this.editProfileForm.patchValue({
             [field]: response.secure_url,
           });
+          this.imagePreviews[field] = response.secure_url;
         },
-        (error) => {
+        error: (error) => {
           console.error('Error uploading image:', error);
-        }
-      );
+          this.toast.error('Error uploading image');
+        },
+      });
     }
   }
+
+  removeImage(field: string): void {
+    this.editProfileForm.patchValue({
+      [field]: null,
+    });
+    delete this.imagePreviews[field];
+  }
+
   onSubmit(): void {
     if (this.editProfileForm.invalid) {
       this.editProfileForm.markAllAsTouched();
@@ -112,10 +126,12 @@ export class EditBusinessProfileComponent {
     this.businessService.updateProfileData(formData, this.userId!).subscribe(
       (response) => {
         this.authService.fetchUserData();
+        this.toast.success('Profile updated successfully');
         this.router.navigate(['/profile']);
       },
       (error) => {
         console.error('Failed to update profile', error);
+        this.toast.error('Failed to update profile');
       }
     );
   }

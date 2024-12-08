@@ -185,21 +185,56 @@
               >
             </div>
           </div>
-          <div class="form-group">
-            <label>Profile Picture</label>
-            <input
-              type="file"
-              class="form-control th-btn style4"
-              (change)="onFileChange($event, 'profile_picture')"
-            />
-          </div>
-          <div class="form-group">
-            <label>Cover</label>
-            <input
-              type="file"
-              class="form-control th-btn style4"
-              (change)="onFileChange($event, 'cover')"
-            />
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <div class="form-group">
+                <label>Profile Picture</label>
+                <input
+                  type="file"
+                  class="form-control th-btn style4"
+                  (change)="onFileChange($event, 'profile_picture')"
+                />
+              </div>
+              <div *ngIf="imagePreviews['profile_picture']">
+                <img
+                  [src]="imagePreviews['profile_picture']"
+                  alt="Image 1"
+                  style="width: 100px; height: auto"
+                />
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  (click)="removeImage('profile_picture')"
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+            <div class="col-md-6 form-group">
+              <div class="form-group">
+                <label>Cover</label>
+                <input
+                  type="file"
+                  class="form-control th-btn style4"
+                  (change)="onFileChange($event, 'cover')"
+                />
+              </div>
+
+              <div *ngIf="imagePreviews['cover']">
+                <img
+                  [src]="imagePreviews['cover']"
+                  alt="cover"
+                  style="width: 100px; height: auto"
+                />
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  (click)="removeImage('cover')"
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
           </div>
           <div class="form-group">
             <button type="submit" class="th-btn">Update Profile</button>

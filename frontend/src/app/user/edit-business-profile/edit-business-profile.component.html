@@ -111,7 +111,22 @@
               (change)="onFileChange($event, 'image')"
               class="form-control th-btn style4"
             />
+            <div *ngIf="imagePreviews['image']">
+              <img
+                [src]="imagePreviews['image']"
+                alt="Image 1"
+                style="width: 100px; height: auto"
+              />
+              <button
+                type="button"
+                class="btn btn-danger btn-sm"
+                (click)="removeImage('image')"
+              >
+                Remove
+              </button>
+            </div>
           </div>
+
           <div class="row">
             <div class="col-md-6 form-group">
               <div class="form-group">
