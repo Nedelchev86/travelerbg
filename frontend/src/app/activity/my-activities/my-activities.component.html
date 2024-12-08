@@ -1,3 +1,4 @@
+@if(loading){ <app-loader></app-loader>}@else{
 <div class="row gy-40">
   <app-delete-confirmation-modal
     *ngIf="showModal"
@@ -72,3 +73,4 @@
     </div>
   </div>
 </div>
+}

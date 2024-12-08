@@ -7,11 +7,12 @@ import { AuthService } from '../../services/auth.service';
 import { environment } from '../../../environments/environment';
 import { ActivityService } from '../../services/activity.service';
 import { ToastrService } from 'ngx-toastr';
+import { LoaderComponent } from "../../shared/components/loader/loader.component";
 
 @Component({
   selector: 'app-my-activities',
   standalone: true,
-  imports: [RouterLink, CommonModule, DeleteConfirmationModalComponent],
+  imports: [RouterLink, CommonModule, DeleteConfirmationModalComponent, LoaderComponent],
   templateUrl: './my-activities.component.html',
   styleUrl: './my-activities.component.css',
 })
@@ -19,6 +20,7 @@ export class MyActivitiesComponent {
   public showModal = false;
   public activities: Array<any> = [];
   public itemIdToDelete: number | null = null;
+  public loading = false;
 
   constructor(
     private authService: AuthService,
@@ -31,11 +33,16 @@ export class MyActivitiesComponent {
   }
 
   fetchMyActivities(): void {
+    this.loading = true;
     this.activityService.fetchMyActivities().subscribe({
       next: (data: any) => {
         this.activities = data;
+        this.loading = false;
       },
-      error: (err) => console.log(err),
+      error: (err) => {
+        console.log(err);
+        this.loading = false;
+      },
     });
   }
 

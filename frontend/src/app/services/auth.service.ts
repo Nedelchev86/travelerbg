@@ -1,10 +1,9 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { UserDetails, UserInterface } from '../user-interface';
 import { HttpClient } from '@angular/common/http';
-import { catchError, Observable, of, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -47,7 +46,6 @@ export class AuthService {
       error: (err) => {
         this.toast.error('Login failed. Wronag email or password');
 
-        // Handle error (e.g., show a message)
       },
     });
   }
@@ -102,5 +100,9 @@ export class AuthService {
         this.logout(); // Optionally log out the user on error
       },
     });
+  }
+
+  deleteUser(): Observable<any> {
+    return this.http.delete(`${this.API_URL}user/`);
   }
 }

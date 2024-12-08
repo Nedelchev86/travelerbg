@@ -29,13 +29,13 @@ import { CommonModule } from '@angular/common';
   styleUrl: './profile-layout.component.css',
 })
 export class ProfileLayoutComponent {
-  authService = inject(AuthService);
-  private http = inject(HttpClient);
-  private toast = inject(ToastrService);
-  private router = inject(Router);
-
   public showModal = false;
-  public activities: Array<any> = [];
+
+  constructor(
+    public authService: AuthService,
+    private toast: ToastrService,
+    private router: Router
+  ) {}
 
   openModal() {
     this.showModal = true;
@@ -46,16 +46,14 @@ export class ProfileLayoutComponent {
   }
 
   confirmDelete(): void {
-    this.http.delete('http://localhost:8000/api/user/').subscribe({
+    this.authService.deleteUser().subscribe({
       next: () => {
         this.authService.logout();
         this.closeModal();
-        this.router.navigate(['/']);
-
         this.toast.success('Account deleted successfully');
+        this.router.navigate(['/']);
       },
       error: (error) => {
-        console.error('Failed to delete Account', error);
         this.toast.error('Failed to delete Account');
       },
     });

@@ -1,3 +1,4 @@
+@if(loading){ <app-loader></app-loader>}@else{
 <div class="th-checkout-wrapper space-extra-bottom">
   <div class="container">
     <div class="row">
@@ -19,12 +20,21 @@
             />
             <div
               *ngIf="
-                editProfileForm.get('name')?.touched &&
-                editProfileForm.get('name')?.invalid
+                editProfileForm.get('name')?.invalid &&
+                editProfileForm.get('name')?.touched
               "
               class="text-danger"
             >
-              Name is required.
+              <small *ngIf="editProfileForm.get('name')?.errors?.['required']"
+                >Name is required.</small
+              >
+              <small *ngIf="editProfileForm.get('name')?.errors?.['pattern']"
+                >Name must start with an uppercase and contains only
+                letters.</small
+              >
+              <small *ngIf="editProfileForm.get('name')?.errors?.['maxlength']">
+                Name must be a maximum of 30 letters.
+              </small>
             </div>
           </div>
           <div class="form-group">
@@ -144,3 +154,4 @@
     </div>
   </div>
 </div>
+}

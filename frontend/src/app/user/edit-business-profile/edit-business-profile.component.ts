@@ -11,28 +11,39 @@ import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { CloudinaryuploadService } from '../../shared/services/cloudinaryupload.service';
 import { environment } from '../../../environments/environment';
+import { BussinessDetails } from '../../user-interface';
+import { BusinessService } from '../../services/business.service';
+import { LoaderComponent } from "../../shared/components/loader/loader.component";
 
 @Component({
   selector: 'app-edit-business-profile',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, LoaderComponent],
   templateUrl: './edit-business-profile.component.html',
   styleUrl: './edit-business-profile.component.css',
 })
 export class EditBusinessProfileComponent {
-  editProfileForm: FormGroup;
-  userId: string | null = null;
-  private readonly API_URL = environment.apiUrl;
-  private fb = inject(FormBuilder);
-  private http = inject(HttpClient);
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
-  authService = inject(AuthService);
-  cloudinaryuploadService = inject(CloudinaryuploadService);
+  public editProfileForm: FormGroup;
+  public userId: number | null = null;
+  public loading = false;
 
-  constructor() {
+  constructor(
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private router: Router,
+    private authService: AuthService,
+    private cloudinaryuploadService: CloudinaryuploadService,
+    private businessService: BusinessService
+  ) {
     this.editProfileForm = this.fb.group({
-      name: ['', Validators.required],
+      name: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Z][a-zA-Z\s]*$/),
+          Validators.maxLength(30),
+        ],
+      ],
       description: ['', Validators.required],
       location: ['', Validators.required],
       phone: ['', [Validators.required, Validators.pattern(/^[0-9]{10,20}$/)]],
@@ -43,26 +54,20 @@ export class EditBusinessProfileComponent {
   }
 
   ngOnInit(): void {
+    this.loading = true;
     this.loadProfileData();
   }
 
   loadProfileData(): void {
-    this.http.get(`${this.API_URL}user/`).subscribe(
+    this.businessService.getProfileData().subscribe(
       (data: any) => {
         this.userId = data.user.user;
-        this.editProfileForm.patchValue({
-          name: data.user.name,
-          description: data.user.description,
-          location: data.user.location,
-          phone: data.user.phone,
-          image: data.user.image,
-          linkedin_url: data.user.linkedin_url,
-          facebook_url: data.user.facebook_url,
-          activated: data.user.activated,
-        });
+        this.editProfileForm.patchValue(data.user);
+        this.loading = false;
       },
       (error) => {
         console.error('Failed to load profile data', error);
+        this.loading = false;
       }
     );
   }
@@ -104,16 +109,14 @@ export class EditBusinessProfileComponent {
       }
     });
 
-    this.http
-      .put(`${this.API_URL}business/${this.userId}/`, formData)
-      .subscribe(
-        (response) => {
-          this.authService.fetchUserData();
-          this.router.navigate(['/profile']);
-        },
-        (error) => {
-          console.error('Failed to update profile', error);
-        }
-      );
+    this.businessService.updateProfileData(formData, this.userId!).subscribe(
+      (response) => {
+        this.authService.fetchUserData();
+        this.router.navigate(['/profile']);
+      },
+      (error) => {
+        console.error('Failed to update profile', error);
+      }
+    );
   }
 }

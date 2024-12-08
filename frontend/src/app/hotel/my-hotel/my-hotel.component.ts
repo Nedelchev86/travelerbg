@@ -8,19 +8,20 @@ import { environment } from '../../../environments/environment';
 import { HotelService } from '../../services/hotel.service';
 import { Hotel } from '../hotel-interface';
 import { ToastrService } from 'ngx-toastr';
+import { LoaderComponent } from "../../shared/components/loader/loader.component";
 
 @Component({
   selector: 'app-my-hotel',
   standalone: true,
-  imports: [DeleteConfirmationModalComponent, RouterLink, CommonModule],
+  imports: [DeleteConfirmationModalComponent, RouterLink, CommonModule, LoaderComponent],
   templateUrl: './my-hotel.component.html',
   styleUrl: './my-hotel.component.css',
 })
 export class MyHotelComponent {
   public showModal = false;
-
   public hotels: Hotel[] = [];
   public itemIdToDelete: number | null = null;
+  public loading = false;
 
   constructor(
     private hotelService: HotelService,
@@ -33,11 +34,16 @@ export class MyHotelComponent {
   }
 
   fetchMyHotels(): void {
+    this.loading = true;
     this.hotelService.fetchMyHotels().subscribe({
       next: (data: any) => {
         this.hotels = data;
+        this.loading = false;
       },
-      error: (err) => console.log(err),
+      error: (err) => {
+        console.log(err);
+        this.loading = false;
+      },
     });
   }
 

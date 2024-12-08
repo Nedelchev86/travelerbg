@@ -8,6 +8,7 @@ import {
 
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-profile',
@@ -17,6 +18,6 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './profile.component.css',
 })
 export class ProfileComponent {
-  authService = inject(AuthService);
-  role = JSON.parse(localStorage.getItem('currentUser') || '{}');
+  // public role = JSON.parse(localStorage.getItem('currentUser') || '{}');
+  constructor(public authService: AuthService) {}
 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -9,31 +9,15 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
-import { UserDetails, UserInterface } from '../../user-interface';
+import { UserDetails } from '../../user-interface';
 import { CloudinaryuploadService } from '../../shared/services/cloudinaryupload.service';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-import {
-  ClassicEditor,
-  Bold,
-  Essentials,
-  Italic,
-  Mention,
-  Paragraph,
-  Undo,
-  Image,
-  Link,
-  List,
-  TodoList,
-  BlockQuote,
-  Heading,
-  FontFamily,
-  FontSize,
-  FontColor,
-  ImageUpload,
-} from 'ckeditor5';
+
 import { environment } from '../../../environments/environment';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import { ToastrService } from 'ngx-toastr';
+import { CKEditorConfigService } from '../../shared/services/ckeditor-config.service';
+import { TravelerService } from '../../services/traveler.service';
 
 @Component({
   selector: 'app-editprofile',
@@ -43,55 +27,23 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './editprofile.component.css',
 })
 export class EditProfileComponent implements OnInit {
-  loading = true;
-  profileForm: FormGroup;
-  profilePicture: File | null = null;
-  cover: File | null = null;
-  authService = inject(AuthService);
-  toast = inject(ToastrService);
-  router = inject(Router);
-  cloudinaryuploadService = inject(CloudinaryuploadService);
-  public Editor = ClassicEditor;
-  private readonly API_URL = environment.apiUrl;
+  private ckEditorConfigService = inject(CKEditorConfigService);
+  public Editor = this.ckEditorConfigService.Editor;
+  public config = this.ckEditorConfigService.config;
+  public loading = true;
+  public profileForm: FormGroup;
+  // profilePicture: File | null = null;
+  // cover: File | null = null;
 
-  public config = {
-    toolbar: {
-      items: [
-        'undo',
-        'redo',
-        '|',
-        'heading',
-        '|',
-        'fontfamily',
-        'fontsize',
-        'fontColor',
-        '|',
-        'bold',
-        'italic',
-        '|',
-        'link',
-      ],
-      shouldNotGroupWhenFull: false,
-    },
-    plugins: [
-      Bold,
-      Essentials,
-      Italic,
-      Mention,
-      Paragraph,
-      Undo,
-      BlockQuote,
-      Link,
-      TodoList,
-      Image,
-      Heading,
-      FontFamily,
-      FontSize,
-      FontColor,
-    ],
-  };
-
-  constructor(private fb: FormBuilder, private http: HttpClient) {
+  constructor(
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private authService: AuthService,
+    private router: Router,
+    private toast: ToastrService,
+    private cloudinaryuploadService: CloudinaryuploadService,
+    private travelerService: TravelerService
+  ) {
     this.profileForm = this.fb.group({
       name: [
         '',
@@ -116,21 +68,11 @@ export class EditProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Fetch the current profile data and populate the form
-    this.http.get(`${this.API_URL}traveler/update/`).subscribe((data: any) => {
+    this.travelerService.getProfileData().subscribe((data: any) => {
       this.profileForm.patchValue(data);
       this.loading = false;
     });
   }
-
-  // onFileChange(event: any, field: string): void {
-  //   const file = event.target.files[0];
-  //   if (field === 'profile_picture') {
-  //     this.profilePicture = file;
-  //   } else if (field === 'cover') {
-  //     this.cover = file;
-  //   }
-  // }
 
   onFileChange(event: any, field: string): void {
     const file = event.target.files[0];
@@ -158,32 +100,34 @@ export class EditProfileComponent implements OnInit {
     Object.keys(this.profileForm.controls).forEach((key) => {
       let controlValue = this.profileForm.get(key)?.value;
       if (controlValue === null) {
-        controlValue = ''; // Replace null with an empty string
+        controlValue = '';
       }
       if (key === 'image') {
         if (controlValue instanceof File) {
           formData.append(key, controlValue);
         } else if (typeof controlValue === 'string' && controlValue !== '') {
-          formData.append(key, controlValue); // Append the existing URL if it's a string and not empty
+          formData.append(key, controlValue);
         }
       } else {
         formData.append(key, controlValue);
       }
     });
 
-    this.http
-      .put<UserDetails>(`${this.API_URL}traveler/update/`, formData)
-      .subscribe(
-        (response) => {
-          this.authService.fetchUserData();
-          this.router.navigate(['/profile']);
-        },
-        (error) => {
-          this.toast.error('Failed to update profile', error);
+    this.travelerService.updateProfileData(formData).subscribe(
+      (response) => {
+        this.authService.fetchUserData();
+        this.router.navigate(['/profile']);
+      },
+      (error: HttpErrorResponse) => {
+        if (error.status === 400 && error.error) {
           const errorMessage = this.extractErrorMessage(error.error);
-          this.toast.error(errorMessage, 'Failed to update profile');
+          this.toast.error('Failed to update profile', errorMessage);
+        } else {
+          this.toast.error('Failed to update profile');
         }
-      );
+        console.error('Failed to update profile', error);
+      }
+    );
   }
 
   private extractErrorMessage(error: any): string {

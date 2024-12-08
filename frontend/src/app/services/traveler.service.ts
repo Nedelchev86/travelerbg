@@ -29,4 +29,12 @@ export class TravelerService {
   fetchTopTravelers(): Observable<Traveler[]> {
     return this.http.get<Traveler[]>(`${this.API_URL}travelers/top-rated/`);
   }
+
+  getProfileData(): Observable<any> {
+    return this.http.get(`${this.API_URL}traveler/update/`);
+  }
+
+  updateProfileData(formData: FormData): Observable<any> {
+    return this.http.put(`${this.API_URL}traveler/update/`, formData);
+  }
 }
