@@ -4,13 +4,16 @@
 - Demo on Render / DB on aiven.io - <a href="https://travelerbg.onrender.com/" target="_blank">travelerbg.onrender.com</a>    (Free instance will spin down with inactivity, which can delay requests by 50 seconds or more)
 
 ### Technologies Used:
-- Angular 18 with StandAlone Components
+- Angular 18 with StandAlone Components and Server with Django and Django REST framework
+- 
 #### Key Features
-  - CKEditor 5: A powerful rich text editor used for creating and editing content within the application.
-  - Angular Animations: Smooth and interactive animations to enhance the user experience.
-  - Toastr Notifications: Elegant and customizable toast notifications for displaying success, error, and informational messages.
-  - Google Maps Integration: Interactive maps to display locations of destinations and activities.
-  - Angular Guards: Route guards to protect certain routes and ensure that only authorized users can access specific parts of the application.
+  - __CKEditor 5:__ A powerful rich text editor used for creating and editing content within the application.
+  - __Angular Animations:__ Smooth and interactive animations to enhance the user experience.
+  - __Toastr Notifications:__ Elegant and customizable toast notifications for displaying success, error, and informational messages.
+  - __Google Maps__ Integration: Interactive maps to display locations of destinations and activities.
+  - __Angular Guards:__ Route guards to protect certain routes and ensure that only authorized users can access specific parts of the application.
+  - __Lazy Loading:__ The profile dashboard is lazy-loaded to improve the application's performance by loading the profile-related components only when the user navigates to the profile section.
+  - __Cloudinary:__ Cloud-based image and video management for uploading, storing, and delivering images efficiently.
 
 
 ### Description
