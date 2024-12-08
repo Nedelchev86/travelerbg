@@ -19,7 +19,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../../../auth.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-rating',

@@ -30,3 +30,8 @@
   overflow-wrap: break-word; /* Break long words */
   white-space: pre-wrap; /* Preserve whitespace and wrap text */
 }
+
+.space,
+.space-top {
+  padding-top: 10px;
+}

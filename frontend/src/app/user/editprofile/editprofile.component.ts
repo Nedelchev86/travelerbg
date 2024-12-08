@@ -7,7 +7,7 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { AuthService } from '../../auth.service';
+import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { UserDetails, UserInterface } from '../../user-interface';
 import { CloudinaryuploadService } from '../../shared/services/cloudinaryupload.service';
@@ -33,6 +33,7 @@ import {
 } from 'ckeditor5';
 import { environment } from '../../../environments/environment';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-editprofile',
@@ -47,6 +48,7 @@ export class EditProfileComponent implements OnInit {
   profilePicture: File | null = null;
   cover: File | null = null;
   authService = inject(AuthService);
+  toast = inject(ToastrService);
   router = inject(Router);
   cloudinaryuploadService = inject(CloudinaryuploadService);
   public Editor = ClassicEditor;
@@ -95,7 +97,7 @@ export class EditProfileComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.pattern(/^[a-zA-Z\s]*$/),
+          Validators.pattern(/^[A-Z][a-zA-Z\s]*$/),
           Validators.maxLength(30),
         ],
       ],
@@ -177,8 +179,21 @@ export class EditProfileComponent implements OnInit {
           this.router.navigate(['/profile']);
         },
         (error) => {
-          console.error('Failed to update profile', error);
+          this.toast.error('Failed to update profile', error);
+          const errorMessage = this.extractErrorMessage(error.error);
+          this.toast.error(errorMessage, 'Failed to update profile');
         }
       );
+  }
+
+  private extractErrorMessage(error: any): string {
+    if (typeof error === 'string') {
+      return error;
+    } else if (Array.isArray(error)) {
+      return error.join(', ');
+    } else if (typeof error === 'object') {
+      return Object.values(error).flat().join(', ');
+    }
+    return 'An unknown error occurred';
   }
 }

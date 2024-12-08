@@ -23,14 +23,17 @@ import { SetBgImageDirective } from '../../../directives/set-bg-image.directive'
 })
 export class GoogleMapComponent implements OnChanges {
   @Input() location: string = '';
-  @Input() lat: number = 42.504792;
-  @Input() lng: number = 27.462636;
+  @Input() lat: string = '42.504792';
+  @Input() lng: string = '27.462636';
 
-  center: google.maps.LatLngLiteral = { lat: this.lat, lng: this.lng };
+  center: google.maps.LatLngLiteral = {
+    lat: Number(this.lat),
+    lng: Number(this.lng),
+  };
   zoom = 15;
   markerPosition: google.maps.LatLngLiteral = {
-    lat: this.lat,
-    lng: this.lng,
+    lat: Number(this.lat),
+    lng: Number(this.lng),
   };
   mapOptions: google.maps.MapOptions = {
     mapId: '453204c6eedd332f',
@@ -59,8 +62,8 @@ export class GoogleMapComponent implements OnChanges {
       if (results.length > 0) {
         const location = results[0].geometry.location;
 
-        this.lat = location.lat();
-        this.lng = location.lng();
+        this.lat = location.lat().toString();
+        this.lng = location.lng().toString();
         this.center = { lat: location.lat(), lng: location.lng() };
         this.markerPosition = { lat: location.lat(), lng: location.lng() };
       }

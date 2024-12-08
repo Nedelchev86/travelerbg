@@ -10,6 +10,7 @@ import { RouterLink } from '@angular/router';
 import { SetBgImageDirective } from '../../directives/set-bg-image.directive';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import { environment } from '../../../environments/environment';
+import { HotelService } from '../../services/hotel.service';
 
 @Component({
   selector: 'app-top-hotels',
@@ -20,15 +21,19 @@ import { environment } from '../../../environments/environment';
   styleUrl: './top-hotels.component.css',
 })
 export class TopHotelsComponent implements OnInit {
-  constructor() {}
-  private readonly API_URL = environment.apiUrl;
-  loading = true;
-  hotels: any = [];
-  http = inject(HttpClient);
-  ngOnInit() {
-    this.http.get(`${this.API_URL}hotels/`).subscribe({
+  public loading = true;
+  public hotels: any = [];
+
+  constructor(private hotelService: HotelService) {}
+
+  ngOnInit(): void {
+    this.fetchTopRatedHotels();
+  }
+
+  fetchTopRatedHotels(): void {
+    this.hotelService.fetchTopRatedHotels().subscribe({
       next: (data: any) => {
-        this.hotels = data.results;
+        this.hotels = data;
         this.loading = false;
       },
       error: (err) => {

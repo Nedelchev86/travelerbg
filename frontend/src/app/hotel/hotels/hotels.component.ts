@@ -1,12 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, Input } from '@angular/core';
-
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { SetBgImageDirective } from '../../directives/set-bg-image.directive';
 import { RatingComponent } from '../../shared/components/rating/rating.component';
 import { environment } from '../../../environments/environment';
-import { AuthService } from '../../auth.service';
+import { AuthService } from '../../services/auth.service';
 import {
   animate,
   query,
@@ -16,11 +14,13 @@ import {
   trigger,
 } from '@angular/animations';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
+import { HotelService } from '../../services/hotel.service';
+import { Hotel, HotelsResponse } from '../hotel-interface';
 
 @Component({
   selector: 'app-hotels',
   standalone: true,
-  imports: [RouterLink, RatingComponent, LoaderComponent],
+  imports: [RouterLink, RatingComponent, RouterLink, LoaderComponent],
   templateUrl: './hotels.component.html',
   styleUrl: './hotels.component.css',
   animations: [
@@ -43,9 +43,8 @@ import { LoaderComponent } from '../../shared/components/loader/loader.component
   ],
 })
 export class HotelsComponent {
-  private httpClient = inject(HttpClient);
 
-  public data: Array<any> = [];
+  public hotels: Hotel[] = [];
   public currentPage: number = 1;
   public totalPages: number = 1;
   public nextPageUrl: string | null = null;
@@ -53,58 +52,46 @@ export class HotelsComponent {
   public searchQuery: string = '';
   public categoryQuery: string = '';
   private readonly API_URL = environment.apiUrl;
-  route = inject(ActivatedRoute);
-  authService = inject(AuthService);
-  loading = true;
-  router = inject(Router);
-  toast = inject(ToastrService);
+  public loading = true;
 
-  // ngOnInit() {
-  //   this.httpClient.get('http://localhost:8000/api/hotels/').subscribe({
-  //     next: (data: any) => {
-  //       this.data = data;
-  //     },
-  //     error: (err) => console.log(err),
-  //   });
-  // }
+  constructor(
+    private route: ActivatedRoute,
+    private authService: AuthService,
+    private router: Router,
+    private toast: ToastrService,
+    private hotelService: HotelService
+  ) {}
+
+
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
       this.searchQuery = params['name'] || '';
       this.categoryQuery = params['category'] || '';
-      this.fetchDestinations();
+      this.fetchHotels();
     });
   }
 
-  fetchDestinations(url: string = `${this.API_URL}hotels/`): void {
+  fetchHotels(): void {
     this.loading = true;
     const params: any = {
       page: this.currentPage,
+      name: this.searchQuery,
+      category: this.categoryQuery,
     };
-    if (this.searchQuery) {
-      params.name = this.searchQuery;
-    }
-    if (this.categoryQuery) {
-      params.category = this.categoryQuery;
-    }
-    // Check if the URL already contains query parameters
-    const hasQueryParams = url.includes('?');
 
-    this.httpClient
-      .get(url, { params: hasQueryParams ? {} : params })
-      .subscribe({
-        next: (data: any) => {
-          this.data = data.results;
-          this.totalPages = Math.ceil(data.count / 9); // Assuming 9 items per page
-          this.nextPageUrl = data.next;
-          this.previousPageUrl = data.previous;
-          this.loading = false;
-        },
-        error: (err) => {
-          console.log(err);
-          this.loading = false;
-        },
-      });
+    this.hotelService.fetchHotels(params).subscribe({
+      next: (data: HotelsResponse) => {
+        this.hotels = data.results;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Failed to fetch hotels', error);
+        this.toast.error('Failed to fetch hotels');
+        this.loading = false;
+      },
+    });
   }
+
 
   changePage(page: number): void {
     if (page >= 1 && page <= this.totalPages) {
@@ -130,11 +117,11 @@ export class HotelsComponent {
       .map((_, i) => i + 1);
   }
 
-  updateHotelRating(hotelId: string, rating: number): void {
-    const hotel = this.data.find((t) => t.id === hotelId);
+  updateHotelRating(hotelId: number, rating: number): void {
+    const hotel = this.hotels.find((t) => t.id === hotelId);
     if (hotel) {
-      this.httpClient.get(`${this.API_URL}hotels/${hotelId}`).subscribe({
-        next: (data: any) => {
+      this.hotelService.getHotel(hotelId).subscribe({
+        next: (data: Hotel) => {
           hotel.average_rating = data.average_rating;
           hotel.number_of_votes = data.number_of_votes;
         },
@@ -148,24 +135,19 @@ export class HotelsComponent {
     }
   }
 
-  rateDestination(hotelId: string, rating: number): void {
+  rateDestination(hotelId: number, rating: number): void {
     if (!this.authService.isLoggedIn()) {
-      this.toast.error('Please login to rate travelers', 'Login required');
+      this.toast.error('Please login to rate hotel', 'Login required');
       return;
     }
-
-    this.httpClient
-      .post(`${this.API_URL}hotels/${hotelId}/rate/`, {
-        rating,
-      })
-      .subscribe({
-        next: (response) => {
-          this.updateHotelRating(hotelId, rating);
-          this.toast.success('Rating submitted successfully');
-        },
-        error: (err) => {
-          this.toast.error('Please login to rate travelers', 'Login required');
-        },
-      });
+    this.hotelService.rateHotel(hotelId, rating).subscribe({
+      next: (response) => {
+        this.updateHotelRating(hotelId, rating);
+        this.toast.success('Rating submitted successfully');
+      },
+      error: (err) => {
+        this.toast.error('Please login to rate hotel', 'Login required');
+      },
+    });
   }
 }

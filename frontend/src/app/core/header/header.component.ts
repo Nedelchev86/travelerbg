@@ -2,7 +2,7 @@ import { Component, HostListener, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { LoginRegisterComponent } from '../../user/login-register/login-register.component';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../auth.service';
+import { AuthService } from '../../services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { UserInterface } from '../../user-interface';
 import { faFontAwesome, faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -65,7 +65,6 @@ export class HeaderComponent {
   router = inject(Router);
   faTimes = faTimes;
   isBodyVisible = false;
-  private readonly API_URL = environment.apiUrl;
 
   // isSticky = false;
 

@@ -1,5 +1,4 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   FormBuilder,
@@ -9,33 +8,26 @@ import {
 } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
-
 import { CommonModule } from '@angular/common';
-import { GoogleMap } from '@angular/google-maps';
 import { RatingComponent } from '../../shared/components/rating/rating.component';
-
-import { environment } from '../../../environments/environment';
-import { AuthService } from '../../auth.service';
+import { AuthService } from '../../services/auth.service';
 import { GalleryLightboxComponent } from '../../shared/components/gallery-lightbox/gallery-lightbox.component';
 import { GoogleMapComponent } from '../../shared/components/google-map/google-map.component';
-
+import { HotelService } from '../../services/hotel.service';
+import { Comment, FavoriteStatusResponse, Hotel } from '../hotel-interface';
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
+import {
+  trigger,
+  transition,
+  style,
+  animate,
+  query,
+  stagger,
+} from '@angular/animations';
+import { HotelCommentsComponent } from '../hotel-comments/hotel-comments.component';
 interface Images {
   imageSrc: string;
   imageAlt?: string;
-}
-
-interface FavoriteStatusResponse {
-  is_favorite: boolean;
-}
-export interface Comment {
-  created_at: String;
-  email: String;
-  hotel: Number;
-  id: Number;
-  modified_at: String;
-  name: String;
-  text: String;
-  user: null | String;
 }
 
 @Component({
@@ -47,43 +39,57 @@ export interface Comment {
     CommonModule,
     GoogleMapComponent,
     GalleryLightboxComponent,
+    LoaderComponent,
+    HotelCommentsComponent,
   ],
   templateUrl: './hotel-details.component.html',
   styleUrl: './hotel-details.component.css',
+  animations: [
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('1500ms ease-in', style({ opacity: 1 })),
+      ]),
+    ]),
+    trigger('listAnimation', [
+      transition('* => *', [
+        query(
+          ':enter',
+          [
+            style({ opacity: 0, transform: 'translateY(-20px)' }),
+            stagger('100ms', [
+              animate(
+                '500ms ease-out',
+                style({ opacity: 1, transform: 'translateY(0)' })
+              ),
+            ]),
+          ],
+          { optional: true }
+        ),
+      ]),
+    ]),
+  ],
 })
 export class HotelDetailsComponent implements OnInit {
-  hotel: any = {}; // Store hotel data
-  hotelId: string | null = null;
-  comments: any[] = []; // Store comments data
-  commentForm: FormGroup;
-  commentFormRegistred: FormGroup;
-  galleryData: Images[] = [];
-  private readonly API_URL = environment.apiUrl;
-  private http = inject(HttpClient);
-  private route = inject(ActivatedRoute);
-  private fb = inject(FormBuilder);
-  public authService = inject(AuthService);
-  private toast = inject(ToastrService);
-  isFavorite: boolean = false;
+  public loading: boolean = true;
+  public hotel: Hotel = {} as Hotel; // Store hotel data
+  public hotelId: number | null = null;
+  public galleryData: Images[] = [];
+  public isFavorite: boolean = false;
 
-  constructor() {
-    this.commentForm = this.fb.group({
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      website: [''],
-      text: ['', Validators.required],
-    });
-
-    this.commentFormRegistred = this.fb.group({
-      text: ['', Validators.required],
-    });
-  }
+  constructor(
+    private route: ActivatedRoute,
+    public authService: AuthService,
+    private toast: ToastrService,
+    private hotelDetailsService: HotelService
+  ) {}
 
   ngOnInit(): void {
-    this.hotelId = this.route.snapshot.paramMap.get('hotelId');
+    this.hotelId = Number(this.route.snapshot.paramMap.get('hotelId'));
     if (this.hotelId) {
-      this.fetchHotelDetails(this.hotelId);
-      this.fetcComments(this.hotelId);
+      this.fetchFavoriteStatus();
+      // this.fetchComments();
+      this.fetchHotelDetails();
     }
   }
 
@@ -95,104 +101,55 @@ export class HotelDetailsComponent implements OnInit {
     ].filter((item) => item.imageSrc);
   }
 
-  fetchHotelDetails(hotelId: string): void {
-    this.http.get<Comment[]>(`${this.API_URL}hotels/${hotelId}/`).subscribe(
-      (response: Comment[]) => {
-        this.hotel = response;
-        this.galleryData = this.getFilteredImages();
-        this.checkIsFavorite(hotelId);
+  fetchHotelDetails(): void {
+    this.hotelDetailsService.getHotelDetails(this.hotelId!).subscribe({
+      next: (data: Hotel) => {
+        this.hotel = data;
+        this.loading = false;
       },
-      (error) => {
-        console.error('Error fetching hotel details:', error);
-      }
-    );
-  }
-
-  fetcComments(hotelId: string): void {
-    this.http.get(`${this.API_URL}hotels/${hotelId}/comments/`).subscribe(
-      (response: any) => {
-        this.comments = response;
+      error: (err) => {
+        console.error('Failed to fetch hotel details', err);
+        this.toast.error('Failed to fetch hotel details');
       },
-      (error) => {
-        console.error('Error fetching comments details:', error);
-      }
-    );
+    });
   }
 
-  onSubmitComment(): void {
-    if (this.commentForm.valid) {
-      const commentData = {
-        ...this.commentForm.value,
-        hotel: this.hotelId,
-      };
-      this.http
-        .post(
-          `${this.API_URL}hotels/${this.hotelId}/comments/add/`,
-          commentData
-        )
-        .subscribe(
-          (response) => {
-            this.comments.push(response); // Add the new comment to the list
-            this.commentForm.reset();
-          },
-          (error) => {
-            console.error('Error posting comment:', error);
-          }
-        );
-    } else {
-      this.commentForm.markAllAsTouched();
-    }
-  }
-
-  onSubmitRegistredComment(): void {
-    if (this.commentFormRegistred.valid) {
-      const commentData = {
-        ...this.commentFormRegistred.value,
-        hotel: this.hotelId,
-      };
-      this.http
-        .post(
-          `${this.API_URL}hotels/${this.hotelId}/comments/add/`,
-          commentData
-        )
-        .subscribe(
-          (response) => {
-            this.comments.push(response); // Add the new comment to the list
-            this.commentFormRegistred.reset();
-          },
-          (error) => {
-            console.error('Error posting comment:', error);
-          }
-        );
-    } else {
-      this.commentFormRegistred.markAllAsTouched();
-    }
-  }
-
-  rateTHotel(rating: number): void {
+  fetchFavoriteStatus(): void {
     if (!this.authService.isLoggedIn()) {
-      this.toast.error('Please login to rate travelers', 'Login required');
+      return;
+    }
+    this.hotelDetailsService.getFavoriteStatus(this.hotelId!).subscribe({
+      next: (data: FavoriteStatusResponse) => {
+        this.isFavorite = data.is_favorite;
+      },
+      error: (err) => {
+        console.error('Failed to fetch favorite status', err);
+        this.toast.error('Failed to fetch favorite status');
+      },
+    });
+  }
+
+  rateHotel(rating: number): void {
+    if (!this.authService.isLoggedIn()) {
+      this.toast.error('Please login to rate hotel', 'Login required');
       return;
     }
 
-    this.http
-      .post(`${this.API_URL}hotels/${this.hotelId}/rate/`, {
-        rating,
-      })
-      .subscribe({
-        next: (response) => {
-          this.updateTravelerRating(rating);
-          this.toast.success('Rating submitted successfully');
-        },
-        error: (err) => {
-          this.toast.error('Please login to rate travelers', 'Login required');
-        },
-      });
+    this.hotelDetailsService.rateHotel(this.hotelId!, rating).subscribe({
+      next: () => {
+        this.toast.success('Rating submitted successfully');
+        this.updateTravelerRating(rating);
+      },
+      error: (err) => {
+        this.toast.error('Failed to submit rating');
+      },
+    });
   }
+
   updateTravelerRating(rating: number): void {
     {
-      this.http.get(`${this.API_URL}hotels/${this.hotelId}`).subscribe({
-        next: (data: any) => {
+      this.hotelDetailsService.getHotelDetails(this.hotelId!).subscribe({
+        next: (data: Hotel) => {
           this.hotel.average_rating = data.average_rating;
           this.hotel.number_of_votes = data.number_of_votes;
         },
@@ -206,55 +163,33 @@ export class HotelDetailsComponent implements OnInit {
     }
   }
 
-  checkIsFavorite(hotelId: string): void {
-    if (!this.authService.isLoggedIn()) {
-      return;
-    }
-    this.http
-      .get<FavoriteStatusResponse>(
-        `${this.API_URL}hotels/${hotelId}/is_favorite/`
-      )
-      .subscribe({
-        next: (response) => {
-          this.isFavorite = response?.['is_favorite'] || false;
-        },
-        error: (err) => {
-          console.error('Failed to check favorite status', err);
-        },
-      });
-  }
-
-  addToFavorites(hotelId: string): void {
+  addToFavorites(hotelId: number): void {
     if (!this.authService.isLoggedIn()) {
       this.toast.error('Please login to add to favorites', 'Login required');
       return;
     }
-    this.http
-      .post(`${this.API_URL}hotels/${hotelId}/add_to_favorites/`, {})
-      .subscribe({
-        next: (response) => {
-          this.isFavorite = true; // Set favorite status to true
-          this.toast.success('Added to favorites successfully');
-        },
-        error: (err) => {
-          console.error('Failed to add to favorites', err);
-          this.toast.error('Failed to add to favorites');
-        },
-      });
+    this.hotelDetailsService.addToFavorites(hotelId).subscribe({
+      next: () => {
+        this.isFavorite = true; // Set favorite status to true
+        this.toast.success('Added to favorites successfully');
+      },
+      error: (err) => {
+        console.error('Failed to add to favorites', err);
+        this.toast.error('Failed to add to favorites');
+      },
+    });
   }
-  removeFromFavorites(hotelId: string): void {
-    this.http
-      .delete(`${this.API_URL}hotels/${hotelId}/remove_from_favorites/`)
-      .subscribe({
-        next: (response) => {
-          this.isFavorite = true; // Set favorite status to true
-          this.toast.success('Removed from favorite successfully');
-          this.isFavorite = false;
-        },
-        error: (err) => {
-          console.error('Failed to remove from favorites', err);
-          this.toast.error('Failed to remove from  favorites');
-        },
-      });
+
+  removeFromFavorites(hotelId: number): void {
+    this.hotelDetailsService.removeFromFavorites(hotelId).subscribe({
+      next: () => {
+        this.isFavorite = false; // Set favorite status to false
+        this.toast.success('Removed from favorites successfully');
+      },
+      error: (err) => {
+        console.error('Failed to remove from favorites', err);
+        this.toast.error('Failed to remove from favorites');
+      },
+    });
   }
 }

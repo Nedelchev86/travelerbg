@@ -8,10 +8,10 @@ import {
 } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
-import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../auth.service';
-import { environment } from '../../../environments/environment';
+import { AuthService } from '../../services/auth.service';
+import { DestinationService } from '../../services/destination.service';
+import { Comment } from '../../hotel/hotel-interface';
 
 @Component({
   selector: 'app-destination-comments',
@@ -21,11 +21,17 @@ import { environment } from '../../../environments/environment';
   styleUrl: './destination-comments.component.css',
 })
 export class DestinationCommentsComponent {
-  @Input() destinationId: string | null = null;
-  comments: any[] = []; // Store comments data
-  commentForm: FormGroup;
-  commentFormRegistred: FormGroup;
-  constructor() {
+  @Input() destinationId: number | null = null;
+  public comments: Comment[] = []; // Store comments data
+  public commentForm: FormGroup;
+  public commentFormRegistred: FormGroup;
+
+  constructor(
+    private fb: FormBuilder,
+    public authService: AuthService,
+    private toast: ToastrService,
+    private destinationService: DestinationService
+  ) {
     this.commentForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -37,79 +43,73 @@ export class DestinationCommentsComponent {
       text: ['', Validators.required],
     });
   }
-  private http = inject(HttpClient);
-  private route = inject(ActivatedRoute);
-  private fb = inject(FormBuilder);
-  public authService = inject(AuthService);
-  private toast = inject(ToastrService);
-  private readonly API_URL = environment.apiUrl;
 
   ngOnInit(): void {
     if (this.destinationId) {
-      this.fetcComments(this.destinationId);
+      this.fetchComments();
     }
   }
-
-  fetcComments(destinationId: string): void {
-    this.http
-      .get(`${this.API_URL}destinations/${destinationId}/comments/`)
-      .subscribe(
-        (response: any) => {
-          this.comments = response;
-        },
-        (error) => {
-          console.error('Error fetching comments details:', error);
-        }
-      );
+  fetchComments(): void {
+    this.destinationService.fetchComments(this.destinationId!).subscribe({
+      next: (data: Comment[]) => {
+        this.comments = data;
+      },
+      error: (err) => {
+        console.error('Failed to fetch comments', err);
+        this.toast.error('Failed to fetch comments');
+      },
+    });
   }
 
   onSubmitComment(): void {
-    if (this.commentForm.valid) {
-      const commentData = {
-        ...this.commentForm.value,
-        destination: this.destinationId,
-      };
-      this.http
-        .post(
-          `${this.API_URL}destinations/${this.destinationId}/comments/add/`,
-          commentData
-        )
-        .subscribe(
-          (response) => {
-            this.comments.push(response); // Add the new comment to the list
-            this.commentForm.reset();
-          },
-          (error) => {
-            console.error('Error posting comment:', error);
-          }
-        );
-    } else {
+    if (this.commentForm.invalid) {
       this.commentForm.markAllAsTouched();
+      return;
     }
+
+    const commentData = {
+      ...this.commentForm.value,
+      destination: this.destinationId,
+    };
+
+    this.destinationService
+      .addComment(this.destinationId!, commentData)
+      .subscribe({
+        next: (response) => {
+          this.comments.push(response); // Add the new comment to the list
+          this.commentForm.reset();
+          this.toast.success('Comment added successfully');
+        },
+        error: (error) => {
+          console.error('Error posting comment:', error);
+          this.toast.error('Failed to add comment');
+        },
+      });
   }
 
-  onSubmitRegistredComment(): void {
-    if (this.commentFormRegistred.valid) {
-      const commentData = {
-        ...this.commentFormRegistred.value,
-        destination: this.destinationId,
-      };
-      this.http
-        .post(
-          `${this.API_URL}destinations/${this.destinationId}/comments/add/`,
-          commentData
-        )
-        .subscribe(
-          (response) => {
-            this.comments.push(response); // Add the new comment to the list
-            this.commentFormRegistred.reset();
-          },
-          (error) => {
-            console.error('Error posting comment:', error);
-          }
-        );
-    } else {
+  onSubmitRegisteredComment(): void {
+    if (this.commentFormRegistred.invalid) {
       this.commentFormRegistred.markAllAsTouched();
+      return;
     }
+
+    const commentData = {
+      ...this.commentFormRegistred.value,
+      destination: this.destinationId,
+    };
+
+    this.destinationService
+      .addRegisteredComment(this.destinationId!, commentData)
+      .subscribe({
+        next: (response) => {
+          this.comments.push(response); // Add the new comment to the list
+          this.commentFormRegistred.reset();
+          this.toast.success('Comment added successfully');
+        },
+        error: (error) => {
+          console.error('Error posting comment:', error);
+          this.toast.error('Failed to add comment');
+        },
+      });
   }
 }

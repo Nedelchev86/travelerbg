@@ -28,7 +28,7 @@ class Activities(models.Model):
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE)
     title = models.CharField(max_length=300)
     description = models.TextField(blank=False, null=False)
-    highlights = models.TextField(blank=True, null=True)
+    highlight = models.TextField(blank=True, null=True)
     category = models.ForeignKey(ActivityCategory,  on_delete=models.CASCADE)
     image = models.CharField(max_length=255, blank=True, null=True)
     image2 = models.CharField(max_length=255, blank=True, null=True)

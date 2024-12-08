@@ -154,16 +154,18 @@
                 <span></span>
               </li>
               <li>
-                <a
-                  style="color: red"
-                  routerLink="/profile/delete/"
-                  routerLinkActive="active"
+                <a class="red" (click)="openModal()"
                   ><img src="assets/img/theme-img/map.svg" alt="" />Delete
                   Profile</a
                 >
               </li>
             </ul>
           </div>
+          <app-delete-confirmation-modal
+            *ngIf="showModal"
+            (confirm)="confirmDelete()"
+            (cancel)="closeModal()"
+          ></app-delete-confirmation-modal>
 
           <app-banner></app-banner>
         </aside>

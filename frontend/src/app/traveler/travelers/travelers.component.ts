@@ -1,14 +1,9 @@
 import { Component, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { SetBgImageDirective } from '../../directives/set-bg-image.directive';
 import { RouterLink } from '@angular/router';
-import { ShapeMockupDirective } from '../../directives/shape-mockup.directive';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import { RatingComponent } from '../../shared/components/rating/rating.component';
-
 import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../../auth.service';
-import { environment } from '../../../environments/environment';
+import { AuthService } from '../../services/auth.service';
 import {
   animate,
   query,
@@ -17,6 +12,8 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
+import { TravelerService } from '../../services/traveler.service';
+import { Traveler } from '../traveler-interface';
 
 @Component({
   selector: 'app-tralevers',
@@ -44,64 +41,113 @@ import {
   ],
 })
 export class TraleversComponent {
-  httpClient = inject(HttpClient);
-  public data: Array<any> = [];
-  loading = true;
-  toast = inject(ToastrService);
-  authService = inject(AuthService);
-  private readonly API_URL = environment.apiUrl;
+  public data: Traveler[] = [];
+  public loading = true;
+
+  constructor(
+    private travelerService: TravelerService,
+    private toast: ToastrService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
-    this.httpClient.get(`${this.API_URL}travelers/`).subscribe({
-      next: (data: any) => {
+    this.fetchTravelers();
+    // this.httpClient.get(`${this.API_URL}travelers/`).subscribe({
+    //   next: (data: any) => {
+    //     this.data = data;
+    //     this.loading = false;
+    //   },
+    //   error: (err) => {
+    //     console.log(err);
+    //     this.toast.error(
+    //       'Error fetching travelers data',
+    //       'Cannot connect to server'
+    //     );
+    //   },
+    // });
+  }
+
+  fetchTravelers(): void {
+    this.travelerService.fetchTravelers().subscribe({
+      next: (data: Traveler[]) => {
         this.data = data;
         this.loading = false;
       },
-      error: (err) => {
-        console.log(err);
-        this.toast.error(
-          'Error fetching travelers data',
-          'Cannot connect to server'
-        );
+      error: (error) => {
+        console.error('Failed to fetch travelers', error);
+        this.toast.error('Failed to fetch travelers');
+        this.loading = false;
       },
     });
   }
 
-  rateTraveler(travelerId: string, rating: number): void {
+  rateTraveler(travelerId: number, rating: number): void {
     if (!this.authService.isLoggedIn()) {
       this.toast.error('Please login to rate travelers', 'Login required');
       return;
     }
 
-    this.httpClient
-      .post(`${this.API_URL}travelers/${travelerId}/rate/`, {
-        rating,
-      })
-      .subscribe({
-        next: (response) => {
-          this.updateTravelerRating(travelerId, rating);
-          this.toast.success('Rating submitted successfully');
-        },
-        error: (err) => {
-          this.toast.error('Please login to rate travelers', 'Login required');
-        },
-      });
+    this.travelerService.rateTraveler(travelerId, rating).subscribe({
+      next: () => {
+        this.updateTravelerRating(travelerId, rating);
+        this.toast.success('Rating submitted successfully');
+      },
+      error: (err) => {
+        this.toast.error('Failed to submit rating');
+      },
+    });
   }
-  updateTravelerRating(travelerId: string, rating: number): void {
+
+  updateTravelerRating(travelerId: number, rating: number): void {
     const traveler = this.data.find((t) => t.user === travelerId);
     if (traveler) {
-      this.httpClient.get(`${this.API_URL}travelers/${travelerId}`).subscribe({
-        next: (data: any) => {
+      this.travelerService.getTraveler(travelerId).subscribe({
+        next: (data: Traveler) => {
           traveler.average_rating = data.average_rating;
           traveler.number_of_votes = data.number_of_votes;
         },
         error: (err) => {
-          this.toast.error(
-            'Error fetching travelers data',
-            'Cannot connect to server'
-          );
+          console.error('Failed to update traveler rating', err);
         },
       });
     }
   }
+
+  // rateTraveler(travelerId: string, rating: number): void {
+  //   if (!this.authService.isLoggedIn()) {
+  //     this.toast.error('Please login to rate travelers', 'Login required');
+  //     return;
+  //   }
+
+  //   this.httpClient
+  //     .post(`${this.API_URL}travelers/${travelerId}/rate/`, {
+  //       rating,
+  //     })
+  //     .subscribe({
+  //       next: (response) => {
+  //         this.updateTravelerRating(travelerId, rating);
+  //         this.toast.success('Rating submitted successfully');
+  //       },
+  //       error: (err) => {
+  //         this.toast.error('Please login to rate travelers', 'Login required');
+  //       },
+  //     });
+  // }
+  // updateTravelerRating(travelerId: string, rating: number): void {
+  //   const traveler = this.data.find((t) => t.user === travelerId);
+  //   if (traveler) {
+  //     this.httpClient.get(`${this.API_URL}travelers/${travelerId}`).subscribe({
+  //       next: (data: any) => {
+  //         traveler.average_rating = data.average_rating;
+  //         traveler.number_of_votes = data.number_of_votes;
+  //       },
+  //       error: (err) => {
+  //         this.toast.error(
+  //           'Error fetching travelers data',
+  //           'Cannot connect to server'
+  //         );
+  //       },
+  //     });
+  //   }
+  // }
 }

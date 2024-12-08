@@ -17,7 +17,6 @@ import { TopHotelsComponent } from '../../hotel/top-hotels/top-hotels.component'
     TopRatedDestinationsComponent,
     TopHotelsComponent,
     ShapeMockupDirective,
-    BreadcumbComponent,
   ],
   templateUrl: './travelers-layout.component.html',
   styleUrl: './travelers-layout.component.css',

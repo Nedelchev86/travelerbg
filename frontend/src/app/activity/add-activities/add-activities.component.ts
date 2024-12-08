@@ -1,12 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import {
-  AbstractControl,
   FormArray,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
-  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -19,10 +17,13 @@ import {
 
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../auth.service';
 import { CKEditorConfigService } from '../../shared/services/ckeditor-config.service';
-import { environment } from '../../../environments/environment';
 import { CloudinaryuploadService } from '../../shared/services/cloudinaryupload.service';
+import { ActivityService } from '../../services/activity.service';
+import { minLengthArray } from '../../validators/minLengthArray.validator';
+import { ActivityCategory } from '../activities/activity-iterface';
+import { FormUtilsService } from '../../services/form-utils.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-activities',
@@ -38,11 +39,11 @@ import { CloudinaryuploadService } from '../../shared/services/cloudinaryupload.
   styleUrl: './add-activities.component.css',
 })
 export class AddActivitiesComponent {
+  private ckEditorConfigService = inject(CKEditorConfigService);
   addActivitieForm: FormGroup;
   categories: any[] = [];
   tags: FormArray;
   imagePreviews: { [key: string]: string } = {};
-  authSevices = inject(AuthService);
 
   center: google.maps.LatLngLiteral = { lat: 42.504792, lng: 27.462636 };
   zoom = 15;
@@ -56,33 +57,34 @@ export class AddActivitiesComponent {
   };
   geocoder = inject(MapGeocoder);
 
-  private ckEditorConfigService = inject(CKEditorConfigService);
   public Editor = this.ckEditorConfigService.Editor;
   public config = this.ckEditorConfigService.config;
-  private readonly API_URL = environment.apiUrl;
 
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
     private router: Router,
-    private cloudinaryuploadService: CloudinaryuploadService
+    private cloudinaryuploadService: CloudinaryuploadService,
+    private activityService: ActivityService,
+    private formDataService: FormUtilsService,
+    private toast: ToastrService
   ) {
     this.addActivitieForm = this.fb.group({
       title: ['', Validators.required],
       category: ['', Validators.required],
       description: ['', Validators.required],
-      highlights: ['', Validators.required],
+      highlight: ['', Validators.required],
       image: ['', Validators.required],
       image2: [''],
       image3: [''],
       location: ['', Validators.required],
       duration: ['', Validators.required],
       price: ['', Validators.required],
-      lat: [''], // Add lat control
-      lng: [''], // Add lng control
+      lat: [''],
+      lng: [''],
       is_published: [true],
-      tags: this.fb.array([], this.minLengthArray(1)),
-      newTag: [''], // Input field for new tag
+      tags: this.fb.array([], minLengthArray(1)),
+      newTag: [''],
     });
     this.tags = this.addActivitieForm.get('tags') as FormArray;
   }
@@ -91,24 +93,13 @@ export class AddActivitiesComponent {
     this.fetchCategories();
   }
 
-  minLengthArray(min: number) {
-    return (c: AbstractControl): ValidationErrors | null => {
-      if (c instanceof FormArray && c.length >= min) {
-        return null;
-      }
-      return { minLengthArray: true };
-    };
-  }
-
   fetchCategories(): void {
-    this.http.get(`${this.API_URL}categories/activities/`).subscribe(
-      (response: any) => {
-        this.categories = response;
+    this.activityService.fetchCategories().subscribe({
+      next: (data: ActivityCategory[]) => {
+        this.categories = data;
       },
-      (error) => {
-        console.error('Failed to fetch categories', error);
-      }
-    );
+      error: (err) => console.log(err),
+    });
   }
 
   onFileChange(event: any, field: string): void {
@@ -188,32 +179,33 @@ export class AddActivitiesComponent {
       this.addActivitieForm.markAllAsTouched();
       return;
     }
+    const formData = this.formDataService.createFormData(this.addActivitieForm);
+    // const formData = new FormData();
+    // Object.keys(this.addActivitieForm.controls).forEach((key) => {
+    //   if (key === 'tags') {
+    //     const tags = this.tags.value;
+    //     tags.forEach((tag: string, index: number) => {
+    //       formData.append(`tags[${index}]`, tag);
+    //     });
+    //   } else if (key !== 'newTag') {
+    //     const controlValue = this.addActivitieForm.get(key)?.value;
+    //     if (controlValue instanceof File) {
+    //       formData.append(key, controlValue);
+    //     } else {
+    //       formData.append(key, controlValue ?? '');
+    //     }
+    //   }
+    // });
 
-    const formData = new FormData();
-    Object.keys(this.addActivitieForm.controls).forEach((key) => {
-      if (key === 'tags') {
-        const tags = this.tags.value;
-        tags.forEach((tag: string, index: number) => {
-          formData.append(`tags[${index}]`, tag);
-        });
-      } else if (key !== 'newTag') {
-        const controlValue = this.addActivitieForm.get(key)?.value;
-        if (controlValue instanceof File) {
-          formData.append(key, controlValue);
-        } else {
-          formData.append(key, controlValue ?? '');
-        }
-      }
-    });
-
-    this.http.post(`${this.API_URL}activities/`, formData).subscribe(
-      (response) => {
-        this.authSevices.fetchUserData();
-        this.router.navigate(['/profile']);
+    this.activityService.submitActivityForm(formData).subscribe({
+      next: () => {
+        this.toast.success('Activity added successfully');
+        this.router.navigate(['/activities']);
       },
-      (error) => {
-        console.error('Failed to add destination', error);
-      }
-    );
+      error: (err) => {
+        this.toast.error('Failed to add activity');
+        console.error('Error submitting activity form:', err);
+      },
+    });
   }
 }

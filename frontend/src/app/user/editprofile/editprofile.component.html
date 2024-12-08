@@ -32,9 +32,9 @@
                 >Name must start with an uppercase and contains only
                 letters.</small
               >
-              <small *ngIf="profileForm.get('name')?.errors?.['maxLength']"
-                >Name must be maximum 30 letters.</small
-              >
+              <small *ngIf="profileForm.get('name')?.errors?.['maxlength']">
+                Name must be a maximum of 30 letters.
+              </small>
             </div>
           </div>
           <div class="row">

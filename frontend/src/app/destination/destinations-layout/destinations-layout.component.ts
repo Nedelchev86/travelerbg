@@ -1,13 +1,10 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-
-import { HttpClient } from '@angular/common/http';
-
+import { Component, OnInit } from '@angular/core';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { TopRatedDestinationsComponent } from '../top-rated-destinations/top-rated-destinations.component';
 import { BannerComponent } from '../../shared/components/banner/banner.component';
-import { environment } from '../../../environments/environment';
-import { BreadcumbComponent } from '../../shared/components/breadcumb/breadcumb.component';
 import { TopHotelsComponent } from '../../hotel/top-hotels/top-hotels.component';
+import { DestinationCategory } from '../destination-interface';
+import { DestinationService } from '../../services/destination.service';
 
 @Component({
   selector: 'app-destinations-layout',
@@ -15,22 +12,20 @@ import { TopHotelsComponent } from '../../hotel/top-hotels/top-hotels.component'
   imports: [
     RouterOutlet,
     RouterLink,
-
     TopHotelsComponent,
     TopRatedDestinationsComponent,
     BannerComponent,
-    BreadcumbComponent,
   ],
   templateUrl: './destinations-layout.component.html',
   styleUrl: './destinations-layout.component.css',
 })
 export class DestinationsLayoutComponent implements OnInit {
-  http = inject(HttpClient);
-  categories: any = Array<any>();
-  private readonly API_URL = environment.apiUrl;
+  constructor(private destinationsService: DestinationService) {}
+
+  categories: DestinationCategory[] = [];
 
   ngOnInit(): void {
-    this.http.get(`${this.API_URL}categories/`).subscribe({
+    this.destinationsService.getCategories().subscribe({
       next: (data: any) => {
         this.categories = data;
       },

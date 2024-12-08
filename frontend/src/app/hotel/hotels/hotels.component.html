@@ -2,7 +2,7 @@
 <app-loader></app-loader>
 }@else {
 <div class="row gy-30" @listAnimation>
-  @for (hotel of data; track hotel.id){
+  @for (hotel of hotels; track hotel.id){
   <div class="col-xxl-4 col-xl-6">
     <div class="tour-box th-ani">
       <div class="tour-box_img global-img">
@@ -13,7 +13,7 @@
           <!-- <a routerLink="/destinations/{{ destination.id }}">{{
             destination.title
           }}</a> -->
-          <a [routerLink]="hotel.id">{{ hotel.name }}</a>
+          <a [routerLink]="hotel.id.toString()">{{ hotel.name }}</a>
         </h3>
         <div class="tour-rating">
           <app-rating
@@ -33,6 +33,11 @@
         </div>
       </div>
     </div>
+  </div>
+  }@empty {
+
+  <div class="col-12">
+    <div class="alert alert-warning" role="alert">No hotels found.</div>
   </div>
   }
 </div>

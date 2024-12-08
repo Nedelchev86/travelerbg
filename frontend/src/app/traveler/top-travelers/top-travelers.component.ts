@@ -1,15 +1,8 @@
-import {
-  Component,
-  CUSTOM_ELEMENTS_SCHEMA,
-  inject,
-  OnInit,
-} from '@angular/core';
-
-import { HttpClient } from '@angular/common/http';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SetBgImageDirective } from '../../directives/set-bg-image.directive';
-import { environment } from '../../../environments/environment';
-
+import { TravelerService } from '../../services/traveler.service';
+import { Traveler } from '../traveler-interface';
 
 @Component({
   selector: 'app-top-travelers',
@@ -20,12 +13,16 @@ import { environment } from '../../../environments/environment';
   styleUrl: './top-travelers.component.css',
 })
 export class TopTravelersComponent implements OnInit {
-  http = inject(HttpClient);
-  top_travelers = Array<any>();
-  private readonly API_URL = environment.apiUrl;
+  public top_travelers: Traveler[] = [];
+  constructor(private travelerService: TravelerService) {}
+
   ngOnInit() {
-    this.http.get(`${this.API_URL}travelers/top-rated/`).subscribe({
-      next: (data: any) => {
+    this.fetchTopTravelers();
+  }
+
+  fetchTopTravelers(): void {
+    this.travelerService.fetchTopTravelers().subscribe({
+      next: (data: Traveler[]) => {
         this.top_travelers = data;
       },
       error: (err) => console.log(err),

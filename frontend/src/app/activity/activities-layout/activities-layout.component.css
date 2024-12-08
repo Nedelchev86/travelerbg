@@ -1,0 +1,20 @@
+.price_slider {
+  display: flex;
+  justify-content: space-between;
+}
+
+.price_slider input[type="range"] {
+  width: 100%;
+}
+
+select,
+.form-control,
+.form-select,
+textarea,
+input.price {
+  padding: 0px;
+}
+
+.search-form-area {
+  margin-bottom: 20px;
+}

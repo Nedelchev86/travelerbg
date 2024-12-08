@@ -1,16 +1,22 @@
-<section class="space">
+@if(loading) {
+<app-loader></app-loader>
+
+}@else {
+<section class="space" @fadeIn>
   <div class="container">
     <div class="row">
       <div class="col-xxl-12 col-lg-12">
         <div class="page-single">
-          <div class="service-img"><img src="{{ hotel.image }}" alt="" /></div>
+          <div class="service-img">
+            <img src="{{ hotel.image }}" alt="" />
+          </div>
           <div class="page-content">
             <div class="page-meta mt-50 mb-45">
               <div class="inline">
                 <app-rating
                   [rating]="hotel.average_rating"
                   [data]="hotel"
-                  (rated)="rateTHotel($event)"
+                  (rated)="rateHotel($event)"
                 ></app-rating>
               </div>
               @if(!isFavorite){
@@ -54,12 +60,14 @@
           <div class="destination-gallery-wrapper">
             <app-google-map
               [location]="hotel.location"
-              [lat]="hotel?.lat"
-              [lng]="hotel?.lng"
+              [lat]="hotel.lat!"
+              [lng]="hotel.lng!"
             ></app-google-map>
           </div>
 
-          <div class="th-comments-wrap style2">
+          <app-hotel-comments [hotelId]="hotelId"></app-hotel-comments>
+
+          <!-- <div class="th-comments-wrap style2">
             <h2 class="blog-inner-title h4">
               Comments ({{ comments.length }})
             </h2>
@@ -87,7 +95,7 @@
                       <span class="commented-on">{{
                         comment.created_at | date : "medium"
                       }}</span>
-                      <!-- <span class="commented-time">08:56pm </span> -->
+                   
                     </div>
                     <p class="text comment-content">
                       {{ comment.text }}
@@ -97,16 +105,16 @@
               </li>
               }
             </ul>
-          </div>
+          </div> -->
 
-          @if(authService.isLoggedIn()) {
+          <!-- @if(authService.isLoggedIn()) {
           <div class="th-comment-form">
             <div class="row">
               <h3 class="blog-inner-title h4 mb-2">Leave a Reply</h3>
 
               <form
                 [formGroup]="commentFormRegistred"
-                (ngSubmit)="onSubmitRegistredComment()"
+                (ngSubmit)="onSubmitRegisteredComment()"
               >
                 <div class="col-12 form-group">
                   <textarea
@@ -217,9 +225,10 @@
               </form>
             </div>
           </div>
-          }
+          } -->
         </div>
       </div>
     </div>
   </div>
 </section>
+}

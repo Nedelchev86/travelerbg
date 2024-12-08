@@ -10,7 +10,7 @@ class ActivitiesAdmin(admin.ModelAdmin):
     search_fields = ['title', 'description']
 
     # Fields to be displayed in the form for adding/editing
-    fields = ['user', 'title', 'category', 'description', 'highlights', 'image', 'image2', 'image3', 'price', 'duration', 'tags']
+    fields = ['user', 'title', 'category', 'description', 'highlight', 'image', 'image2', 'image3', 'price', 'duration', 'tags']
 
     # Widget for tags
     filter_horizontal = ('tags',)

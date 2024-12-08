@@ -33,6 +33,8 @@ import { MyActivitiesComponent } from './activity/my-activities/my-activities.co
 import { BookmarksComponent } from './bookmarks/bookmarks.component';
 import { PageNotFoundComponent } from './core/page-not-found/page-not-found.component';
 import { ProfileComponent } from './user/profile/profile.component';
+import { addHotelGuard } from './guards/add-hotel.guard';
+import { isTravelerGuard } from './guards/is-traveler.guard';
 
 export const routes: Routes = [
   {
@@ -109,88 +111,94 @@ export const routes: Routes = [
       },
     ],
   },
+  // {
+  //   path: 'profile',
+  //   title: 'Profile',
+  //   component: ProfileLayoutComponent,
+
+  //   data: { breadcrumb: 'Profile' },
+  //   canActivate: [AuthGuard],
+  //   children: [
+  //     {
+  //       path: '',
+  //       component: ProfileComponent,
+  //       data: { breadcrumb: 'Profile' },
+  //     },
+  //     {
+  //       path: 'edit',
+  //       component: EditProfileComponent,
+  //       data: { breadcrumb: 'Edit Profile' },
+  //     },
+  //     {
+  //       path: 'add-destination',
+  //       component: AddDestinationComponent,
+  //       data: { breadcrumb: 'Add destination' },
+  //       canActivate: [isActivatedGuard, isTravelerGuard],
+  //     },
+  //     {
+  //       path: 'my-destinations',
+  //       component: MyDestinationsComponent,
+  //       data: { breadcrumb: 'My Destinations' },
+  //     },
+  //     {
+  //       path: 'my-hotels',
+  //       component: MyHotelComponent,
+  //       data: { breadcrumb: 'My Hotels' },
+  //     },
+  //     {
+  //       path: 'edit-destination/:id',
+  //       component: EditDestinationComponent,
+  //       canActivate: [editDestinationGuard],
+  //       data: { breadcrumb: 'Edit Destination' },
+  //     },
+  //     {
+  //       path: 'add-hotel',
+  //       component: AddHotelComponent,
+  //       canActivate: [isActivatedGuard, addHotelGuard],
+  //       data: { breadcrumb: 'Add Hotel' },
+  //     },
+  //     {
+  //       path: 'edit-hotel/:id',
+  //       component: HotelEditComponent,
+  //       canActivate: [isActivatedGuard, editHotelGuard],
+  //       data: { breadcrumb: 'Edit Hotel' },
+  //     },
+  //     {
+  //       path: 'edit-profile',
+  //       component: EditBusinessProfileComponent,
+  //       data: { breadcrumb: 'Edit Profile' },
+  //     },
+
+  //     {
+  //       path: 'add-activities',
+  //       component: AddActivitiesComponent,
+  //       canActivate: [isActivatedGuard],
+  //       data: { breadcrumb: 'Add Activities' },
+  //     },
+  //     {
+  //       path: 'my-activities',
+  //       component: MyActivitiesComponent,
+  //       data: { breadcrumb: 'My activity' },
+  //     },
+  //     {
+  //       path: 'edit-activitie/:id',
+  //       component: EditActivitieComponent,
+  //       canActivate: [editActivitiesGuard],
+  //       data: { breadcrumb: 'Edit Activity' },
+  //     },
+  //     {
+  //       path: 'bookmarked',
+  //       component: BookmarksComponent,
+  //       data: { breadcrumb: 'Bookmarked' },
+  //     },
+  //   ],
+  // },
   {
     path: 'profile',
     title: 'Profile',
-    component: ProfileLayoutComponent,
-    data: { breadcrumb: 'Profile' },
     canActivate: [AuthGuard],
-    children: [
-      {
-        path: '',
-        component: ProfileComponent,
-        data: { breadcrumb: 'Profile' },
-      },
-      {
-        path: 'edit',
-        component: EditProfileComponent,
-        data: { breadcrumb: 'Edit Profile' },
-      },
-      {
-        path: 'add-destination',
-        component: AddDestinationComponent,
-        data: { breadcrumb: 'Add destination' },
-        canActivate: [isActivatedGuard],
-      },
-      {
-        path: 'my-destinations',
-        component: MyDestinationsComponent,
-        data: { breadcrumb: 'My Destinations' },
-      },
-      {
-        path: 'my-hotels',
-        component: MyHotelComponent,
-        data: { breadcrumb: 'My Hotels' },
-      },
-      {
-        path: 'edit-destination/:id',
-        component: EditDestinationComponent,
-        canActivate: [editDestinationGuard],
-        data: { breadcrumb: 'Edit Destination' },
-      },
-      {
-        path: 'add-hotel',
-        component: AddHotelComponent,
-        canActivate: [isActivatedGuard],
-        data: { breadcrumb: 'Add Hotel' },
-      },
-      {
-        path: 'edit-hotel/:id',
-        component: HotelEditComponent,
-        canActivate: [isActivatedGuard, editHotelGuard],
-        data: { breadcrumb: 'Edit Hotel' },
-      },
-      {
-        path: 'edit-profile',
-        component: EditBusinessProfileComponent,
-        data: { breadcrumb: 'Edit Profile' },
-      },
-
-      {
-        path: 'add-activities',
-        component: AddActivitiesComponent,
-        canActivate: [isActivatedGuard],
-        data: { breadcrumb: 'Add Activities' },
-      },
-      {
-        path: 'my-activities',
-        component: MyActivitiesComponent,
-        data: { breadcrumb: 'My activity' },
-      },
-      {
-        path: 'edit-activitie/:id',
-        component: EditActivitieComponent,
-        canActivate: [editActivitiesGuard],
-        data: { breadcrumb: 'Edit Activity' },
-      },
-      {
-        path: 'bookmarked',
-        component: BookmarksComponent,
-        data: { breadcrumb: 'Bookmarked' },
-      },
-    ],
+    loadChildren: () => import('./profile.routes').then((m) => m.profileRoutes),
   },
-
   {
     path: 'contact-us',
     title: 'Contact Us',

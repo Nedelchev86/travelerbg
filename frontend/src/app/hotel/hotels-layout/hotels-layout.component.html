@@ -88,6 +88,9 @@
       <div class="col-xxl-3 col-lg-4">
         <aside class="sidebar-area style2">
           <div class="widget widget_categories">
+            @if(loading) {
+            <app-loader></app-loader>
+            }@else{
             <h3 class="widget_title">Categories</h3>
             <ul>
               @for (category of categories; track category.id) {
@@ -104,6 +107,7 @@
               </li>
               }
             </ul>
+            }
           </div>
           <app-top-rated-destinations></app-top-rated-destinations>
 

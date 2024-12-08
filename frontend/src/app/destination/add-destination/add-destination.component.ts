@@ -1,13 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+
 import { Component, inject } from '@angular/core';
 import {
-  AbstractControl,
   FormArray,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
-  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -19,27 +17,13 @@ import {
 } from '@angular/google-maps';
 
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-import {
-  ClassicEditor,
-  Bold,
-  Essentials,
-  Italic,
-  Mention,
-  Paragraph,
-  Undo,
-  Image,
-  Link,
-  List,
-  TodoList,
-  BlockQuote,
-  Heading,
-  FontFamily,
-  FontSize,
-  FontColor,
-} from 'ckeditor5';
-import { AuthService } from '../../auth.service';
-import { environment } from '../../../environments/environment';
+import { CKEditorConfigService } from '../../shared/services/ckeditor-config.service';
+import { AuthService } from '../../services/auth.service';
 import { CloudinaryuploadService } from '../../shared/services/cloudinaryupload.service';
+import { DestinationService } from '../../services/destination.service';
+import { minLengthArray } from '../../validators/minLengthArray.validator';
+import { DestinationCategory } from '../destination-interface';
+import { FormUtilsService } from '../../services/form-utils.service';
 
 @Component({
   selector: 'app-add-destination',
@@ -55,8 +39,12 @@ import { CloudinaryuploadService } from '../../shared/services/cloudinaryupload.
   styleUrl: './add-destination.component.css',
 })
 export class AddDestinationComponent {
+  private ckEditorConfigService = inject(CKEditorConfigService);
+  public Editor = this.ckEditorConfigService.Editor;
+  public config = this.ckEditorConfigService.config;
+  public loading: boolean = true;
   addDestinationForm: FormGroup;
-  categories: any[] = [];
+  categories: DestinationCategory[] = [];
   tags: FormArray;
   imagePreviews: { [key: string]: string } = {};
 
@@ -70,15 +58,15 @@ export class AddDestinationComponent {
     mapId: '453204c6eedd332f',
     gestureHandling: 'greedy',
   };
-  geocoder = inject(MapGeocoder);
-  authSevices = inject(AuthService);
-  private readonly API_URL = environment.apiUrl;
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
     private router: Router,
-    private cloudinaryuploadService: CloudinaryuploadService
+    private cloudinaryuploadService: CloudinaryuploadService,
+    private destinationService: DestinationService,
+    private formDataService: FormUtilsService,
+    private geocoder: MapGeocoder,
+    private authService: AuthService
   ) {
     this.addDestinationForm = this.fb.group({
       title: ['', Validators.required],
@@ -94,75 +82,25 @@ export class AddDestinationComponent {
       lat: [''], // Add lat control
       lng: [''], // Add lng control
       is_published: [true],
-      tags: this.fb.array([], this.minLengthArray(1)),
+      tags: this.fb.array([], minLengthArray(1)),
       newTag: [''], // Input field for new tag
     });
     this.tags = this.addDestinationForm.get('tags') as FormArray;
   }
 
-  public Editor = ClassicEditor;
-
-  public config = {
-    toolbar: {
-      items: [
-        'undo',
-        'redo',
-        '|',
-        'heading',
-        '|',
-        'fontfamily',
-        'fontsize',
-        'fontColor',
-        '|',
-        'bold',
-        'italic',
-        '|',
-        'link',
-      ],
-      shouldNotGroupWhenFull: false,
-    },
-    plugins: [
-      Bold,
-      Essentials,
-      Italic,
-      Mention,
-      Paragraph,
-      Undo,
-      BlockQuote,
-      Link,
-      TodoList,
-      Image,
-      Heading,
-      FontFamily,
-      FontSize,
-      FontColor,
-    ],
-  };
-
   ngOnInit(): void {
     this.fetchCategories();
   }
 
-  minLengthArray(min: number) {
-    return (c: AbstractControl): ValidationErrors | null => {
-      if (c instanceof FormArray && c.length >= min) {
-        return null;
-      }
-      return { minLengthArray: true };
-    };
-  }
-
   fetchCategories(): void {
-    this.http.get(`${this.API_URL}categories/`).subscribe(
-      (response: any) => {
-        this.categories = response;
+    this.destinationService.fetchCategories().subscribe({
+      next: (categories: DestinationCategory[]) => {
+        this.categories = categories;
+        this.loading = false;
       },
-      (error) => {
-        console.error('Failed to fetch categories', error);
-      }
-    );
+      error: (err) => console.error('Failed to fetch categories', err),
+    });
   }
-
 
   onFileChange(event: any, field: string): void {
     const file = event.target.files[0];
@@ -241,32 +179,16 @@ export class AddDestinationComponent {
       this.addDestinationForm.markAllAsTouched();
       return;
     }
+    const formData = this.formDataService.createFormData(
+      this.addDestinationForm
+    );
 
-    const formData = new FormData();
-    Object.keys(this.addDestinationForm.controls).forEach((key) => {
-      if (key === 'tags') {
-        const tags = this.tags.value;
-        tags.forEach((tag: string, index: number) => {
-          formData.append(`tags[${index}]`, tag);
-        });
-      } else if (key !== 'newTag') {
-        const controlValue = this.addDestinationForm.get(key)?.value;
-        if (controlValue instanceof File) {
-          formData.append(key, controlValue);
-        } else {
-          formData.append(key, controlValue ?? '');
-        }
-      }
-    });
-
-    this.http.post(`${this.API_URL}destinations/`, formData).subscribe(
-      (response) => {
-        this.authSevices.fetchUserData();
+    this.destinationService.addDestination(formData).subscribe({
+      next: () => {
+        this.authService.fetchUserData();
         this.router.navigate(['/profile']);
       },
-      (error) => {
-        console.error('Failed to add destination', error);
-      }
-    );
+      error: (err) => console.error('Failed to add destination', err),
+    });
   }
 }

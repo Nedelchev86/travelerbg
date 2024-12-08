@@ -1,7 +1,9 @@
 <div class="widget">
   <h3 class="widget_title">Top Rated Destinations</h3>
   <div class="recent-post-wrap">
-    @for (destination of destinations; track destination.id) {
+    @if(loading){
+    <app-loader></app-loader>
+    }@else{ @for (destination of destinations; track destination.id) {
     <div class="recent-post" [@fadeIn]>
       <div class="media-img">
         <a [routerLink]="['/destinations/', destination.id]">
@@ -24,6 +26,6 @@
         </div>
       </div>
     </div>
-    }
+    }}
   </div>
 </div>

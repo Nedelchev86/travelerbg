@@ -1,13 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component, inject, Input, OnInit } from '@angular/core';
 import {
-  AbstractControl,
   FormArray,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
-  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import {
@@ -17,26 +14,12 @@ import {
 } from '@angular/google-maps';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-import {
-  ClassicEditor,
-  Bold,
-  Essentials,
-  Italic,
-  Mention,
-  Paragraph,
-  Undo,
-  Image,
-  Link,
-  List,
-  TodoList,
-  BlockQuote,
-  Heading,
-  FontFamily,
-  FontSize,
-  FontColor,
-} from 'ckeditor5';
-import { environment } from '../../../environments/environment';
+import { minLengthArray } from '../../validators/minLengthArray.validator';
 import { CloudinaryuploadService } from '../../shared/services/cloudinaryupload.service';
+import { CKEditorConfigService } from '../../shared/services/ckeditor-config.service';
+import { DestinationService } from '../../services/destination.service';
+import { Destination } from '../destination-interface';
+import { FormUtilsService } from '../../services/form-utils.service';
 
 @Component({
   selector: 'app-edit-destination',
@@ -52,50 +35,15 @@ import { CloudinaryuploadService } from '../../shared/services/cloudinaryupload.
   styleUrl: './edit-destination.component.css',
 })
 export class EditDestinationComponent implements OnInit {
+  private ckEditorConfigService = inject(CKEditorConfigService);
   @Input() id!: string;
   editDestinationForm: FormGroup;
   categories: any[] = [];
   tags: FormArray;
-  destinationId: string | null = null;
+  destinationId: number | null = null;
   imagePreviews: { [key: string]: string } = {};
-  private readonly API_URL = environment.apiUrl;
-  public Editor = ClassicEditor;
-  public config = {
-    toolbar: {
-      items: [
-        'undo',
-        'redo',
-        '|',
-        'heading',
-        '|',
-        'fontfamily',
-        'fontsize',
-        'fontColor',
-        '|',
-        'bold',
-        'italic',
-        '|',
-        'link',
-      ],
-      shouldNotGroupWhenFull: false,
-    },
-    plugins: [
-      Bold,
-      Essentials,
-      Italic,
-      Mention,
-      Paragraph,
-      Undo,
-      BlockQuote,
-      Link,
-      TodoList,
-      Image,
-      Heading,
-      FontFamily,
-      FontSize,
-      FontColor,
-    ],
-  };
+  public Editor = this.ckEditorConfigService.Editor;
+  public config = this.ckEditorConfigService.config;
 
   center: google.maps.LatLngLiteral = { lat: 42.504792, lng: 27.462636 };
   zoom = 15;
@@ -111,14 +59,15 @@ export class EditDestinationComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
-    private cloudinaryuploadService: CloudinaryuploadService
+    private cloudinaryuploadService: CloudinaryuploadService,
+    private destinationService: DestinationService,
+    private formDataService: FormUtilsService
   ) {
     this.editDestinationForm = this.fb.group({
       title: ['', Validators.required],
-      tags: this.fb.array([], this.minLengthArray(1)),
+      tags: this.fb.array([], minLengthArray(1)),
       category: ['', Validators.required],
       description: ['', Validators.required],
       image: ['', Validators.required],
@@ -137,72 +86,54 @@ export class EditDestinationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.fetchCategories();
-    this.destinationId = this.route.snapshot.paramMap.get('id');
-    if (this.destinationId) {
-      this.getDestinationDetails(this.destinationId);
-    }
-  }
-  minLengthArray(min: number) {
-    return (c: AbstractControl): ValidationErrors | null => {
-      if (c instanceof FormArray && c.length >= min) {
-        return null;
+    this.route.params.subscribe((params) => {
+      this.destinationId = params['id'];
+      if (this.destinationId) {
+        this.getDestinationDetails(this.destinationId);
+        this.fetchCategories();
       }
-      return { minLengthArray: true };
-    };
-  }
-  fetchCategories(): void {
-    this.http.get(`${this.API_URL}categories/`).subscribe(
-      (response: any) => {
-        this.categories = response;
-      },
-      (error) => {
-        console.error('Failed to fetch categories', error);
-      }
-    );
+    });
   }
 
-  getDestinationDetails(destinationId: string): void {
-    this.http.get(`${this.API_URL}destinations/${destinationId}/`).subscribe(
-      (response: any) => {
-        this.editDestinationForm.patchValue(response);
-        if (response.lat && response.lng) {
+  fetchCategories(): void {
+    this.destinationService.fetchCategories().subscribe({
+      next: (categories) => (this.categories = categories),
+      error: (err) => console.error('Failed to fetch categories', err),
+    });
+  }
+
+  getDestinationDetails(destinationId: number): void {
+    this.destinationService.fetchDestinationDetails(destinationId).subscribe({
+      next: (data: Destination) => {
+        this.editDestinationForm.patchValue(data);
+        if (data.lat && data.lng) {
           this.center = {
-            lat: Number(response.lat),
-            lng: Number(response.lng),
+            lat: Number(data.lat),
+            lng: Number(data.lng),
           };
           this.markerPosition = {
-            lat: Number(response.lat),
-            lng: Number(response.lng),
+            lat: Number(data.lat),
+            lng: Number(data.lng),
           };
         } else {
-          this.geocodeAddress(response.location);
+          this.geocodeAddress(data.location);
         }
 
-        response.tags.forEach((tag: { id: Number; name: string }) => {
+        data.tags.forEach((tag: { id: Number; name: string }) => {
           this.tags.push(this.fb.control(tag.name, Validators.required));
         });
 
-        this.imagePreviews['image'] = response.image;
-        this.imagePreviews['image2'] = response.image2;
-        this.imagePreviews['image3'] = response.image3;
-        this.imagePreviews['image4'] = response.image4;
-        this.imagePreviews['image5'] = response.image5;
+        this.imagePreviews['image'] = data.image;
+        this.imagePreviews['image2'] = data.image2;
+        this.imagePreviews['image3'] = data.image3;
+        this.imagePreviews['image4'] = data.image4;
+        this.imagePreviews['image5'] = data.image5;
       },
-      (error) => {
-        console.error('Failed to fetch destination details', error);
-      }
-    );
+      error: (err) => {
+        console.error('Failed to fetch destination details', err);
+      },
+    });
   }
-  //   this.http.get(`http://localhost:8000/api/destinations/${id}/`).subscribe(
-  //     (data: any) => {
-  //       this.editDestinationForm.patchValue(data);
-  //     },
-  //     (error) => {
-  //       console.error('Failed to fetch destination details', error);
-  //     }
-  //   );
-  // }
 
   onMapClick(event: google.maps.MapMouseEvent): void {
     if (event.latLng) {
@@ -280,33 +211,17 @@ export class EditDestinationComponent implements OnInit {
       this.editDestinationForm.markAllAsTouched();
       return;
     }
+    const formData = this.formDataService.createFormData(
+      this.editDestinationForm
+    );
 
-    const formData = new FormData();
-    Object.keys(this.editDestinationForm.controls).forEach((key) => {
-      if (key === 'tags') {
-        const tags = this.tags.value;
-        tags.forEach((tag: string, index: number) => {
-          formData.append(`tags[${index}]`, tag);
-        });
-      } else if (key !== 'newTag') {
-        const controlValue = this.editDestinationForm.get(key)?.value;
-        if (controlValue instanceof File) {
-          formData.append(key, controlValue);
-        } else {
-          formData.append(key, controlValue ?? '');
-        }
-      }
-    });
-
-    this.http
-      .put(`${this.API_URL}destinations/${this.destinationId}/`, formData)
-      .subscribe(
-        (response) => {
+    this.destinationService
+      .updateDestination(formData, this.destinationId!)
+      .subscribe({
+        next: () => {
           this.router.navigate(['/profile/my-destinations']);
         },
-        (error) => {
-          console.error('Failed to update destination', error);
-        }
-      );
+        error: (err) => console.error('Failed to update destination', err),
+      });
   }
 }

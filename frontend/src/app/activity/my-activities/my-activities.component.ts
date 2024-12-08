@@ -3,8 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DeleteConfirmationModalComponent } from '../../shared/components/delete-confirmation-modal/delete-confirmation-modal.component';
-import { AuthService } from '../../auth.service';
+import { AuthService } from '../../services/auth.service';
 import { environment } from '../../../environments/environment';
+import { ActivityService } from '../../services/activity.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-my-activities',
@@ -14,15 +16,22 @@ import { environment } from '../../../environments/environment';
   styleUrl: './my-activities.component.css',
 })
 export class MyActivitiesComponent {
-  showModal = false;
-  http = inject(HttpClient);
-  authServices = inject(AuthService);
+  public showModal = false;
   public activities: Array<any> = [];
-  private readonly API_URL = environment.apiUrl;
-  itemIdToDelete: string | null = null;
+  public itemIdToDelete: number | null = null;
+
+  constructor(
+    private authService: AuthService,
+    private activityService: ActivityService,
+    public toast: ToastrService
+  ) {}
 
   ngOnInit() {
-    this.http.get(`${this.API_URL}activities/my/`).subscribe({
+    this.fetchMyActivities();
+  }
+
+  fetchMyActivities(): void {
+    this.activityService.fetchMyActivities().subscribe({
       next: (data: any) => {
         this.activities = data;
       },
@@ -30,7 +39,7 @@ export class MyActivitiesComponent {
     });
   }
 
-  openModal(itemId: string) {
+  openModal(itemId: number) {
     this.itemIdToDelete = itemId;
     this.showModal = true;
   }
@@ -40,24 +49,22 @@ export class MyActivitiesComponent {
     this.itemIdToDelete = null;
   }
 
-  confirmDelete() {
+  confirmDelete(): void {
     if (this.itemIdToDelete) {
-      // Perform the delete action here
-      this.http
-        .delete(`${this.API_URL}activities/${this.itemIdToDelete}/`)
-        .subscribe(
-          (response) => {
-            // Remove the deleted item from the data array
-            this.authServices.fetchUserData();
-            this.activities = this.activities.filter(
-              (item) => item.id !== this.itemIdToDelete
-            );
-            this.closeModal();
-          },
-          (error) => {
-            console.error('Failed to delete item', error);
-          }
-        );
+      this.activityService.deleteActivity(this.itemIdToDelete).subscribe({
+        next: () => {
+          this.authService.fetchUserData();
+          this.activities = this.activities.filter(
+            (item) => item.id !== this.itemIdToDelete
+          );
+          this.closeModal();
+          this.toast.success('Activity deleted successfully');
+        },
+        error: (error) => {
+          console.error('Failed to delete activity', error);
+          this.toast.error('Failed to delete activity');
+        },
+      });
     }
   }
 }

@@ -20,7 +20,7 @@
                 (rated)="rateDestination($event)"
               ></app-rating>
             </div>
-            @if(!isFavorite){
+            <!-- @if(!isFavorite){
             <button (click)="addToFavorites(data.id)" class="ratting">
               <i class="fa fa-heart"></i>
               Add to Favorites</button
@@ -29,7 +29,15 @@
               <i class="fa fa-heart text-danger"></i>
               Remove from Favorites
             </button>
-            }
+            } -->
+            <button (click)="toggleFavorite()" class="ratting">
+              <i
+                class="fa fa-heart"
+                [ngClass]="{ 'text-danger': isFavorite }"
+              ></i>
+              @if (!isFavorite) { Add to Favorites } @else { Remove from
+              Favorites }
+            </button>
           </div>
 
           <h2 class="box-title">{{ data.name }}</h2>

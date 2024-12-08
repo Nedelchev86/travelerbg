@@ -11,7 +11,7 @@ class ActivitiesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Activities
-        fields = ["id", "user", "title", 'highlights', "category", "description", "location", "highlights", "duration", "lat", "lng", "image", "image2", "image3", "price", "tags", "created_at", "modified_at",]
+        fields = ["id", "user", "title", "category", "description", "location", "highlight", "duration", "lat", "lng", "image", "image2", "image3", "price", "tags", "created_at", "modified_at",]
         extra_kwargs = {
             'user': {'read_only': True}
         }

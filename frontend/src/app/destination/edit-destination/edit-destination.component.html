@@ -123,7 +123,6 @@
               id="description"
               [editor]="Editor"
               [config]="config"
-              id="description"
               formControlName="description"
             ></ckeditor>
             <div
@@ -137,7 +136,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="cost">Duration <span class="red">*</span></label>
+            <label for="time">Duration <span class="red">*</span></label>
             <input
               class="form-control"
               id="time"
@@ -377,7 +376,7 @@
               type="checkbox"
             />
           </div> -->
-          <button class="th-btn" type="submit">Add Destination</button>
+          <button class="th-btn" type="submit">Update Destination</button>
           <div *ngIf="editDestinationForm.invalid" class="text-danger">
             <small *ngIf="editDestinationForm.invalid"
               >Please fill all required fields.

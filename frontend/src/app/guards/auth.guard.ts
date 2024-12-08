@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { AuthService } from '../auth.service'; // Adjust the path as necessary
+import { AuthService } from '../services/auth.service'; // Adjust the path as necessary
 import { Toast, ToastrService } from 'ngx-toastr';
 
 @Injectable({

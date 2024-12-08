@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
-import { SetBgImageDirective } from '../../directives/set-bg-image.directive';
-import { RouterLink, RouterOutlet } from '@angular/router';
-import { environment } from '../../../environments/environment';
+import { Component } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { ActivityService } from '../../services/activity.service';
+import { Activity } from './activity-iterface';
 
 @Component({
   selector: 'app-activities',
@@ -12,15 +12,57 @@ import { environment } from '../../../environments/environment';
   styleUrl: './activities.component.css',
 })
 export class ActivitiesComponent {
-  httpClient = inject(HttpClient);
-  public data: Array<any> = [];
-  private readonly API_URL = environment.apiUrl;
+  public loading: boolean = false;
+  public data: Array<Activity> = [];
+  public searchQuery: string = '';
+  public categoryQuery: string = '';
+  public max_price: number = 0;
+
+  constructor(
+    private route: ActivatedRoute,
+    private toast: ToastrService,
+    private activityService: ActivityService
+  ) {}
+
   ngOnInit() {
-    this.httpClient.get(`${this.API_URL}activities/`).subscribe({
-      next: (data: any) => {
-        this.data = data;
-      },
-      error: (err) => console.log(err),
+    this.route.queryParams.subscribe((params) => {
+      this.searchQuery = params['title'] || '';
+      this.categoryQuery = params['category'] || '';
+      this.max_price = params['max_price'] ? +params['max_price'] : 0;
+      this.fetchActivities();
     });
   }
+
+  fetchActivities(): void {
+    this.loading = true;
+    const params: any = {
+      title: this.searchQuery,
+      category: this.categoryQuery,
+      max_price: this.max_price,
+    };
+
+    this.activityService.fetchActivities(params).subscribe({
+      next: (data: Activity[]) => {
+        this.data = data;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Failed to fetch activities', err);
+        this.toast.error('Failed to fetch activities');
+        this.loading = false;
+      },
+    });
+  }
+
+  // searchActivities(): void {
+  //   this.router.navigate([], {
+  //     relativeTo: this.route,
+  //     queryParams: {
+  //       title: this.searchQuery || null,
+  //       category: this.categoryQuery || null,
+  //       max_price: this.max_price || null,
+  //     },
+  //     queryParamsHandling: 'merge', // Merge with existing query params
+  //   });
+  // }
 }

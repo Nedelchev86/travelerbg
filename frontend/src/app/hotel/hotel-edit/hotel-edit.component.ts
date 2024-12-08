@@ -6,8 +6,6 @@ import {
   FormGroup,
   Validators,
   ReactiveFormsModule,
-  AbstractControl,
-  ValidationErrors,
   FormArray,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -22,6 +20,13 @@ import {
 import { environment } from '../../../environments/environment';
 import { CKEditorConfigService } from '../../shared/services/ckeditor-config.service';
 import { CloudinaryuploadService } from '../../shared/services/cloudinaryupload.service';
+import { HotelService } from '../../services/hotel.service';
+import { Hotel, HotelsCategory } from '../hotel-interface';
+import { minLengthArray } from '../../validators/minLengthArray.validator';
+import { FormUtilsService } from '../../services/form-utils.service';
+import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../../services/auth.service';
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
 
 export interface Highlight {
   id: number;
@@ -37,79 +42,43 @@ export interface Highlight {
     CKEditorModule,
     GoogleMap,
     MapAdvancedMarker,
+    LoaderComponent,
   ],
   templateUrl: './hotel-edit.component.html',
   styleUrl: './hotel-edit.component.css',
 })
 export class HotelEditComponent {
-  // highlights: FormArray;
-  imagePreviews: { [key: string]: string } = {};
-  highlights: any[] = [];
-  editHotelForm: FormGroup;
-  tags: FormArray;
-  hotelId: string | null = null;
-  categories: any = Array<any>();
-  center: google.maps.LatLngLiteral = { lat: 42.504792, lng: 27.462636 };
-  zoom = 15;
-  markerPosition: google.maps.LatLngLiteral = {
+  public loading = true;
+  public imagePreviews: { [key: string]: string } = {};
+  public highlights: Highlight[] = [];
+  public editHotelForm: FormGroup;
+  public tags: FormArray;
+  public hotelId: number | null = null;
+  public categories: HotelsCategory[] = [];
+  public center: google.maps.LatLngLiteral = { lat: 42.504792, lng: 27.462636 };
+  public zoom = 15;
+  public markerPosition: google.maps.LatLngLiteral = {
     lat: 42.504792,
     lng: 27.462636,
   };
-  mapOptions: google.maps.MapOptions = {
+  public mapOptions: google.maps.MapOptions = {
     mapId: '453204c6eedd332f',
     gestureHandling: 'greedy',
   };
-  geocoder = inject(MapGeocoder);
-  private readonly API_URL = environment.apiUrl;
+  public geocoder = inject(MapGeocoder);
   private ckEditorConfigService = inject(CKEditorConfigService);
   public Editor = this.ckEditorConfigService.Editor;
   public config = this.ckEditorConfigService.config;
 
-  // public Editor = ClassicEditor;
-
-  // public config = {
-  //   toolbar: {
-  //     items: [
-  //       'undo',
-  //       'redo',
-  //       '|',
-  //       'heading',
-  //       '|',
-  //       'fontfamily',
-  //       'fontsize',
-  //       'fontColor',
-  //       '|',
-  //       'bold',
-  //       'italic',
-  //       '|',
-  //       'link',
-  //     ],
-  //     shouldNotGroupWhenFull: false,
-  //   },
-  //   plugins: [
-  //     Bold,
-  //     Essentials,
-  //     Italic,
-  //     Mention,
-  //     Paragraph,
-  //     Undo,
-  //     BlockQuote,
-  //     Link,
-  //     TodoList,
-  //     Image,
-  //     Heading,
-  //     FontFamily,
-  //     FontSize,
-  //     FontColor,
-  //   ],
-  // };
-
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
-    private cloudinaryuploadService: CloudinaryuploadService
+    private cloudinaryuploadService: CloudinaryuploadService,
+    private hotelService: HotelService,
+    private formDataService: FormUtilsService,
+    public toast: ToastrService,
+    public authSevices: AuthService
   ) {
     this.editHotelForm = this.fb.group({
       name: ['', Validators.required],
@@ -119,7 +88,7 @@ export class HotelEditComponent {
       website: ['', Validators.pattern('https?://.+')],
       highlights: this.fb.array([]),
       price: ['', [Validators.required, Validators.min(0)]],
-      tags: this.fb.array([], this.minLengthArray(1)),
+      tags: this.fb.array([], minLengthArray(1)),
       newTag: [''], // Input field for new tag
       image: ['', Validators.required],
       image2: [''],
@@ -133,9 +102,8 @@ export class HotelEditComponent {
   }
 
   ngOnInit(): void {
-    this.hotelId = this.route.snapshot.paramMap.get('id');
+    this.hotelId = Number(this.route.snapshot.paramMap.get('id'));
     if (this.hotelId) {
-      // this.fetchHighlights();
       this.fetchCategories();
       this.fetchHighlights();
       this.loadHotelData(this.hotelId);
@@ -143,8 +111,8 @@ export class HotelEditComponent {
   }
 
   fetchCategories(): void {
-    this.http.get(`${this.API_URL}categories/hotels/`).subscribe({
-      next: (data: any) => {
+    this.hotelService.fetchHotelCategories().subscribe({
+      next: (data: HotelsCategory[]) => {
         this.categories = data;
       },
       error: (err) => console.log(err),
@@ -170,30 +138,34 @@ export class HotelEditComponent {
   //     );
   // }
 
+  // fetchHighlights(): void {
+  //   this.http.get(`${this.API_URL}highlights/`).subscribe(
+  //     (response: any) => {
+  //       this.highlights = response;
+  //       // If hotel data is already loaded, mark the checked highlights
+  //     },
+  //     (error) => {
+  //       console.error('Error fetching highlights:', error);
+  //     }
+  //   );
+  // }
+
   fetchHighlights(): void {
-    this.http.get(`${this.API_URL}highlights/`).subscribe(
-      (response: any) => {
+    this.hotelService.fetchHighlights().subscribe({
+      next: (response: Highlight[]) => {
         this.highlights = response;
         // If hotel data is already loaded, mark the checked highlights
       },
-      (error) => {
+      error: (error) => {
         console.error('Error fetching highlights:', error);
-      }
-    );
+      },
+    });
   }
 
-  minLengthArray(min: number) {
-    return (c: AbstractControl): ValidationErrors | null => {
-      if (c instanceof FormArray && c.length >= min) {
-        return null;
-      }
-      return { minLengthArray: true };
-    };
-  }
-
-  loadHotelData(hotelId: string): void {
-    this.http.get(`${this.API_URL}hotels/${hotelId}/`).subscribe(
-      (response: any) => {
+  loadHotelData(hotelId: number): void {
+    this.hotelService.getHotelDetails(hotelId).subscribe({
+      next: (response: Hotel) => {
+        this.loading = false;
         this.editHotelForm.patchValue(response);
         if (response.lat && response.lng) {
           this.center = {
@@ -217,11 +189,44 @@ export class HotelEditComponent {
         this.imagePreviews['image3'] = response.image3;
         this.imagePreviews['image4'] = response.image4;
       },
-      (error) => {
+      error: (error) => {
         console.error('Failed to fetch destination details', error);
-      }
-    );
+      },
+    });
   }
+
+  // loadHotelData(hotelId: string): void {
+
+  //   this.http.get(`${this.API_URL}hotels/${hotelId}/`).subscribe(
+  //     (response: any) => {
+  //       this.editHotelForm.patchValue(response);
+  //       if (response.lat && response.lng) {
+  //         this.center = {
+  //           lat: Number(response.lat),
+  //           lng: Number(response.lng),
+  //         };
+  //         this.markerPosition = {
+  //           lat: Number(response.lat),
+  //           lng: Number(response.lng),
+  //         };
+  //       } else {
+  //         this.geocodeAddress(response.location);
+  //       }
+
+  //       response.tags.forEach((tag: { id: Number; name: string }) => {
+  //         this.tags.push(this.fb.control(tag.name, Validators.required));
+  //       });
+  //       this.markCheckedHighlights(response.highlights);
+  //       this.imagePreviews['image'] = response.image;
+  //       this.imagePreviews['image2'] = response.image2;
+  //       this.imagePreviews['image3'] = response.image3;
+  //       this.imagePreviews['image4'] = response.image4;
+  //     },
+  //     (error) => {
+  //       console.error('Failed to fetch destination details', error);
+  //     }
+  //   );
+  // }
 
   removeImage(field: string): void {
     this.editHotelForm.patchValue({
@@ -358,39 +363,58 @@ export class HotelEditComponent {
     }
   }
   onSubmit(): void {
-    if (this.editHotelForm.valid) {
-      const formData = new FormData();
-      Object.keys(this.editHotelForm.controls).forEach((key) => {
-        if (key === 'tags') {
-          const tags = this.tags.value;
-          tags.forEach((tag: string, index: number) => {
-            formData.append(`tags[${index}]`, tag);
-          });
-        } else if (key === 'highlights') {
-          const highlights = this.editHotelForm.get('highlights')?.value;
-          const selectedHighlights = highlights.filter(
-            (highlight: number | boolean) => highlight !== false
-          );
-          selectedHighlights.forEach((highlight: number, index: number) => {
-            formData.append(`highlights[${index}]`, highlight.toString());
-          });
-        } else if (key !== 'newTag') {
-          const controlValue = this.editHotelForm.get(key)?.value;
-          if (controlValue instanceof File) {
-            formData.append(key, controlValue);
-          } else {
-            formData.append(key, controlValue ?? '');
-          }
-        }
-      });
-
-      this.http
-        .put(`${this.API_URL}hotels/${this.hotelId}/`, formData)
-        .subscribe((response) => {
-          this.router.navigate(['/profile/my-hotels']);
-        });
-    } else {
-      this.editHotelForm.markAllAsTouched(); // Mark all fields as touched to show validation errors
+    if (this.editHotelForm.invalid) {
+      this.editHotelForm.markAllAsTouched();
+      return;
     }
+
+    const formData = this.formDataService.createFormData(this.editHotelForm);
+
+    this.hotelService.updateHotelForm(formData, this.hotelId!).subscribe({
+      next: () => {
+        this.toast.success('Hotel updated successfully');
+        this.authSevices.fetchUserData();
+        this.router.navigate(['/profile/my-hotels']);
+      },
+      error: (err) => {
+        console.error('Error submitting hotel form:', err);
+        this.toast.error('Failed to updated hotel');
+      },
+    });
   }
+  //   if (this.editHotelForm.valid) {
+  //     const formData = new FormData();
+  //     Object.keys(this.editHotelForm.controls).forEach((key) => {
+  //       if (key === 'tags') {
+  //         const tags = this.tags.value;
+  //         tags.forEach((tag: string, index: number) => {
+  //           formData.append(`tags[${index}]`, tag);
+  //         });
+  //       } else if (key === 'highlights') {
+  //         const highlights = this.editHotelForm.get('highlights')?.value;
+  //         const selectedHighlights = highlights.filter(
+  //           (highlight: number | boolean) => highlight !== false
+  //         );
+  //         selectedHighlights.forEach((highlight: number, index: number) => {
+  //           formData.append(`highlights[${index}]`, highlight.toString());
+  //         });
+  //       } else if (key !== 'newTag') {
+  //         const controlValue = this.editHotelForm.get(key)?.value;
+  //         if (controlValue instanceof File) {
+  //           formData.append(key, controlValue);
+  //         } else {
+  //           formData.append(key, controlValue ?? '');
+  //         }
+  //       }
+  //     });
+
+  //     this.http
+  //       .put(`${this.API_URL}hotels/${this.hotelId}/`, formData)
+  //       .subscribe((response) => {
+  //         this.router.navigate(['/profile/my-hotels']);
+  //       });
+  //   } else {
+  //     this.editHotelForm.markAllAsTouched(); // Mark all fields as touched to show validation errors
+  //   }
+  // }
 }

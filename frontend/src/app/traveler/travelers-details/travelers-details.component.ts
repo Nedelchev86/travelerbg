@@ -1,63 +1,77 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 import { ToastrService } from 'ngx-toastr';
 import { RatingComponent } from '../../shared/components/rating/rating.component';
-import { DestinationsByUserComponent } from '../../destinations-by-user/destinations-by-user.component';
-import { AuthService } from '../../auth.service';
-import { environment } from '../../../environments/environment';
+import { AuthService } from '../../services/auth.service';
+import { DestinationsByUserComponent } from '../../destination/destinations-by-user/destinations-by-user.component';
+import { Traveler } from '../traveler-interface';
+import { TravelerService } from '../../services/traveler.service';
+import { LoaderComponent } from "../../shared/components/loader/loader.component";
 
 @Component({
   selector: 'app-travelers-details',
   standalone: true,
-  imports: [RatingComponent, DestinationsByUserComponent],
+  imports: [RatingComponent, DestinationsByUserComponent, LoaderComponent],
   templateUrl: './travelers-details.component.html',
   styleUrl: './travelers-details.component.css',
 })
 export class TravelersDetailsComponent implements OnInit {
-  @Input() travelerId!: string;
-  http = inject(HttpClient);
-  travelerDetails: any;
-  authService = inject(AuthService);
-  toast = inject(ToastrService);
-  private readonly API_URL = environment.apiUrl;
+  @Input() travelerId!: number;
+
+  constructor(
+    private authService: AuthService,
+    private toast: ToastrService,
+    private travelerDetailsService: TravelerService
+  ) {}
+
+  public travelerDetails: Traveler = {} as Traveler;
+  public loading = true;
 
   ngOnInit() {
-    this.http.get(`${this.API_URL}travelers/${this.travelerId}/`).subscribe(
-      (data: any) => {
-        this.travelerDetails = data;
-      },
-      (error) => {
-        console.error('Failed to fetch traveler details', error);
-      }
-    );
+    this.fetchTravelerDetails();
+    // this.http.get(`${this.API_URL}travelers/${this.travelerId}/`).subscribe(
+    //   (data: any) => {
+    //     this.travelerDetails = data;
+    //   },
+    //   (error) => {
+    //     console.error('Failed to fetch traveler details', error);
+    //   }
+    // );
   }
-  rateTraveler(travelerId: string, rating: number): void {
+
+  fetchTravelerDetails(): void {
+    this.travelerDetailsService.getTraveler(this.travelerId).subscribe({
+      next: (data: Traveler) => {
+        this.travelerDetails = data;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Failed to fetch traveler details', error);
+      },
+    });
+  }
+
+  rateTraveler(travelerId: number, rating: number): void {
     if (!this.authService.isLoggedIn()) {
       this.toast.error('Please login to rate travelers', 'Login required');
       return;
     }
 
-    this.http
-      .post(`${this.API_URL}travelers/${travelerId}/rate/`, {
-        rating,
-      })
-      .subscribe({
-        next: (response) => {
-          this.updateTravelerRating(travelerId, rating);
-          this.toast.success('Rating submitted successfully');
-        },
-        error: (err) => {
-          this.toast.error('Please login to rate travelers', 'Login required');
-        },
-      });
+    this.travelerDetailsService.rateTraveler(travelerId, rating).subscribe({
+      next: () => {
+        this.toast.success('Rating submitted successfully');
+      },
+      error: (err) => {
+        this.toast.error('Failed to submit rating');
+      },
+    });
   }
-  updateTravelerRating(travelerId: string, rating: number): void {
+  updateTravelerRating(travelerId: number, rating: number): void {
     {
-      this.http.get(`${this.API_URL}travelers/${travelerId}`).subscribe({
+      this.travelerDetailsService.getTraveler(travelerId).subscribe({
         next: (data: any) => {
           this.travelerDetails.average_rating = data.average_rating;
-          this.travelerDetails.users_rated = data.users_rated;
+          this.travelerDetails.number_of_votes = data.number_of_votes;
         },
         error: (err) => {
           this.toast.error(

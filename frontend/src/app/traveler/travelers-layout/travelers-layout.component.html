@@ -15,24 +15,6 @@
       </div>
       <div class="col-xxl-3 col-lg-4">
         <aside class="sidebar-area style2">
-          <div class="widget widget_categories">
-            <h3 class="widget_title">Categories</h3>
-            <ul>
-              <!-- @for (category of categories; track category.id) {
-              <li>
-                <a
-                  [routerLink]="['/destinations']"
-                  [queryParams]="{ category: category.name }"
-                >
-                  <img src="./assets/img/theme-img/map.svg" alt="" />{{
-                    category.name
-                  }}</a
-                >
-                <span>({{ category.number_of_destinations }})</span>
-              </li>
-              } -->
-            </ul>
-          </div>
           <app-top-rated-destinations></app-top-rated-destinations>
           <div class="widget widget_tag_cloud">
             <h3 class="widget_title">Popular Tags</h3>

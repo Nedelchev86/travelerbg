@@ -1,3 +1,6 @@
+@if(loading){
+<app-loader></app-loader>
+}@else{
 <div class="row gy-40">
   <app-delete-confirmation-modal
     *ngIf="showModal"
@@ -63,9 +66,7 @@
                   role="img"
                   aria-label="Rated 5.00 out of 5"
                 >
-                  <span
-                    [style.width.%]="item.average_rating.toFixed(2) * 18"
-                  ></span>
+                  <span [style.width.%]="item.average_rating * 18"></span>
                 </div>
               </div>
             </div>
@@ -76,3 +77,4 @@
     </div>
   </div>
 </div>
+}

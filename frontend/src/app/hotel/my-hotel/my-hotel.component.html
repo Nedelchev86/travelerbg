@@ -18,7 +18,7 @@
         (cancel)="closeModal()"
       ></app-delete-confirmation-modal>
       <div class="row gy-40">
-        @for (item of data; track item.id) {
+        @for (item of hotels; track item.id) {
         <div class="col-xl-3 col-sm-6">
           <div class="th-product product-grid">
             <div class="product-img">
@@ -47,7 +47,7 @@
                 <a
                   routerLink="/hotels/{{ item.id }}"
                   routerLinkActive="active"
-                  >{{ item.title }}</a
+                  >{{ item.name }}</a
                 >
               </h3>
               <span class="price">{{ item.location }}</span>
@@ -63,9 +63,7 @@
                   role="img"
                   aria-label="Rated 5.00 out of 5"
                 >
-                  <span
-                    [style.width.%]="item.average_rating.toFixed(2) * 18"
-                  ></span>
+                  <span [style.width.%]="item.average_rating * 18"></span>
                 </div>
               </div>
             </div>

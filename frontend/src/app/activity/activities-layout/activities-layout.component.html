@@ -6,9 +6,14 @@
       </div>
       <div class="col-xxl-4 col-lg-5">
         <aside class="sidebar-area">
-          <div class="widget widget_search">
+          <div class="search-form-area" (input)="onSearch($event)">
             <form class="search-form">
-              <input type="text" placeholder="Search" />
+              <input
+                type="text"
+                placeholder="Search"
+                [(ngModel)]="searchQuery"
+                name="search"
+              />
               <button type="submit"><i class="far fa-search"></i></button>
             </form>
           </div>
@@ -20,17 +25,18 @@
                 <a
                   [routerLink]="['/activities']"
                   [queryParams]="{ category: category.name }"
+                  [routerLinkActive]="['active']"
                 >
                   <img src="./assets/img/theme-img/map.svg" alt="" />{{
                     category.name
                   }}</a
                 >
-                <span>({{ category.number_of_destinations }})</span>
+                <span>({{ category.number_of_activity }})</span>
               </li>
               }
             </ul>
           </div>
-          <div class="widget widget_price_filter">
+          <!-- "          <div class="widget widget_price_filter">
             <h4 class="widget_title">Filter By Price</h4>
             <div class="price_slider_wrapper">
               <div class="price_label">
@@ -39,29 +45,27 @@
               </div>
               <div class="price_slider"></div>
             </div>
-          </div>
-          <div class="widget widget_categories">
-            <h3 class="widget_title">Duration</h3>
-            <ul>
-              <li>
-                <a routerLink="/activities"
-                  ><i class="fa-light fa-square-check"></i>Up to 2 hour</a
-                >
-                <span>(20)</span>
-              </li>
-              <li>
-                <a routerLink="/activities"
-                  ><i class="fa-light fa-square-check"></i>1 to 4 hour</a
-                >
-                <span>(24)</span>
-              </li>
-              <li>
-                <a routerLink="/activities"
-                  ><i class="fa-light fa-square-check"></i>4 hour to 1 day</a
-                >
-                <span>(25)</span>
-              </li>
-            </ul>
+          </div> -->
+
+          <div class="widget widget_price_filter">
+            <h4 class="widget_title">Filter By Price</h4>
+            <div class="price_slider_wrapper">
+              <div class="price_label">
+                Price: <span class="from"> 0 </span> —
+                <span class="to">${{ max_price }}</span>
+              </div>
+              <div class="price_slider">
+                <input
+                  class="price"
+                  type="range"
+                  min="0"
+                  max="300"
+                  [(ngModel)]="max_price"
+                  (input)="onMaxValueChange($event)"
+                  (change)="onMaxValueChangeComplete()"
+                />
+              </div>
+            </div>
           </div>
         </aside>
       </div>

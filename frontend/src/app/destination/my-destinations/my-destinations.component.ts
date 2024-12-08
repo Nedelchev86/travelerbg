@@ -1,11 +1,12 @@
 import { Component, inject } from '@angular/core';
-import { AuthService } from '../../auth.service';
-import { HttpClient } from '@angular/common/http';
-import { SetBgImageDirective } from '../../directives/set-bg-image.directive';
+import { AuthService } from '../../services/auth.service';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { DeleteConfirmationModalComponent } from '../../shared/components/delete-confirmation-modal/delete-confirmation-modal.component';
 import { CommonModule } from '@angular/common';
-import { environment } from '../../../environments/environment';
+import { DestinationService } from '../../services/destination.service';
+import { Destination } from '../destination-interface';
+import { ToastrService } from 'ngx-toastr';
+import { LoaderComponent } from "../../shared/components/loader/loader.component";
 @Component({
   selector: 'app-my-destinations',
   standalone: true,
@@ -14,28 +15,34 @@ import { environment } from '../../../environments/environment';
     RouterLinkActive,
     DeleteConfirmationModalComponent,
     CommonModule,
-  ],
+    LoaderComponent
+],
   templateUrl: './my-destinations.component.html',
   styleUrl: './my-destinations.component.css',
 })
 export class MyDestinationsComponent {
-  showModal = false;
-  http = inject(HttpClient);
-  authServices = inject(AuthService);
-  public data: Array<any> = [];
-  itemIdToDelete: string | null = null;
-  private readonly API_URL = environment.apiUrl;
+  public loading: boolean = true;
+  public showModal = false;
+  public data: Destination[] = [];
+  private itemIdToDelete: number | null = null;
+
+  constructor(
+    private destinationService: DestinationService,
+    private authService: AuthService,
+    private toast: ToastrService
+  ) {}
 
   ngOnInit() {
-    this.http.get(`${this.API_URL}destinations/my/`).subscribe({
-      next: (data: any) => {
+    this.destinationService.myDestinations().subscribe({
+      next: (data: Destination[]) => {
         this.data = data;
+        this.loading = false;
       },
       error: (err) => console.log(err),
     });
   }
 
-  openModal(itemId: string) {
+  openModal(itemId: number) {
     this.itemIdToDelete = itemId;
     this.showModal = true;
   }
@@ -47,22 +54,20 @@ export class MyDestinationsComponent {
 
   confirmDelete() {
     if (this.itemIdToDelete) {
-      // Perform the delete action here
-      this.http
-        .delete(`${this.API_URL}destinations/${this.itemIdToDelete}/`)
-        .subscribe(
-          (response) => {
-            // Remove the deleted item from the data array
-            this.authServices.fetchUserData();
-            this.data = this.data.filter(
-              (item) => item.id !== this.itemIdToDelete
-            );
-            this.closeModal();
-          },
-          (error) => {
-            console.error('Failed to delete item', error);
-          }
-        );
+      this.destinationService.deleteDestination(this.itemIdToDelete).subscribe({
+        next: () => {
+          this.authService.fetchUserData();
+          this.data = this.data.filter(
+            (item) => item.id != this.itemIdToDelete
+          );
+          this.closeModal();
+          this.toast.success('Destination deleted successfully');
+        },
+        error: (error) => {
+          console.error('Failed to delete item', error);
+          this.toast.error('Failed to delete destination');
+        },
+      });
     }
   }
 }

@@ -1,13 +1,13 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import { RatingComponent } from '../../shared/components/rating/rating.component';
-import { AuthService } from '../../auth.service';
-import { environment } from '../../../environments/environment';
+import { AuthService } from '../../services/auth.service';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { DestinationService } from '../../services/destination.service';
+import { ApiResponse, Destination } from '../destination-interface';
 
 @Component({
   selector: 'app-destinations',
@@ -35,21 +35,23 @@ import { animate, style, transition, trigger } from '@angular/animations';
   ],
 })
 export class DestinationsComponent {
-  httpClient = inject(HttpClient);
-  authService = inject(AuthService);
-  public data: Array<any> = [];
+  constructor(
+    private destinationsService: DestinationService,
+    private authService: AuthService,
+    private toast: ToastrService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
+
+  public destinations: Destination[] = [];
   public searchQuery: string = '';
   public categoryQuery: string = '';
   public currentPage: number = 1;
   public totalPages: number = 1;
   public nextPageUrl: string | null = null;
   public previousPageUrl: string | null = null;
-  private readonly API_URL = environment.apiUrl;
-  loading = true;
-  searching = false;
-  route = inject(ActivatedRoute);
-  router = inject(Router);
-  toast = inject(ToastrService);
+  public loading = true;
+
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
       this.categoryQuery = params['category'] || '';
@@ -57,55 +59,29 @@ export class DestinationsComponent {
     });
   }
 
-  fetchDestinations(url: string = `${this.API_URL}destinations/`): void {
+  fetchDestinations(): void {
     this.loading = true;
-    const params: any = {
-      page: this.currentPage,
-    };
-    if (this.searchQuery) {
-      params.title = this.searchQuery;
-    }
-    if (this.categoryQuery) {
-      params.category = this.categoryQuery;
-    }
-    // Check if the URL already contains query parameters
-    const hasQueryParams = url.includes('?');
-
-    this.httpClient
-      .get(url, { params: hasQueryParams ? {} : params })
+    this.destinationsService
+      .fetchDestinations(this.currentPage, this.searchQuery, this.categoryQuery)
       .subscribe({
-        next: (data: any) => {
-          this.data = data.results;
-          this.totalPages = Math.ceil(data.count / 9); // Assuming 9 items per page
+        next: (data: ApiResponse) => {
+          this.destinations = data.results;
+          this.totalPages = Math.ceil(data.count / 9);
           this.nextPageUrl = data.next;
           this.previousPageUrl = data.previous;
           this.loading = false;
         },
         error: (err) => {
-          console.log(err);
+          console.error(err);
+          this.toast.error('Failed to fetch destinations');
           this.loading = false;
         },
       });
   }
 
   searchDestinations(): void {
-    // this.searching = true;
-    const params = {
-      title: this.searchQuery,
-      category: this.categoryQuery,
-    };
     this.currentPage = 1;
-
-    this.httpClient.get(`${this.API_URL}destinations/`, { params }).subscribe({
-      next: (data: any) => {
-        this.data = data.results;
-        // this.searching = false;
-      },
-      error: (err) => {
-        console.log(err);
-        // this.searching = false;
-      },
-    });
+    this.fetchDestinations();
   }
 
   changePage(page: number): void {
@@ -126,51 +102,49 @@ export class DestinationsComponent {
       queryParamsHandling: 'merge', // Merge with existing query params
     });
   }
+
   getPaginationArray(): number[] {
     return Array(this.totalPages)
       .fill(0)
       .map((_, i) => i + 1);
   }
 
-  updateDestinationRating(destinationId: string): void {
-    const destination = this.data.find((t) => t.id === destinationId);
-    if (destination) {
-      this.httpClient
-        .get(`${this.API_URL}destinations/${destinationId}`)
-        .subscribe({
-          next: (data: any) => {
-            destination.average_rating = data.average_rating;
-            destination.number_of_votes = data.number_of_votes;
-          },
-          error: (err) => {
-            console.log(err);
-            this.toast.error(
-              'Error fetching travelers data',
-              'Cannot connect to server'
-            );
-          },
-        });
-    }
+  updateDestinationRating(destinationId: number): void {
+    this.destinationsService.fetchDestinationDetails(destinationId).subscribe({
+      next: (data) => {
+        const destination = this.destinations.find(
+          (d) => d.id === destinationId
+        );
+        if (destination) {
+          destination.average_rating = data.average_rating;
+          destination.number_of_votes = data.number_of_votes;
+        }
+      },
+      error: (err) => {
+        console.error(err);
+        this.toast.error(
+          'Error fetching destination rating',
+          'Cannot connect to server'
+        );
+      },
+    });
   }
 
-  rateDestination(destinationId: string, rating: number): void {
+  rateDestination(destinationId: number, rating: number): void {
     if (!this.authService.isLoggedIn()) {
-      this.toast.error('Please login to rate travelers', 'Login required');
+      this.toast.error('Please login to rate destinations', 'Login required');
       return;
     }
 
-    this.httpClient
-      .post(`${this.API_URL}destinations/${destinationId}/rate/`, {
-        rating,
-      })
-      .subscribe({
-        next: (response) => {
-          this.updateDestinationRating(destinationId);
-          this.toast.success('Rating submitted successfully');
-        },
-        error: (err) => {
-          this.toast.error('Please login to rate travelers', 'Login required');
-        },
-      });
+    this.destinationsService.rateDestination(destinationId, rating).subscribe({
+      next: () => {
+        this.updateDestinationRating(destinationId);
+        this.toast.success('Rating submitted successfully');
+      },
+      error: (err) => {
+        console.error(err);
+        this.toast.error('Failed to submit rating', 'Error');
+      },
+    });
   }
 }

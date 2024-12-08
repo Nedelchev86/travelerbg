@@ -1,5 +1,3 @@
-@if (loading) {<app-loader></app-loader>} @else {
-
 <section class="space">
   <div class="container">
     <div class="th-sort-bar">
@@ -21,6 +19,7 @@
         </div>
       </div>
     </div>
+    @if (loading) {<app-loader></app-loader>} @else {
     <div class="row">
       <div class="tab-content" id="nav-tabContent">
         <div
@@ -30,7 +29,7 @@
           aria-labelledby="tab-destination-grid"
         >
           <div class="row gy-30">
-            @for (destination of data; track destination.id){
+            @for (destination of destinations; track destination.id){
             <div class="col-xxl-4 col-xl-6" @slideIn>
               <div class="tour-box th-ani">
                 <div class="tour-box_img global-img">
@@ -96,39 +95,39 @@
         </div>
       </div>
     </div>
+    <div class="th-pagination text-center mt-60 mb-0">
+      <ul>
+        <li>
+          <a
+            class="next-page"
+            (click)="changePage(currentPage - 1)"
+            [class.disabled]="currentPage === 1"
+            href="javascript:void(0)"
+            >Previous <img src="./assets/img/icon/arrow-left4.svg" alt=""
+          /></a>
+        </li>
+        @for (page of getPaginationArray(); track $index) {
+        <li>
+          <a
+            [class.active]="page === currentPage"
+            (click)="changePage(page)"
+            href="javascript:void(0)"
+            >{{ page }}</a
+          >
+        </li>
+        }
+        <li>
+          <a
+            class="next-page"
+            (click)="changePage(currentPage + 1)"
+            [class.disabled]="currentPage === totalPages"
+            href="javascript:void(0)"
+            >Next <img src="./assets/img/icon/arrow-right4.svg" alt=""
+          /></a>
+        </li>
+      </ul>
+    </div>
+
+    }
   </div>
 </section>
-<div class="th-pagination text-center mt-60 mb-0">
-  <ul>
-    <li>
-      <a
-        class="next-page"
-        (click)="changePage(currentPage - 1)"
-        [class.disabled]="currentPage === 1"
-        href="javascript:void(0)"
-        >Previous <img src="./assets/img/icon/arrow-left4.svg" alt=""
-      /></a>
-    </li>
-    @for (page of getPaginationArray(); track $index) {
-    <li>
-      <a
-        [class.active]="page === currentPage"
-        (click)="changePage(page)"
-        href="javascript:void(0)"
-        >{{ page }}</a
-      >
-    </li>
-    }
-    <li>
-      <a
-        class="next-page"
-        (click)="changePage(currentPage + 1)"
-        [class.disabled]="currentPage === totalPages"
-        href="javascript:void(0)"
-        >Next <img src="./assets/img/icon/arrow-right4.svg" alt=""
-      /></a>
-    </li>
-  </ul>
-</div>
-
-}

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, input, OnInit } from '@angular/core';
 
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services/auth.service';
 import { environment } from '../../environments/environment';
 import { RouterLink } from '@angular/router';
 import { LoaderComponent } from '../shared/components/loader/loader.component';

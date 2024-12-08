@@ -16,7 +16,7 @@ import { HeaderComponent } from './core/header/header.component';
 import { FooterComponent } from './core/footer/footer.component';
 
 import { HttpClient } from '@angular/common/http';
-import { AuthService } from './auth.service';
+import { AuthService } from './services/auth.service';
 import { UserInterface } from './user-interface';
 import { CloudinaryModule } from '@cloudinary/ng';
 import { GoogleMapsModule } from '@angular/google-maps';

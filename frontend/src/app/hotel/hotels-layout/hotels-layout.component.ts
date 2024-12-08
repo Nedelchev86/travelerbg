@@ -6,18 +6,14 @@ import {
   RouterLinkActive,
   RouterOutlet,
 } from '@angular/router';
-import { SetBgImageDirective } from '../../directives/set-bg-image.directive';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HotelsComponent } from '../hotels/hotels.component';
-
 import { TopRatedDestinationsComponent } from '../../destination/top-rated-destinations/top-rated-destinations.component';
-import { HttpClient } from '@angular/common/http';
 import { BannerComponent } from '../../shared/components/banner/banner.component';
 import { ShapeMockupDirective } from '../../directives/shape-mockup.directive';
-import { environment } from '../../../environments/environment';
-import { BreadcumbComponent } from '../../shared/components/breadcumb/breadcumb.component';
 import { TopTravelersComponent } from '../../traveler/top-travelers/top-travelers.component';
+import { HotelService } from '../../services/hotel.service';
+import { HotelsCategory } from '../hotel-interface';
+import { LoaderComponent } from "../../shared/components/loader/loader.component";
 
 @Component({
   selector: 'app-hotels-layout',
@@ -25,7 +21,6 @@ import { TopTravelersComponent } from '../../traveler/top-travelers/top-traveler
   imports: [
     RouterOutlet,
     TopTravelersComponent,
-
     FormsModule,
     TopTravelersComponent,
     ShapeMockupDirective,
@@ -33,22 +28,30 @@ import { TopTravelersComponent } from '../../traveler/top-travelers/top-traveler
     RouterLink,
     RouterLinkActive,
     BannerComponent,
-    BreadcumbComponent,
-  ],
+    LoaderComponent
+],
   templateUrl: './hotels-layout.component.html',
   styleUrl: './hotels-layout.component.css',
 })
 export class HotelsLayoutComponent implements OnInit {
-  searchQuery: string = '';
-  categories: any = Array<any>();
-  private readonly API_URL = environment.apiUrl;
-  http = inject(HttpClient);
+  public searchQuery: string = '';
+  public categories: HotelsCategory[] = [];
+  public loading: boolean = true;
 
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private hotelsService: HotelService
+  ) {}
 
   ngOnInit(): void {
-    this.http.get(`${this.API_URL}categories/hotels/`).subscribe({
-      next: (data: any) => {
+    this.fetchHotelCategories();
+  }
+
+  fetchHotelCategories(): void {
+    this.hotelsService.fetchHotelCategories().subscribe({
+      next: (data: HotelsCategory[]) => {
+        this.loading = false;
         this.categories = data;
       },
       error: (err) => console.log(err),
