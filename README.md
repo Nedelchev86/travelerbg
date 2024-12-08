@@ -3,7 +3,7 @@
 - Demo on DigitalOcean - <a href="https://travelerbg.eu/" target="_blank">travelerBG.eu</a>
 - Demo on Render / DB on aiven.io - <a href="https://travelerbg.onrender.com/" target="_blank">travelerbg.onrender.com</a>    (Free instance will spin down with inactivity, which can delay requests by 50 seconds or more)
 
-Description
+### Description
 This project is a web application that serves two main user types: travelers and business owners. The platform allows users to add, manage, and explore various destinations, hotels, and activities. It aims to provide a seamless experience for both travelers looking for new adventures and business owners wanting to promote their services.
 
 ![main](https://github.com/user-attachments/assets/91a8260f-427b-4f2b-9658-9d2de4cf6996)
@@ -50,6 +50,11 @@ Traveler Dashboard:
 
 - Destinations
   ![destinations](https://github.com/user-attachments/assets/353dd9fc-481d-472b-b44d-2b94a44c2d99)
+
+## Comments for guest and registred user
+![commentguest](https://github.com/user-attachments/assets/7e0842ee-fa5c-4195-909f-e4fd450c4830)
+![commentreg](https://github.com/user-attachments/assets/1ba02579-b098-4614-8475-3f865a922af3)
+
 
 
 ## User Types - Business owner:
