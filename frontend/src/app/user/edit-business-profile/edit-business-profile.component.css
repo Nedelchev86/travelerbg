@@ -226,3 +226,7 @@ input {
 .red {
   color: red;
 }
+
+.btn.btn-danger.btn-sm {
+  margin-left: 20px;
+}
