@@ -9,22 +9,22 @@ This project is a web application that serves two main user types: travelers and
 ![main](https://github.com/user-attachments/assets/91a8260f-427b-4f2b-9658-9d2de4cf6996)
 
 
-## Form Validations
+### Form Validations
 ![validation](https://github.com/user-attachments/assets/cb827009-2bd6-49fa-be3a-88b11633443e)
 
-## Toasts notifications for success or error
+### Toasts notifications for success or error
 ![toast](https://github.com/user-attachments/assets/fb3373c6-3b28-4cb7-bbd2-944ee94fbf06)
 
 
 
-User Types
-Travelers:
+##User Types
+###Travelers:
 
-Explore a wide range of destinations, hotels, and activities.
-Add and manage destinations and activities.
-Add destinations, hotels, and activities to their favorites.
-Rate and review destinations, hotels, and activities.
-Plan trips by browsing through detailed information and user reviews.
+- Explore a wide range of destinations, hotels, and activities.
+- Add and manage destinations and activities.
+- Add destinations, hotels, and activities to their favorites.
+- Rate and review destinations, hotels, and activities.
+- Plan trips by browsing through detailed information and user reviews.
 
 ![traveler](https://github.com/user-attachments/assets/715ffa35-9a8f-4113-814b-ae1f84a42961)
 
@@ -44,7 +44,7 @@ Traveler Dashboard:
 ![edit](https://github.com/user-attachments/assets/b5171331-860e-40a9-b0ae-35d2830efde6)
 
 
-### Demo Links
+## Browse hotels, destinations and activities
 - Hotels
   ![hotels](https://github.com/user-attachments/assets/9ce47b3a-ffe1-41b1-bbca-2ba3b1204895)
 
