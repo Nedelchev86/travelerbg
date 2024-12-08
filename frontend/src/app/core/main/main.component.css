@@ -1,3 +1,25 @@
 .hero-style1 {
   max-width: 1000px;
 }
+
+.name {
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 400;
+  color: var(--black-color);
+  margin: 0;
+}
+
+.number {
+  height: 30px;
+  line-height: 30px;
+  border: none;
+  padding: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--black-color2);
+}
+
+.fa-heart {
+  color: red;
+}
