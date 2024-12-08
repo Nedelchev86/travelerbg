@@ -4,8 +4,11 @@
 - Demo on Render / DB on aiven.io - <a href="https://travelerbg.onrender.com/" target="_blank">travelerbg.onrender.com</a>    (Free instance will spin down with inactivity, which can delay requests by 50 seconds or more)
 
 ### Technologies Used:
-- Angular 18 with StandAlone Components and Server with Django and Django REST framework
-- 
+- Angular 18 with StandAlone Components 
+- Server Python Django and Django REST framework
+- Authentication: JWT (JSON Web Tokens)
+- Database: PostgreSQL
+  
 #### Key Features
   - __CKEditor 5:__ A powerful rich text editor used for creating and editing content within the application.
   - __Angular Animations:__ Smooth and interactive animations to enhance the user experience.
@@ -14,6 +17,7 @@
   - __Angular Guards:__ Route guards to protect certain routes and ensure that only authorized users can access specific parts of the application.
   - __Lazy Loading:__ The profile dashboard is lazy-loaded to improve the application's performance by loading the profile-related components only when the user navigates to the profile section.
   - __Cloudinary:__ Cloud-based image and video management for uploading, storing, and delivering images efficiently.
+  - __Swiper:__ A modern touch slider for creating responsive and customizable sliders .
 
 
 ### Description
@@ -78,18 +82,4 @@ View ratings and reviews left by travelers.
 Promote their services to a broader audience.
 
 
-Features
-User Authentication: Secure login and registration for both travelers and business owners.
-Add and Manage Listings: Business owners can add and manage hotels and activities.
-Explore Listings: Travelers can browse through a variety of listings with detailed information and images.
-Favorites: Both user types  can add listings to their favorites for easy access.
-Ratings and Reviews: Both user types can rate and review listings to share their experiences.
-Responsive Design: The platform is designed to be accessible on both desktop and mobile devices.
-Technologies Used
-Frontend: Angular, Swiper for image galleries
-Backend: Python & Django
-Database: PostgreSQL
-Authentication: JWT (JSON Web Tokens)
-Styling: CSS, Bootstrap
 
-![traveler](https://github.com/user-attachments/assets/8b130d4e-20a3-4718-a740-afd637fab9a1)
