@@ -2,7 +2,7 @@ from django.db.models import Avg
 from django.shortcuts import render
 from rest_framework import permissions, viewsets, generics
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
 from backend.activities.models import FavoriteActivity
@@ -45,6 +45,11 @@ class TravelerkerViewSet(viewsets.ModelViewSet):
             '-avg_rating')[:8]
         serializer = self.get_serializer(top_travelers, many=True)
         return Response(serializer.data)
+
+    @action(detail=False, methods=['get'], permission_classes=[AllowAny])
+    def count(self, request):
+        count = Traveler.objects.count()
+        return Response({'count': count})
 
     @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
     def rate(self, request, pk=None):

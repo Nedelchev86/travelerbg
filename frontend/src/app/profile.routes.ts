@@ -19,7 +19,7 @@ import { AddActivitiesComponent } from './activity/add-activities/add-activities
 import { MyActivitiesComponent } from './activity/my-activities/my-activities.component';
 import { editActivitiesGuard } from './guards/edit-activities.guard';
 import { EditActivitieComponent } from './activity/edit-activitie/edit-activitie.component';
-import { BookmarksComponent } from './bookmarks/bookmarks.component';
+import { BookmarksComponent } from './user/bookmarks/bookmarks.component';
 
 export const profileRoutes: Routes = [
   {

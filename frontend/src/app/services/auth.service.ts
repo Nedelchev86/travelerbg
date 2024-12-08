@@ -45,7 +45,6 @@ export class AuthService {
       },
       error: (err) => {
         this.toast.error('Login failed. Wronag email or password');
-
       },
     });
   }
@@ -104,5 +103,15 @@ export class AuthService {
 
   deleteUser(): Observable<any> {
     return this.http.delete(`${this.API_URL}user/`);
+  }
+
+  getBookmarks(userType: string, userId: number): Observable<any> {
+    return this.http.get(`${this.API_URL}${userType}/${userId}/favorites/`);
+  }
+
+  removeFavorite(type: string, id: number): Observable<any> {
+    return this.http.delete(
+      `${this.API_URL}${type}/${id}/remove_from_favorites/`
+    );
   }
 }

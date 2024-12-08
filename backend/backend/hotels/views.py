@@ -89,6 +89,11 @@ class HotelViewSet(viewsets.ModelViewSet):
         is_favorite = FavoriteHotels.objects.filter(user=request.user, hotel=hotel).exists()
         return Response({'is_favorite': is_favorite}, status=status.HTTP_200_OK)
 
+    @action(detail=False, methods=['get'], permission_classes=[AllowAny])
+    def count(self, request):
+        count = Hotel.objects.count()
+        return Response({'count': count})
+
 class HotelsCategory(ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer

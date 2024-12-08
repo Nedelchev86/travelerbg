@@ -66,6 +66,11 @@ class ActivitiesViewSet(viewsets.ModelViewSet):
         is_favorite = FavoriteActivity.objects.filter(user=request.user, activity=activity).exists()
         return Response({'is_favorite': is_favorite}, status=status.HTTP_200_OK)
 
+    @action(detail=False, methods=['get'], permission_classes=[AllowAny])
+    def count(self, request):
+        count = Activities.objects.count()
+        return Response({'count': count})
+
 
 
 class ActivitiesCategory(ListAPIView):

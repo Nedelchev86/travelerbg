@@ -116,6 +116,11 @@ class DestinationViewSet(viewsets.ModelViewSet):
         is_favorite = FavoriteDestinations.objects.filter(user=request.user, destination=destination).exists()
         return Response({'is_favorite': is_favorite}, status=status.HTTP_200_OK)
 
+    @action(detail=False, methods=['get'], permission_classes=[AllowAny])
+    def count(self, request):
+        count = Destination.objects.count()
+        return Response({'count': count})
+
 class DestinationCategory(ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer

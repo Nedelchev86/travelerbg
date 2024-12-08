@@ -20,6 +20,8 @@ import { CKEditorConfigService } from '../../shared/services/ckeditor-config.ser
 import { DestinationService } from '../../services/destination.service';
 import { Destination } from '../destination-interface';
 import { FormUtilsService } from '../../services/form-utils.service';
+import { ToastrService } from 'ngx-toastr';
+import { LoaderComponent } from "../../shared/components/loader/loader.component";
 
 @Component({
   selector: 'app-edit-destination',
@@ -30,20 +32,23 @@ import { FormUtilsService } from '../../services/form-utils.service';
     CKEditorModule,
     GoogleMap,
     MapAdvancedMarker,
-  ],
+    LoaderComponent
+],
   templateUrl: './edit-destination.component.html',
   styleUrl: './edit-destination.component.css',
 })
 export class EditDestinationComponent implements OnInit {
-  private ckEditorConfigService = inject(CKEditorConfigService);
   @Input() id!: string;
-  editDestinationForm: FormGroup;
-  categories: any[] = [];
-  tags: FormArray;
-  destinationId: number | null = null;
-  imagePreviews: { [key: string]: string } = {};
+
+  private ckEditorConfigService = inject(CKEditorConfigService);
+  public editDestinationForm: FormGroup;
+  public categories: any[] = [];
+  public tags: FormArray;
+  public destinationId: number | null = null;
+  public imagePreviews: { [key: string]: string } = {};
   public Editor = this.ckEditorConfigService.Editor;
   public config = this.ckEditorConfigService.config;
+  public loading = false;
 
   center: google.maps.LatLngLiteral = { lat: 42.504792, lng: 27.462636 };
   zoom = 15;
@@ -63,7 +68,8 @@ export class EditDestinationComponent implements OnInit {
     private router: Router,
     private cloudinaryuploadService: CloudinaryuploadService,
     private destinationService: DestinationService,
-    private formDataService: FormUtilsService
+    private formDataService: FormUtilsService,
+    public toast: ToastrService
   ) {
     this.editDestinationForm = this.fb.group({
       title: ['', Validators.required],
@@ -103,8 +109,10 @@ export class EditDestinationComponent implements OnInit {
   }
 
   getDestinationDetails(destinationId: number): void {
+    this.loading = true;
     this.destinationService.fetchDestinationDetails(destinationId).subscribe({
       next: (data: Destination) => {
+        this.loading = false;
         this.editDestinationForm.patchValue(data);
         if (data.lat && data.lng) {
           this.center = {
@@ -130,6 +138,7 @@ export class EditDestinationComponent implements OnInit {
         this.imagePreviews['image5'] = data.image5;
       },
       error: (err) => {
+        this.loading = false;
         console.error('Failed to fetch destination details', err);
       },
     });
@@ -185,17 +194,18 @@ export class EditDestinationComponent implements OnInit {
   onFileChange(event: any, field: string): void {
     const file = event.target.files[0];
     if (file) {
-      this.cloudinaryuploadService.uploadImage(file).subscribe(
-        (response) => {
+      this.cloudinaryuploadService.uploadImage(file).subscribe({
+        next: (response) => {
           this.editDestinationForm.patchValue({
             [field]: response.secure_url,
           });
           this.imagePreviews[field] = response.secure_url;
         },
-        (error) => {
+        error: (error) => {
           console.error('Error uploading image:', error);
-        }
-      );
+          this.toast.error('Error uploading image');
+        },
+      });
     }
   }
 
