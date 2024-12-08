@@ -1,0 +1,27 @@
+.tour-box {
+  display: flex;
+  align-items: flex-start;
+}
+
+.tour-box_img {
+  flex: 0 0 auto;
+  margin-right: 20px;
+  width: 150px;
+  height: 150px;
+  margin-top: 20px;
+  border-radius: 16px;
+}
+
+.tour-box_img img {
+  border-radius: 16px;
+  width: 150px;
+  height: 150px;
+}
+.tour-content {
+  flex: 1 1 auto;
+}
+
+.global-img {
+  min-width: 100px;
+  margin-bottom: 30px;
+}

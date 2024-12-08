@@ -39,7 +39,7 @@ class TravelerkerViewSet(viewsets.ModelViewSet):
             # queryset = queryset.filter(skills=skill)
         return queryset
 
-    @action(detail=False, methods=['get'], url_path='top-rated', permission_classes=[permissions.AllowAny])
+    @action(detail=False, methods=['get'], url_path='top-rated', permission_classes=[permissions.AllowAny],authentication_classes=[] )
     def top_rated(self, request):
         top_travelers = Traveler.objects.filter(activated=True).annotate(avg_rating=Avg('ratings__rating')).order_by(
             '-avg_rating')[:8]
