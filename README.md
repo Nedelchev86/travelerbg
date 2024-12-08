@@ -9,6 +9,13 @@ This project is a web application that serves two main user types: travelers and
 ![main](https://github.com/user-attachments/assets/91a8260f-427b-4f2b-9658-9d2de4cf6996)
 
 
+## Form Validations
+![validation](https://github.com/user-attachments/assets/cb827009-2bd6-49fa-be3a-88b11633443e)
+
+## Toasts notifications for success or error
+![toast](https://github.com/user-attachments/assets/fb3373c6-3b28-4cb7-bbd2-944ee94fbf06)
+
+
 
 User Types
 Travelers:
