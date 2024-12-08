@@ -21,6 +21,14 @@ Plan trips by browsing through detailed information and user reviews.
 
 ![traveler](https://github.com/user-attachments/assets/715ffa35-9a8f-4113-814b-ae1f84a42961)
 
+Add and Edit Forms with Google Map and CKEditor 5 
+![edit2](https://github.com/user-attachments/assets/001fd88d-97cf-4011-8340-f84705dd0e9e)
+
+![edit3](https://github.com/user-attachments/assets/ba0dae6a-ed3c-49b6-b51a-adc081555006)
+
+
+
+
 Traveler Dashboard: 
   A dedicated dashboard for travelers to manage their travel-related activities.
   Add and Edit Destinations: Travelers can easily add new destinations they have visited or plan to visit. They can also edit the details of existing destinations.
