@@ -1,3 +1,6 @@
+@if(loading){
+<app-loader></app-loader>
+}@else{
 <div class="tour-page-single">
   <div class="tour-page-single">
     <div class="slider-area tour-slider1">
@@ -55,10 +58,6 @@
   </div>
   <div class="page-content">
     <div class="page-meta mb-45">
-      <span class="ratting">
-        <i class="fa-sharp fa-solid fa-star"></i>
-        <span>4.8</span>
-      </span>
       @if(!isFavorite){
       <button (click)="addToFavorites(activitie.id)" class="ratting">
         <i class="fa fa-heart"></i>
@@ -117,3 +116,4 @@
     </div>
   </div>
 </div>
+}

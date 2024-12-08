@@ -3,11 +3,12 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ActivityService } from '../../services/activity.service';
 import { Activity } from './activity-iterface';
+import { LoaderComponent } from "../../shared/components/loader/loader.component";
 
 @Component({
   selector: 'app-activities',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, LoaderComponent],
   templateUrl: './activities.component.html',
   styleUrl: './activities.component.css',
 })
@@ -17,6 +18,7 @@ export class ActivitiesComponent {
   public searchQuery: string = '';
   public categoryQuery: string = '';
   public max_price: number = 0;
+
 
   constructor(
     private route: ActivatedRoute,

@@ -1,3 +1,6 @@
+@if(loading){
+<app-loader></app-loader>
+}@else{
 <div class="row gy-24 gx-24">
   @for (activitie of data; track activitie.id) {
   <div class="col-md-6">
@@ -11,7 +14,7 @@
             activitie.title
           }}</a>
         </h3>
-        <div class="tour-rating">
+        <!-- <div class="tour-rating">
           <div class="star-rating" role="img" aria-label="Rated 5.00 out of 5">
             <span style="width: 100%"
               >Rated <strong class="rating">5.00</strong> out of 5 based on
@@ -21,7 +24,7 @@
           <a href="activities-details.html" class="woocommerce-review-link"
             >(<span class="count">4.8</span> Rating)</a
           >
-        </div>
+        </div> -->
         <h4 class="tour-box_price">
           <span class="currency">{{ activitie.price }}</span
           >/Person
@@ -42,3 +45,4 @@
   </div>
   }
 </div>
+}

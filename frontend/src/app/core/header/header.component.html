@@ -114,6 +114,16 @@
                 width="40px"
             /></a>
           </div>
+          }@else if (authService.currentUser()?.user?.image) {
+          <div class="inline-block">
+            <a routerLink="/profile" class="col-auto d-xl-block"
+              ><img
+                class="square"
+                src="{{ authService.currentUser()?.user?.image }}"
+                alt=""
+                width="40px"
+            /></a>
+          </div>
           }@else {
           <div class="circle">
             <a routerLink="/profile" class="circle-inner">{{

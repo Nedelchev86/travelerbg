@@ -25,6 +25,7 @@ export class ActivitieDetailsComponent {
   public isFavorite: boolean = false;
   public activitie: Activity = {} as Activity; // Store hotel data
   public activitieId: number | null = null;
+  public loading: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -42,14 +43,17 @@ export class ActivitieDetailsComponent {
   }
 
   fetchActivitieDetails(activitieId: number): void {
+    this.loading = true;
     this.activityService.getActivityDetails(activitieId).subscribe({
       next: (data: Activity) => {
         this.activitie = data;
         this.checkIsFavorite(activitieId);
+        this.loading = false;
       },
       error: (error) => {
         console.error('Error fetching activity details:', error);
         this.toast.error('Failed to fetch activity details');
+        this.loading = false;
       },
     });
   }
