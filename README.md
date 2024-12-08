@@ -5,7 +5,7 @@
 
 ### Technologies Used:
 - Angular 18 with StandAlone Components
-## Key Features
+#### Key Features
   - CKEditor 5: A powerful rich text editor used for creating and editing content within the application.
   - Angular Animations: Smooth and interactive animations to enhance the user experience.
   - Toastr Notifications: Elegant and customizable toast notifications for displaying success, error, and informational messages.
