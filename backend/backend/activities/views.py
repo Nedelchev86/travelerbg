@@ -15,6 +15,25 @@ class ActivitiesViewSet(viewsets.ModelViewSet):
     serializer_class = ActivitiesSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]  # Allows read access to all, but restricts modifications to authenticated users
 
+    def get_queryset(self):
+        queryset = Activities.objects.all()
+        title = self.request.GET.get('title', None)
+        category = self.request.GET.get('category', None)
+        max_price = self.request.GET.get('max_price', None)
+
+
+        if title:
+            queryset = queryset.filter(title__icontains=title)
+        if category:
+            queryset = queryset.filter(category__name__icontains=category)
+        if max_price:
+            try:
+                max_price_float = float(max_price)
+                queryset = queryset.filter(price__lte=max_price_float)
+            except ValueError:
+                pass  # Handle the case where max_price is not a valid float
+
+        return queryset
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

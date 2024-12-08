@@ -62,7 +62,7 @@ class HotelViewSet(viewsets.ModelViewSet):
 
         return Response({'status': 'rating set', 'rating': rating_value})
 
-    @action(detail=False, methods=['get'], url_path='top-rated')
+    @action(detail=False, methods=['get'], url_path='top-rated', authentication_classes=[], permission_classes=[AllowAny])
     def top_rated(self, request):
         top_hotels = Hotel.objects.annotate(avg_rating=Avg('hotel_ratings__rating')).order_by('-avg_rating')[:5]
         serializer = self.get_serializer(top_hotels, many=True)

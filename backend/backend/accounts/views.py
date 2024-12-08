@@ -55,6 +55,11 @@ class UserProfileView(APIView):
 
         return Response({'user_type': user_type, 'user': profile_serializer.data, 'email': email})
 
+    def delete(self, request):
+        user = request.user
+        user.delete()
+        return Response({'status': 'profile deleted'}, status=status.HTTP_204_NO_CONTENT)
+
 
 
 class ChangePasswordView(generics.UpdateAPIView):

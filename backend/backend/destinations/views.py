@@ -85,7 +85,7 @@ class DestinationViewSet(viewsets.ModelViewSet):
 
         return Response({'status': 'rating set', 'rating': rating_value})
 
-    @action(detail=False, methods=['get'], url_path='top-rated')
+    @action(detail=False, methods=['get'], permission_classes=[AllowAny], authentication_classes=[], url_path='top-rated')
     def top_rated(self, request):
         # top_destinations = Destination.objects.annotate(avg_rating=Avg('destination_ratings__rating')).order_by('-avg_rating')[:5]
 
