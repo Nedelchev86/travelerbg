@@ -37,7 +37,12 @@ Traveler Dashboard:
 ![edit](https://github.com/user-attachments/assets/b5171331-860e-40a9-b0ae-35d2830efde6)
 
 
+### Demo Links
+- Hotels
+  ![hotels](https://github.com/user-attachments/assets/9ce47b3a-ffe1-41b1-bbca-2ba3b1204895)
 
+- Destinations
+  ![destinations](https://github.com/user-attachments/assets/353dd9fc-481d-472b-b44d-2b94a44c2d99)
 
 
 Business Owners:
