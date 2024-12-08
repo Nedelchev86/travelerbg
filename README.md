@@ -3,6 +3,16 @@
 - Demo on DigitalOcean - <a href="https://travelerbg.eu/" target="_blank">travelerBG.eu</a>
 - Demo on Render / DB on aiven.io - <a href="https://travelerbg.onrender.com/" target="_blank">travelerbg.onrender.com</a>    (Free instance will spin down with inactivity, which can delay requests by 50 seconds or more)
 
+### Technologies Used:
+- Angular 18 with StandAlone Components
+## Key Features
+  - CKEditor 5: A powerful rich text editor used for creating and editing content within the application.
+  - Angular Animations: Smooth and interactive animations to enhance the user experience.
+  - Toastr Notifications: Elegant and customizable toast notifications for displaying success, error, and informational messages.
+  - Google Maps Integration: Interactive maps to display locations of destinations and activities.
+  - Angular Guards: Route guards to protect certain routes and ensure that only authorized users can access specific parts of the application.
+
+
 ### Description
 This project is a web application that serves two main user types: travelers and business owners. The platform allows users to add, manage, and explore various destinations, hotels, and activities. It aims to provide a seamless experience for both travelers looking for new adventures and business owners wanting to promote their services.
 
