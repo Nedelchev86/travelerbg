@@ -17,8 +17,8 @@ This project is a web application that serves two main user types: travelers and
 
 
 
-##User Types
-###Travelers:
+
+### User Types - Travelers:
 
 - Explore a wide range of destinations, hotels, and activities.
 - Add and manage destinations and activities.
@@ -52,7 +52,7 @@ Traveler Dashboard:
   ![destinations](https://github.com/user-attachments/assets/353dd9fc-481d-472b-b44d-2b94a44c2d99)
 
 
-Business Owners:
+## User Types - Business owner:
 
 Add and manage their own  hotels, and activities.
 Update information and images for their listings.
