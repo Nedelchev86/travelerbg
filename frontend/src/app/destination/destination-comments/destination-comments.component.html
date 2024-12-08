@@ -5,11 +5,11 @@
     <li class="th-comment-item">
       <div class="th-post-comment">
         <div class="comment-avater">
-          @if (comment.user.profile_picture) {
+          @if (comment.user && comment.user.profile_picture ) {
           <img
             src="{{ comment.user.profile_picture }}"
             alt="Comment Author"
-          />}@else if(comment.user.image){<img
+          />}@else if(comment.user && comment.user.image ){<img
             src="{{ comment.user.image }}"
             alt="Comment Author"
           />}@else {
