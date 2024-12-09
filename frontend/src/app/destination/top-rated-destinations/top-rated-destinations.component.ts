@@ -1,11 +1,12 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { DestinationService } from '../../services/destination.service';
 import { Destination } from '../destination-interface';
-import { LoaderComponent } from "../../shared/components/loader/loader.component";
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-top-rated-destinations',
@@ -26,19 +27,29 @@ import { LoaderComponent } from "../../shared/components/loader/loader.component
     ]),
   ],
 })
-export class TopRatedDestinationsComponent implements OnInit {
+export class TopRatedDestinationsComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
+
   public destinations: Destination[] = [];
   public loading: boolean = true;
 
   constructor(private destinationsService: DestinationService) {}
 
   ngOnInit(): void {
-    this.destinationsService.topDestinations().subscribe({
-      next: (data: any) => {
-        this.loading = false;
-        this.destinations = data;
-      },
-      error: (err) => console.log(err),
-    });
+    this.destinationsService
+      .topDestinations()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (data: any) => {
+          this.loading = false;
+          this.destinations = data;
+        },
+        error: (err) => console.log(err),
+      });
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

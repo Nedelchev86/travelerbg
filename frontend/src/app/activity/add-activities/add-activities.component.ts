@@ -1,5 +1,4 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -21,9 +20,10 @@ import { CKEditorConfigService } from '../../shared/services/ckeditor-config.ser
 import { CloudinaryuploadService } from '../../shared/services/cloudinaryupload.service';
 import { ActivityService } from '../../services/activity.service';
 import { minLengthArray } from '../../validators/minLengthArray.validator';
-import { ActivityCategory } from '../activities/activity-iterface';
+import { ActivityCategory } from '../activity-iterface';
 import { FormUtilsService } from '../../services/form-utils.service';
 import { ToastrService } from 'ngx-toastr';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-add-activities',
@@ -38,12 +38,15 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './add-activities.component.html',
   styleUrl: './add-activities.component.css',
 })
-export class AddActivitiesComponent {
+export class AddActivitiesComponent implements OnInit, OnDestroy {
   private ckEditorConfigService = inject(CKEditorConfigService);
-  addActivitieForm: FormGroup;
-  categories: any[] = [];
-  tags: FormArray;
-  imagePreviews: { [key: string]: string } = {};
+  private unsubscribe$ = new Subject<void>();
+  public addActivitieForm: FormGroup;
+  public categories: any[] = [];
+  public tags: FormArray;
+  public imagePreviews: { [key: string]: string } = {};
+  public Editor = this.ckEditorConfigService.Editor;
+  public config = this.ckEditorConfigService.config;
 
   center: google.maps.LatLngLiteral = { lat: 42.504792, lng: 27.462636 };
   zoom = 15;
@@ -57,12 +60,8 @@ export class AddActivitiesComponent {
   };
   geocoder = inject(MapGeocoder);
 
-  public Editor = this.ckEditorConfigService.Editor;
-  public config = this.ckEditorConfigService.config;
-
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
     private router: Router,
     private cloudinaryuploadService: CloudinaryuploadService,
     private activityService: ActivityService,
@@ -93,13 +92,21 @@ export class AddActivitiesComponent {
     this.fetchCategories();
   }
 
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   fetchCategories(): void {
-    this.activityService.fetchCategories().subscribe({
-      next: (data: ActivityCategory[]) => {
-        this.categories = data;
-      },
-      error: (err) => console.log(err),
-    });
+    this.activityService
+      .fetchCategories()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (data: ActivityCategory[]) => {
+          this.categories = data;
+        },
+        error: (err) => console.log(err),
+      });
   }
 
   onFileChange(event: any, field: string): void {

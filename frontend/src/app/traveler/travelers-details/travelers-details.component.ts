@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
 import { ToastrService } from 'ngx-toastr';
 import { RatingComponent } from '../../shared/components/rating/rating.component';
@@ -6,7 +6,8 @@ import { AuthService } from '../../services/auth.service';
 import { DestinationsByUserComponent } from '../../destination/destinations-by-user/destinations-by-user.component';
 import { Traveler } from '../traveler-interface';
 import { TravelerService } from '../../services/traveler.service';
-import { LoaderComponent } from "../../shared/components/loader/loader.component";
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-travelers-details',
@@ -15,8 +16,11 @@ import { LoaderComponent } from "../../shared/components/loader/loader.component
   templateUrl: './travelers-details.component.html',
   styleUrl: './travelers-details.component.css',
 })
-export class TravelersDetailsComponent implements OnInit {
+export class TravelersDetailsComponent implements OnInit, OnDestroy {
   @Input() travelerId!: number;
+  private unsubscribe$ = new Subject<void>();
+  public travelerDetails: Traveler = {} as Traveler;
+  public loading = false;
 
   constructor(
     private authService: AuthService,
@@ -24,31 +28,30 @@ export class TravelersDetailsComponent implements OnInit {
     private travelerDetailsService: TravelerService
   ) {}
 
-  public travelerDetails: Traveler = {} as Traveler;
-  public loading = true;
-
   ngOnInit() {
     this.fetchTravelerDetails();
-    // this.http.get(`${this.API_URL}travelers/${this.travelerId}/`).subscribe(
-    //   (data: any) => {
-    //     this.travelerDetails = data;
-    //   },
-    //   (error) => {
-    //     console.error('Failed to fetch traveler details', error);
-    //   }
-    // );
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   fetchTravelerDetails(): void {
-    this.travelerDetailsService.getTraveler(this.travelerId).subscribe({
-      next: (data: Traveler) => {
-        this.travelerDetails = data;
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Failed to fetch traveler details', error);
-      },
-    });
+    this.loading = true;
+    this.travelerDetailsService
+      .getTraveler(this.travelerId)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (data: Traveler) => {
+          this.travelerDetails = data;
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Failed to fetch traveler details', error);
+          this.loading = false;
+        },
+      });
   }
 
   rateTraveler(travelerId: number, rating: number): void {

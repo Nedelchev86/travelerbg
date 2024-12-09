@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -15,7 +15,6 @@ import {
   MapAdvancedMarker,
   GoogleMap,
 } from '@angular/google-maps';
-
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { CKEditorConfigService } from '../../shared/services/ckeditor-config.service';
 import { AuthService } from '../../services/auth.service';
@@ -24,6 +23,7 @@ import { DestinationService } from '../../services/destination.service';
 import { minLengthArray } from '../../validators/minLengthArray.validator';
 import { DestinationCategory } from '../destination-interface';
 import { FormUtilsService } from '../../services/form-utils.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-add-destination',
@@ -38,8 +38,9 @@ import { FormUtilsService } from '../../services/form-utils.service';
   templateUrl: './add-destination.component.html',
   styleUrl: './add-destination.component.css',
 })
-export class AddDestinationComponent {
+export class AddDestinationComponent implements OnInit, OnDestroy {
   private ckEditorConfigService = inject(CKEditorConfigService);
+  private unsubscribe$ = new Subject<void>();
   public Editor = this.ckEditorConfigService.Editor;
   public config = this.ckEditorConfigService.config;
   public loading: boolean = true;
@@ -92,14 +93,22 @@ export class AddDestinationComponent {
     this.fetchCategories();
   }
 
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   fetchCategories(): void {
-    this.destinationService.fetchCategories().subscribe({
-      next: (categories: DestinationCategory[]) => {
-        this.categories = categories;
-        this.loading = false;
-      },
-      error: (err) => console.error('Failed to fetch categories', err),
-    });
+    this.destinationService
+      .fetchCategories()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (categories: DestinationCategory[]) => {
+          this.categories = categories;
+          this.loading = false;
+        },
+        error: (err) => console.error('Failed to fetch categories', err),
+      });
   }
 
   onFileChange(event: any, field: string): void {

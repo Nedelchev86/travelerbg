@@ -20,6 +20,7 @@ export class HotelCommentsComponent implements OnInit {
   public comments: Comment[] = []; // Store comments data
   public commentForm: FormGroup;
   public commentFormRegistred: FormGroup;
+  
   constructor(
     private fb: FormBuilder,
     public authService: AuthService,

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, OnInit } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -15,6 +15,7 @@ import { LoaderComponent } from '../../shared/components/loader/loader.component
 import { ToastrService } from 'ngx-toastr';
 import { CKEditorConfigService } from '../../shared/services/ckeditor-config.service';
 import { TravelerService } from '../../services/traveler.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-editprofile',
@@ -23,18 +24,17 @@ import { TravelerService } from '../../services/traveler.service';
   templateUrl: './editprofile.component.html',
   styleUrl: './editprofile.component.css',
 })
-export class EditProfileComponent implements OnInit {
+export class EditProfileComponent implements OnInit, OnDestroy {
   private ckEditorConfigService = inject(CKEditorConfigService);
+  private unsubscribe$ = new Subject<void>();
   public Editor = this.ckEditorConfigService.Editor;
   public config = this.ckEditorConfigService.config;
   public loading = true;
   public profileForm: FormGroup;
   public imagePreviews: { [key: string]: string } = {};
 
-
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
     private authService: AuthService,
     private router: Router,
     private toast: ToastrService,
@@ -65,20 +65,28 @@ export class EditProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.travelerService.getProfileData().subscribe({
-      next: (data: any) => {
-        console.log(data);
-        this.profileForm.patchValue(data);
-        this.imagePreviews['profile_picture'] = data.profile_picture;
-        this.imagePreviews['cover'] = data.cover;
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error('Failed to load profile data', err);
-        this.toast.error('Failed to load profile data');
-        this.loading = false;
-      },
-    });
+    this.travelerService
+      .getProfileData()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (data: any) => {
+          console.log(data);
+          this.profileForm.patchValue(data);
+          this.imagePreviews['profile_picture'] = data.profile_picture;
+          this.imagePreviews['cover'] = data.cover;
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Failed to load profile data', err);
+          this.toast.error('Failed to load profile data');
+          this.loading = false;
+        },
+      });
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   onFileChange(event: any, field: string): void {
@@ -129,22 +137,25 @@ export class EditProfileComponent implements OnInit {
       }
     });
 
-    this.travelerService.updateProfileData(formData).subscribe(
-      (response) => {
-        this.authService.fetchUserData();
-        this.toast.success('Profile updated successfully');
-        this.router.navigate(['/profile']);
-      },
-      (error: HttpErrorResponse) => {
-        if (error.status === 400 && error.error) {
-          const errorMessage = this.extractErrorMessage(error.error);
-          this.toast.error('Failed to update profile', errorMessage);
-        } else {
-          this.toast.error('Failed to update profile');
-        }
-        console.error('Failed to update profile', error);
-      }
-    );
+    this.travelerService
+      .updateProfileData(formData)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (response) => {
+          this.authService.fetchUserData();
+          this.toast.success('Profile updated successfully');
+          this.router.navigate(['/profile']);
+        },
+        error: (error: HttpErrorResponse) => {
+          if (error.status === 400 && error.error) {
+            const errorMessage = this.extractErrorMessage(error.error);
+            this.toast.error('Failed to update profile', errorMessage);
+          } else {
+            this.toast.error('Failed to update profile');
+          }
+          console.error('Failed to update profile', error);
+        },
+      });
   }
 
   private extractErrorMessage(error: any): string {

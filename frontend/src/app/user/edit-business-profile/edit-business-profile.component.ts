@@ -1,5 +1,4 @@
-import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -13,6 +12,7 @@ import { CloudinaryuploadService } from '../../shared/services/cloudinaryupload.
 import { BusinessService } from '../../services/business.service';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import { ToastrService } from 'ngx-toastr';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-edit-business-profile',
@@ -21,7 +21,8 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './edit-business-profile.component.html',
   styleUrl: './edit-business-profile.component.css',
 })
-export class EditBusinessProfileComponent {
+export class EditBusinessProfileComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
   public editProfileForm: FormGroup;
   public userId: number | null = null;
   public loading = false;
@@ -29,7 +30,6 @@ export class EditBusinessProfileComponent {
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
     private router: Router,
     private authService: AuthService,
     private cloudinaryuploadService: CloudinaryuploadService,
@@ -59,8 +59,13 @@ export class EditBusinessProfileComponent {
     this.loadProfileData();
   }
 
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   loadProfileData(): void {
-    this.businessService.getProfileData().subscribe({
+    this.businessService.getProfileData().pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (data: any) => {
         this.imagePreviews['image'] = data.user.image;
         this.userId = data.user.user;

@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { DestinationService } from '../../services/destination.service';
 import { Comment } from '../../hotel/hotel-interface';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-destination-comments',
@@ -20,8 +21,9 @@ import { Comment } from '../../hotel/hotel-interface';
   templateUrl: './destination-comments.component.html',
   styleUrl: './destination-comments.component.css',
 })
-export class DestinationCommentsComponent {
+export class DestinationCommentsComponent implements OnInit, OnDestroy {
   @Input() destinationId: number | null = null;
+  private unsubscribe$ = new Subject<void>();
   public comments: Comment[] = []; // Store comments data
   public commentForm: FormGroup;
   public commentFormRegistred: FormGroup;
@@ -49,16 +51,25 @@ export class DestinationCommentsComponent {
       this.fetchComments();
     }
   }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   fetchComments(): void {
-    this.destinationService.fetchComments(this.destinationId!).subscribe({
-      next: (data: Comment[]) => {
-        this.comments = data;
-      },
-      error: (err) => {
-        console.error('Failed to fetch comments', err);
-        this.toast.error('Failed to fetch comments');
-      },
-    });
+    this.destinationService
+      .fetchComments(this.destinationId!)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (data: Comment[]) => {
+          this.comments = data;
+        },
+        error: (err) => {
+          console.error('Failed to fetch comments', err);
+          this.toast.error('Failed to fetch comments');
+        },
+      });
   }
 
   onSubmitComment(): void {

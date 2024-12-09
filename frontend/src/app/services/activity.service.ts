@@ -2,10 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {
-  Activity,
-  ActivityCategory,
-} from '../activity/activities/activity-iterface';
+import { Activity, ActivityCategory } from '../activity/activity-iterface';
 
 @Injectable({
   providedIn: 'root',
@@ -56,10 +53,15 @@ export class ActivityService {
   }
 
   addToFavorites(activityId: number): Observable<any> {
-    return this.http.post(`${this.API_URL}activities/${activityId}/add_to_favorites/`, {});
+    return this.http.post(
+      `${this.API_URL}activities/${activityId}/add_to_favorites/`,
+      {}
+    );
   }
 
   removeFromFavorites(activityId: number): Observable<any> {
-    return this.http.delete(`${this.API_URL}activities/${activityId}/remove_from_favorites/`);
+    return this.http.delete(
+      `${this.API_URL}activities/${activityId}/remove_from_favorites/`
+    );
   }
 }

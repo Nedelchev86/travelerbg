@@ -1,11 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
@@ -25,6 +20,7 @@ import {
   stagger,
 } from '@angular/animations';
 import { HotelCommentsComponent } from '../hotel-comments/hotel-comments.component';
+import { Subject, takeUntil } from 'rxjs';
 interface Images {
   imageSrc: string;
   imageAlt?: string;
@@ -70,7 +66,8 @@ interface Images {
     ]),
   ],
 })
-export class HotelDetailsComponent implements OnInit {
+export class HotelDetailsComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
   public loading: boolean = true;
   public hotel: Hotel = {} as Hotel; // Store hotel data
   public hotelId: number | null = null;
@@ -93,6 +90,11 @@ export class HotelDetailsComponent implements OnInit {
     }
   }
 
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   getFilteredImages(): Images[] {
     return [
       { imageSrc: this.hotel.image2 },
@@ -102,31 +104,38 @@ export class HotelDetailsComponent implements OnInit {
   }
 
   fetchHotelDetails(): void {
-    this.hotelDetailsService.getHotelDetails(this.hotelId!).subscribe({
-      next: (data: Hotel) => {
-        this.hotel = data;
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error('Failed to fetch hotel details', err);
-        this.toast.error('Failed to fetch hotel details');
-      },
-    });
+    this.hotelDetailsService
+      .getHotelDetails(this.hotelId!)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (data: Hotel) => {
+          this.hotel = data;
+          this.galleryData = this.getFilteredImages();
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Failed to fetch hotel details', err);
+          this.toast.error('Failed to fetch hotel details');
+        },
+      });
   }
 
   fetchFavoriteStatus(): void {
     if (!this.authService.isLoggedIn()) {
       return;
     }
-    this.hotelDetailsService.getFavoriteStatus(this.hotelId!).subscribe({
-      next: (data: FavoriteStatusResponse) => {
-        this.isFavorite = data.is_favorite;
-      },
-      error: (err) => {
-        console.error('Failed to fetch favorite status', err);
-        this.toast.error('Failed to fetch favorite status');
-      },
-    });
+    this.hotelDetailsService
+      .getFavoriteStatus(this.hotelId!)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (data: FavoriteStatusResponse) => {
+          this.isFavorite = data.is_favorite;
+        },
+        error: (err) => {
+          console.error('Failed to fetch favorite status', err);
+          this.toast.error('Failed to fetch favorite status');
+        },
+      });
   }
 
   rateHotel(rating: number): void {

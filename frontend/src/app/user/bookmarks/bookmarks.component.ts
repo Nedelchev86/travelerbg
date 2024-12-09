@@ -1,11 +1,9 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, inject, input, OnInit } from '@angular/core';
-
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import { environment } from '../../../environments/environment';
 import { RouterLink } from '@angular/router';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import { ToastrService } from 'ngx-toastr';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-bookmarks',
@@ -14,18 +12,16 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './bookmarks.component.html',
   styleUrl: './bookmarks.component.css',
 })
-export class BookmarksComponent implements OnInit {
-  http = inject(HttpClient);
-  authService = inject(AuthService);
-  toast = inject(ToastrService);
+export class BookmarksComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
 
-  private readonly apiUrl = environment.apiUrl;
+  public favorites_destinations: any[] = [];
+  public favorites_hotels: any[] = [];
+  public favorites_activities: any[] = [];
+  public loading = true; // Track loading state
+  public error: string | null = null;
 
-  favorites_destinations: any[] = [];
-  favorites_hotels: any[] = [];
-  favorites_activities: any[] = [];
-  loading = true; // Track loading state
-  error: string | null = null;
+  constructor(private authService: AuthService, private toast: ToastrService) {}
 
   ngOnInit() {
     const user = this.authService.currentUser();
@@ -41,10 +37,15 @@ export class BookmarksComponent implements OnInit {
     }
   }
 
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   fetchFavorites(userId: number, userType: string): void {
     this.loading = true;
 
-    this.authService.getBookmarks(userType, userId).subscribe({
+    this.authService.getBookmarks(userType, userId).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (response: any) => {
         this.favorites_destinations = response.favorite_destinations;
         this.favorites_hotels = response.favorite_hotels;

@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import {
   FormBuilder,
@@ -17,7 +16,7 @@ import {
   MapAdvancedMarker,
   MapGeocoder,
 } from '@angular/google-maps';
-import { environment } from '../../../environments/environment';
+
 import { CKEditorConfigService } from '../../shared/services/ckeditor-config.service';
 import { CloudinaryuploadService } from '../../shared/services/cloudinaryupload.service';
 import { HotelService } from '../../services/hotel.service';
@@ -194,39 +193,6 @@ export class HotelEditComponent {
       },
     });
   }
-
-  // loadHotelData(hotelId: string): void {
-
-  //   this.http.get(`${this.API_URL}hotels/${hotelId}/`).subscribe(
-  //     (response: any) => {
-  //       this.editHotelForm.patchValue(response);
-  //       if (response.lat && response.lng) {
-  //         this.center = {
-  //           lat: Number(response.lat),
-  //           lng: Number(response.lng),
-  //         };
-  //         this.markerPosition = {
-  //           lat: Number(response.lat),
-  //           lng: Number(response.lng),
-  //         };
-  //       } else {
-  //         this.geocodeAddress(response.location);
-  //       }
-
-  //       response.tags.forEach((tag: { id: Number; name: string }) => {
-  //         this.tags.push(this.fb.control(tag.name, Validators.required));
-  //       });
-  //       this.markCheckedHighlights(response.highlights);
-  //       this.imagePreviews['image'] = response.image;
-  //       this.imagePreviews['image2'] = response.image2;
-  //       this.imagePreviews['image3'] = response.image3;
-  //       this.imagePreviews['image4'] = response.image4;
-  //     },
-  //     (error) => {
-  //       console.error('Failed to fetch destination details', error);
-  //     }
-  //   );
-  // }
 
   removeImage(field: string): void {
     this.editHotelForm.patchValue({

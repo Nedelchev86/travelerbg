@@ -1,13 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DeleteConfirmationModalComponent } from '../../shared/components/delete-confirmation-modal/delete-confirmation-modal.component';
 import { AuthService } from '../../services/auth.service';
-import { environment } from '../../../environments/environment';
 import { ActivityService } from '../../services/activity.service';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderComponent } from "../../shared/components/loader/loader.component";
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-my-activities',
@@ -16,7 +15,8 @@ import { LoaderComponent } from "../../shared/components/loader/loader.component
   templateUrl: './my-activities.component.html',
   styleUrl: './my-activities.component.css',
 })
-export class MyActivitiesComponent {
+export class MyActivitiesComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
   public showModal = false;
   public activities: Array<any> = [];
   public itemIdToDelete: number | null = null;
@@ -32,9 +32,16 @@ export class MyActivitiesComponent {
     this.fetchMyActivities();
   }
 
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   fetchMyActivities(): void {
     this.loading = true;
-    this.activityService.fetchMyActivities().subscribe({
+    this.activityService.fetchMyActivities().pipe(
+      takeUntil(this.unsubscribe$)
+    ).subscribe({
       next: (data: any) => {
         this.activities = data;
         this.loading = false;

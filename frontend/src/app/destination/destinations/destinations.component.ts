@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -8,6 +8,7 @@ import { AuthService } from '../../services/auth.service';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { DestinationService } from '../../services/destination.service';
 import { ApiResponse, Destination } from '../destination-interface';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-destinations',
@@ -34,15 +35,8 @@ import { ApiResponse, Destination } from '../destination-interface';
     ]),
   ],
 })
-export class DestinationsComponent {
-  constructor(
-    private destinationsService: DestinationService,
-    private authService: AuthService,
-    private toast: ToastrService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
-
+export class DestinationsComponent implements OnInit {
+  private unsubscribe$ = new Subject<void>();
   public destinations: Destination[] = [];
   public searchQuery: string = '';
   public categoryQuery: string = '';
@@ -52,17 +46,33 @@ export class DestinationsComponent {
   public previousPageUrl: string | null = null;
   public loading = true;
 
+  constructor(
+    private destinationsService: DestinationService,
+    private authService: AuthService,
+    private toast: ToastrService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
+
   ngOnInit() {
-    this.route.queryParams.subscribe((params) => {
-      this.categoryQuery = params['category'] || '';
-      this.fetchDestinations();
-    });
+    this.route.queryParams
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((params) => {
+        this.categoryQuery = params['category'] || '';
+        this.fetchDestinations();
+      });
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   fetchDestinations(): void {
     this.loading = true;
     this.destinationsService
       .fetchDestinations(this.currentPage, this.searchQuery, this.categoryQuery)
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (data: ApiResponse) => {
           this.destinations = data.results;

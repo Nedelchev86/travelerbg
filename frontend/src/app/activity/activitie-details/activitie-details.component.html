@@ -72,6 +72,14 @@
 
     <h2 class="box-title">{{ activitie.title }}</h2>
     <p class="box-text mb-30" [innerHTML]="activitie.description"></p>
+
+    <div class="destination-gallery-wrapper">
+      <app-google-map
+        [location]="activitie.location"
+        [lat]="activitie.lat!"
+        [lng]="activitie.lng!"
+      ></app-google-map>
+    </div>
     <p class="box-text mb-50" [innerHTML]="activitie.highlight"></p>
     <div class="tour-snapshot">
       <h4 class="box-title">Tour Snapshot</h4>

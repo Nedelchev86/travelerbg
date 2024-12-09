@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   ActivatedRoute,
   Router,
@@ -13,7 +13,8 @@ import { ShapeMockupDirective } from '../../directives/shape-mockup.directive';
 import { TopTravelersComponent } from '../../traveler/top-travelers/top-travelers.component';
 import { HotelService } from '../../services/hotel.service';
 import { HotelsCategory } from '../hotel-interface';
-import { LoaderComponent } from "../../shared/components/loader/loader.component";
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-hotels-layout',
@@ -28,12 +29,13 @@ import { LoaderComponent } from "../../shared/components/loader/loader.component
     RouterLink,
     RouterLinkActive,
     BannerComponent,
-    LoaderComponent
-],
+    LoaderComponent,
+  ],
   templateUrl: './hotels-layout.component.html',
   styleUrl: './hotels-layout.component.css',
 })
-export class HotelsLayoutComponent implements OnInit {
+export class HotelsLayoutComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
   public searchQuery: string = '';
   public categories: HotelsCategory[] = [];
   public loading: boolean = true;
@@ -48,14 +50,22 @@ export class HotelsLayoutComponent implements OnInit {
     this.fetchHotelCategories();
   }
 
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   fetchHotelCategories(): void {
-    this.hotelsService.fetchHotelCategories().subscribe({
-      next: (data: HotelsCategory[]) => {
-        this.loading = false;
-        this.categories = data;
-      },
-      error: (err) => console.log(err),
-    });
+    this.hotelsService
+      .fetchHotelCategories()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (data: HotelsCategory[]) => {
+          this.loading = false;
+          this.categories = data;
+        },
+        error: (err) => console.log(err),
+      });
   }
 
   onSearch(event: any): void {

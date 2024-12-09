@@ -1,23 +1,28 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DeleteConfirmationModalComponent } from '../../shared/components/delete-confirmation-modal/delete-confirmation-modal.component';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
-import { environment } from '../../../environments/environment';
 import { HotelService } from '../../services/hotel.service';
 import { Hotel } from '../hotel-interface';
 import { ToastrService } from 'ngx-toastr';
-import { LoaderComponent } from "../../shared/components/loader/loader.component";
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-my-hotel',
   standalone: true,
-  imports: [DeleteConfirmationModalComponent, RouterLink, CommonModule, LoaderComponent],
+  imports: [
+    DeleteConfirmationModalComponent,
+    RouterLink,
+    CommonModule,
+    LoaderComponent,
+  ],
   templateUrl: './my-hotel.component.html',
   styleUrl: './my-hotel.component.css',
 })
-export class MyHotelComponent {
+export class MyHotelComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
   public showModal = false;
   public hotels: Hotel[] = [];
   public itemIdToDelete: number | null = null;
@@ -33,18 +38,26 @@ export class MyHotelComponent {
     this.fetchMyHotels();
   }
 
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   fetchMyHotels(): void {
     this.loading = true;
-    this.hotelService.fetchMyHotels().subscribe({
-      next: (data: any) => {
-        this.hotels = data;
-        this.loading = false;
-      },
-      error: (err) => {
-        console.log(err);
-        this.loading = false;
-      },
-    });
+    this.hotelService
+      .fetchMyHotels()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (data: any) => {
+          this.hotels = data;
+          this.loading = false;
+        },
+        error: (err) => {
+          console.log(err);
+          this.loading = false;
+        },
+      });
   }
 
   openModal(itemId: number) {
@@ -75,24 +88,4 @@ export class MyHotelComponent {
       });
     }
   }
-  // confirmDelete() {
-  //   if (this.itemIdToDelete) {
-  //     // Perform the delete action here
-  //     this.http
-  //       .delete(`${this.API_URL}hotels/${this.itemIdToDelete}/`)
-  //       .subscribe(
-  //         (response) => {
-  //           this.authServices.fetchUserData();
-  //           // Remove the deleted item from the data array
-  //           this.data = this.data.filter(
-  //             (item) => item.id !== this.itemIdToDelete
-  //           );
-  //           this.closeModal();
-  //         },
-  //         (error) => {
-  //           console.error('Failed to delete item', error);
-  //         }
-  //       );
-  //   }
-  // }
 }

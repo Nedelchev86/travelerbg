@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { DeleteConfirmationModalComponent } from '../../shared/components/delete-confirmation-modal/delete-confirmation-modal.component';
@@ -7,6 +7,7 @@ import { DestinationService } from '../../services/destination.service';
 import { Destination } from '../destination-interface';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderComponent } from "../../shared/components/loader/loader.component";
+import { Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-my-destinations',
   standalone: true,
@@ -20,11 +21,13 @@ import { LoaderComponent } from "../../shared/components/loader/loader.component
   templateUrl: './my-destinations.component.html',
   styleUrl: './my-destinations.component.css',
 })
-export class MyDestinationsComponent {
+export class MyDestinationsComponent implements OnInit, OnDestroy{
   public loading: boolean = true;
   public showModal = false;
   public data: Destination[] = [];
   private itemIdToDelete: number | null = null;
+  private unsubscribe$ = new Subject<void>();
+  
 
   constructor(
     private destinationService: DestinationService,
@@ -33,13 +36,18 @@ export class MyDestinationsComponent {
   ) {}
 
   ngOnInit() {
-    this.destinationService.myDestinations().subscribe({
+    this.destinationService.myDestinations().pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (data: Destination[]) => {
         this.data = data;
         this.loading = false;
       },
       error: (err) => console.log(err),
     });
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   openModal(itemId: number) {

@@ -1,13 +1,13 @@
-import { Component, HostListener, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { LoginRegisterComponent } from '../../user/login-register/login-register.component';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { HttpClient } from '@angular/common/http';
-import { UserInterface } from '../../user-interface';
-import { faFontAwesome, faTimes } from '@fortawesome/free-solid-svg-icons';
+
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { environment } from '../../../environments/environment';
+
 import {
   animate,
   state,
@@ -59,37 +59,16 @@ import {
   ],
 })
 export class HeaderComponent {
-  isLoginRegisterPopupVisible = false;
-  http = inject(HttpClient);
-  authService = inject(AuthService);
-  router = inject(Router);
-  faTimes = faTimes;
-  isBodyVisible = false;
+  public isLoginRegisterPopupVisible = false;
+  public authService = inject(AuthService);
+  public faTimes = faTimes;
+  public isBodyVisible = false;
 
-  // isSticky = false;
+  constructor(public router: Router) {}
 
-  // @HostListener('window:scroll', [])
-  // onScroll(): void {
-  //   this.isSticky = window.scrollY > 0; // Add class when scrolled
-  // }
-
-  ngOnInit(): void {
-    // if (localStorage.getItem('token')) {
-    //   this.http.get<UserInterface>(`${this.API_URL}user`).subscribe({
-    //     next: (response) => {
-    //       this.authService.currentUser.set(response);
-    //     },
-    //     error: () => {
-    //       this.authService.currentUser.set(null);
-    //     },
-    //   });
-    // }
-  }
+  ngOnInit(): void {}
 
   openLoginRegisterPopup() {
-    // if (this.isBodyVisible) {
-    //   this.isBodyVisible = false;
-    // }
     this.isLoginRegisterPopupVisible = true;
   }
 

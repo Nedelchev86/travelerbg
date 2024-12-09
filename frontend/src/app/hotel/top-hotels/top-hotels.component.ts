@@ -1,16 +1,15 @@
-import { HttpClient } from '@angular/common/http';
 import {
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
-  inject,
+  OnDestroy,
   OnInit,
 } from '@angular/core';
 
 import { RouterLink } from '@angular/router';
 import { SetBgImageDirective } from '../../directives/set-bg-image.directive';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
-import { environment } from '../../../environments/environment';
 import { HotelService } from '../../services/hotel.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-top-hotels',
@@ -20,7 +19,8 @@ import { HotelService } from '../../services/hotel.service';
   templateUrl: './top-hotels.component.html',
   styleUrl: './top-hotels.component.css',
 })
-export class TopHotelsComponent implements OnInit {
+export class TopHotelsComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
   public loading = true;
   public hotels: any = [];
 
@@ -30,16 +30,24 @@ export class TopHotelsComponent implements OnInit {
     this.fetchTopRatedHotels();
   }
 
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   fetchTopRatedHotels(): void {
-    this.hotelService.fetchTopRatedHotels().subscribe({
-      next: (data: any) => {
-        this.hotels = data;
-        this.loading = false;
-      },
-      error: (err) => {
-        console.log(err);
-        this.loading = false;
-      },
-    });
+    this.hotelService
+      .fetchTopRatedHotels()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (data: any) => {
+          this.hotels = data;
+          this.loading = false;
+        },
+        error: (err) => {
+          console.log(err);
+          this.loading = false;
+        },
+      });
   }
 }

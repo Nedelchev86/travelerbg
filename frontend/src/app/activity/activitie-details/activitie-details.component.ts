@@ -1,13 +1,19 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
+import {
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
-import { environment } from '../../../environments/environment'; // Import the environment configuration
-import { Activity } from '../activities/activity-iterface';
+import { Activity } from '../activity-iterface';
 import { ActivityService } from '../../services/activity.service';
+import { Subject, takeUntil } from 'rxjs';
+import { GoogleMapComponent } from '../../shared/components/google-map/google-map.component';
 
 interface FavoriteStatusResponse {
   is_favorite: boolean;
@@ -16,12 +22,13 @@ interface FavoriteStatusResponse {
 @Component({
   selector: 'app-activitie-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, GoogleMapComponent],
   templateUrl: './activitie-details.component.html',
   styleUrl: './activitie-details.component.css',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class ActivitieDetailsComponent {
+export class ActivitieDetailsComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
   public isFavorite: boolean = false;
   public activitie: Activity = {} as Activity; // Store hotel data
   public activitieId: number | null = null;
@@ -42,20 +49,28 @@ export class ActivitieDetailsComponent {
     }
   }
 
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   fetchActivitieDetails(activitieId: number): void {
     this.loading = true;
-    this.activityService.getActivityDetails(activitieId).subscribe({
-      next: (data: Activity) => {
-        this.activitie = data;
-        this.checkIsFavorite(activitieId);
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Error fetching activity details:', error);
-        this.toast.error('Failed to fetch activity details');
-        this.loading = false;
-      },
-    });
+    this.activityService
+      .getActivityDetails(activitieId)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (data: Activity) => {
+          this.activitie = data;
+          this.checkIsFavorite(activitieId);
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Error fetching activity details:', error);
+          this.toast.error('Failed to fetch activity details');
+          this.loading = false;
+        },
+      });
   }
 
   checkIsFavorite(activitieId: number): void {

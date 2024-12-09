@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ActivityService } from '../../services/activity.service';
-import { Activity } from './activity-iterface';
-import { LoaderComponent } from "../../shared/components/loader/loader.component";
+import { Activity } from '../activity-iterface';
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-activities',
@@ -12,13 +13,13 @@ import { LoaderComponent } from "../../shared/components/loader/loader.component
   templateUrl: './activities.component.html',
   styleUrl: './activities.component.css',
 })
-export class ActivitiesComponent {
+export class ActivitiesComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
   public loading: boolean = false;
   public data: Array<Activity> = [];
   public searchQuery: string = '';
   public categoryQuery: string = '';
   public max_price: number = 0;
-
 
   constructor(
     private route: ActivatedRoute,
@@ -27,12 +28,20 @@ export class ActivitiesComponent {
   ) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe((params) => {
-      this.searchQuery = params['title'] || '';
-      this.categoryQuery = params['category'] || '';
-      this.max_price = params['max_price'] ? +params['max_price'] : 0;
-      this.fetchActivities();
-    });
+    this.route.queryParams
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((params) => {
+        this.searchQuery = params['title'] || '';
+        this.categoryQuery = params['category'] || '';
+        this.max_price = params['max_price'] ? +params['max_price'] : 0;
+        this.fetchActivities();
+      });
+  }
+
+  ngOnDestroy() {
+    console.log('destroy');
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   fetchActivities(): void {
@@ -43,17 +52,20 @@ export class ActivitiesComponent {
       max_price: this.max_price,
     };
 
-    this.activityService.fetchActivities(params).subscribe({
-      next: (data: Activity[]) => {
-        this.data = data;
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error('Failed to fetch activities', err);
-        this.toast.error('Failed to fetch activities');
-        this.loading = false;
-      },
-    });
+    this.activityService
+      .fetchActivities(params)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (data: Activity[]) => {
+          this.data = data;
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Failed to fetch activities', err);
+          this.toast.error('Failed to fetch activities');
+          this.loading = false;
+        },
+      });
   }
 
   // searchActivities(): void {

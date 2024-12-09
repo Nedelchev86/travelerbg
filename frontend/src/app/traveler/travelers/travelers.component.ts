@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import { RatingComponent } from '../../shared/components/rating/rating.component';
@@ -14,6 +14,7 @@ import {
 } from '@angular/animations';
 import { TravelerService } from '../../services/traveler.service';
 import { Traveler } from '../traveler-interface';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-tralevers',
@@ -24,9 +25,8 @@ import { Traveler } from '../traveler-interface';
   animations: [
     trigger('listAnimation', [
       transition('* => *', [
-        // Initial state for the elements
         query(':enter', [style({ opacity: 0 })], { optional: true }),
-        // Stagger the elements with an animation
+
         query(
           ':enter',
           [
@@ -40,9 +40,10 @@ import { Traveler } from '../traveler-interface';
     ]),
   ],
 })
-export class TraleversComponent {
+export class TraleversComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
   public data: Traveler[] = [];
-  public loading = true;
+  public loading = false;
 
   constructor(
     private travelerService: TravelerService,
@@ -52,33 +53,29 @@ export class TraleversComponent {
 
   ngOnInit() {
     this.fetchTravelers();
-    // this.httpClient.get(`${this.API_URL}travelers/`).subscribe({
-    //   next: (data: any) => {
-    //     this.data = data;
-    //     this.loading = false;
-    //   },
-    //   error: (err) => {
-    //     console.log(err);
-    //     this.toast.error(
-    //       'Error fetching travelers data',
-    //       'Cannot connect to server'
-    //     );
-    //   },
-    // });
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   fetchTravelers(): void {
-    this.travelerService.fetchTravelers().subscribe({
-      next: (data: Traveler[]) => {
-        this.data = data;
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Failed to fetch travelers', error);
-        this.toast.error('Failed to fetch travelers');
-        this.loading = false;
-      },
-    });
+    this.loading = true;
+    this.travelerService
+      .fetchTravelers()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (data: Traveler[]) => {
+          this.data = data;
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Failed to fetch travelers', error);
+          this.toast.error('Failed to fetch travelers');
+          this.loading = false;
+        },
+      });
   }
 
   rateTraveler(travelerId: number, rating: number): void {
@@ -112,42 +109,4 @@ export class TraleversComponent {
       });
     }
   }
-
-  // rateTraveler(travelerId: string, rating: number): void {
-  //   if (!this.authService.isLoggedIn()) {
-  //     this.toast.error('Please login to rate travelers', 'Login required');
-  //     return;
-  //   }
-
-  //   this.httpClient
-  //     .post(`${this.API_URL}travelers/${travelerId}/rate/`, {
-  //       rating,
-  //     })
-  //     .subscribe({
-  //       next: (response) => {
-  //         this.updateTravelerRating(travelerId, rating);
-  //         this.toast.success('Rating submitted successfully');
-  //       },
-  //       error: (err) => {
-  //         this.toast.error('Please login to rate travelers', 'Login required');
-  //       },
-  //     });
-  // }
-  // updateTravelerRating(travelerId: string, rating: number): void {
-  //   const traveler = this.data.find((t) => t.user === travelerId);
-  //   if (traveler) {
-  //     this.httpClient.get(`${this.API_URL}travelers/${travelerId}`).subscribe({
-  //       next: (data: any) => {
-  //         traveler.average_rating = data.average_rating;
-  //         traveler.number_of_votes = data.number_of_votes;
-  //       },
-  //       error: (err) => {
-  //         this.toast.error(
-  //           'Error fetching travelers data',
-  //           'Cannot connect to server'
-  //         );
-  //       },
-  //     });
-  //   }
-  // }
 }

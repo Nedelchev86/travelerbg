@@ -1,5 +1,4 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, inject, Input } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { RatingComponent } from '../../shared/components/rating/rating.component';
@@ -16,6 +15,7 @@ import {
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import { HotelService } from '../../services/hotel.service';
 import { Hotel, HotelsResponse } from '../hotel-interface';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-hotels',
@@ -42,8 +42,8 @@ import { Hotel, HotelsResponse } from '../hotel-interface';
     ]),
   ],
 })
-export class HotelsComponent {
-
+export class HotelsComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
   public hotels: Hotel[] = [];
   public currentPage: number = 1;
   public totalPages: number = 1;
@@ -62,13 +62,19 @@ export class HotelsComponent {
     private hotelService: HotelService
   ) {}
 
-
   ngOnInit() {
-    this.route.queryParams.subscribe((params) => {
-      this.searchQuery = params['name'] || '';
-      this.categoryQuery = params['category'] || '';
-      this.fetchHotels();
-    });
+    this.route.queryParams
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((params) => {
+        this.searchQuery = params['name'] || '';
+        this.categoryQuery = params['category'] || '';
+        this.fetchHotels();
+      });
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   fetchHotels(): void {
@@ -79,19 +85,21 @@ export class HotelsComponent {
       category: this.categoryQuery,
     };
 
-    this.hotelService.fetchHotels(params).subscribe({
-      next: (data: HotelsResponse) => {
-        this.hotels = data.results;
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Failed to fetch hotels', error);
-        this.toast.error('Failed to fetch hotels');
-        this.loading = false;
-      },
-    });
+    this.hotelService
+      .fetchHotels(params)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (data: HotelsResponse) => {
+          this.hotels = data.results;
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Failed to fetch hotels', error);
+          this.toast.error('Failed to fetch hotels');
+          this.loading = false;
+        },
+      });
   }
-
 
   changePage(page: number): void {
     if (page >= 1 && page <= this.totalPages) {

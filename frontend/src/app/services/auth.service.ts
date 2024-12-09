@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -32,41 +32,69 @@ export class AuthService {
     }
   }
 
-  login(credentials: { email: string; password: string }): void {
-    this.http.post(`${this.API_URL}token/`, credentials).subscribe({
-      next: (response: any) => {
+  login(credentials: { email: string; password: string }): Observable<any> {
+    return this.http.post(`${this.API_URL}token/`, credentials).pipe(
+      tap((response: any) => {
         const token = response.access;
         this.token.set(token);
-
         localStorage.setItem('token', token);
         this.fetchUserData();
-
-        this.router.navigate(['/']);
-      },
-      error: (err) => {
-        this.toast.error('Login failed. Wronag email or password');
-      },
-    });
+      })
+    );
   }
+
+  // login(credentials: { email: string; password: string }): void {
+  //   this.http.post(`${this.API_URL}token/`, credentials).subscribe({
+  //     next: (response: any) => {
+  //       const token = response.access;
+  //       this.token.set(token);
+
+  //       localStorage.setItem('token', token);
+  //       this.fetchUserData();
+
+  //       this.router.navigate(['/']);
+  //     },
+  //     error: (err) => {
+  //       this.toast.error('Login failed. Wronag email or password');
+  //     },
+  //   });
+  // }
+
   register(userDetails: {
     email: string;
     password: string;
     confirm_password: string;
     role: string;
-  }): void {
-    this.http.post(`${this.API_URL}register/`, userDetails).subscribe({
-      next: (response: any) => {
-        this.login(userDetails);
-
-        this.router.navigate(['/']);
-      },
-      error: (err) => {
-        this.toast.error('Email already exists', 'Try again');
-
-        // Handle error (e.g., show a message)
-      },
-    });
+  }): Observable<any> {
+    return this.http.post(`${this.API_URL}register/`, userDetails).pipe(
+      tap((response: any) => {
+        this.login({
+          email: userDetails.email,
+          password: userDetails.password,
+        }).subscribe();
+      })
+    );
   }
+
+  // register(userDetails: {
+  //   email: string;
+  //   password: string;
+  //   confirm_password: string;
+  //   role: string;
+  // }): void {
+  //   this.http.post(`${this.API_URL}register/`, userDetails).subscribe({
+  //     next: (response: any) => {
+  //       this.login(userDetails);
+
+  //       this.router.navigate(['/']);
+  //     },
+  //     error: (err) => {
+  //       this.toast.error('Email already exists', 'Try again');
+
+  //       // Handle error (e.g., show a message)
+  //     },
+  //   });
+  // }
 
   logout(): void {
     this.token.set(null);
@@ -96,7 +124,7 @@ export class AuthService {
       },
       error: (err) => {
         console.error('Failed to fetch user details:', err);
-        this.logout(); // Optionally log out the user on error
+        this.logout(); 
       },
     });
   }

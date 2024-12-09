@@ -41,10 +41,14 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class AddHotelComponent implements OnInit {
   private ckEditorConfigService = inject(CKEditorConfigService);
-  imagePreviews: { [key: string]: string } = {};
-  addHotelForm: FormGroup;
-  tags: FormArray;
-  highlights: Highlights[] = [];
+  public categories: HotelsCategory[] = [];
+  public Editor = this.ckEditorConfigService.Editor;
+  public config = this.ckEditorConfigService.config;
+  private readonly API_URL = environment.apiUrl;
+  public imagePreviews: { [key: string]: string } = {};
+  public addHotelForm: FormGroup;
+  public tags: FormArray;
+  public highlights: Highlights[] = [];
   center: google.maps.LatLngLiteral = { lat: 42.504792, lng: 27.462636 };
   zoom = 15;
   markerPosition: google.maps.LatLngLiteral = {
@@ -56,12 +60,6 @@ export class AddHotelComponent implements OnInit {
     gestureHandling: 'greedy',
   };
   geocoder = inject(MapGeocoder);
-
-  public categories: HotelsCategory[] = [];
-
-  public Editor = this.ckEditorConfigService.Editor;
-  public config = this.ckEditorConfigService.config;
-  private readonly API_URL = environment.apiUrl;
 
   constructor(
     private fb: FormBuilder,

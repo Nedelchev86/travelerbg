@@ -94,8 +94,12 @@
                   <small>{{ loginError }}</small>
                 </div>
                 <div class="form-btn mb-20 col-12">
-                  <button class="th-btn btn-fw th-radius2" type="submit">
-                    Login
+                  <button
+                    class="th-btn btn-fw th-radius2"
+                    type="submit"
+                    [disabled]="loading"
+                  >
+                    {{ loading ? "Loading..." : "Login" }}
                   </button>
                 </div>
               </div>
@@ -212,8 +216,12 @@
                 <small>{{ registerError }}</small>
               </div>
               <div class="form-btn mt-20 col-12">
-                <button class="th-btn btn-fw th-radius2" type="submit">
-                  Sign up
+                <button
+                  class="th-btn btn-fw th-radius2"
+                  type="submit"
+                  [disabled]="loading"
+                >
+                  {{ loading ? "Loading..." : "Sign up" }}
                 </button>
               </div>
             </div>

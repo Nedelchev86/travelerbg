@@ -1,8 +1,14 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
+import {
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SetBgImageDirective } from '../../directives/set-bg-image.directive';
 import { TravelerService } from '../../services/traveler.service';
 import { Traveler } from '../traveler-interface';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-top-travelers',
@@ -12,7 +18,8 @@ import { Traveler } from '../traveler-interface';
   templateUrl: './top-travelers.component.html',
   styleUrl: './top-travelers.component.css',
 })
-export class TopTravelersComponent implements OnInit {
+export class TopTravelersComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
   public top_travelers: Traveler[] = [];
   constructor(private travelerService: TravelerService) {}
 
@@ -20,12 +27,20 @@ export class TopTravelersComponent implements OnInit {
     this.fetchTopTravelers();
   }
 
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   fetchTopTravelers(): void {
-    this.travelerService.fetchTopTravelers().subscribe({
-      next: (data: Traveler[]) => {
-        this.top_travelers = data;
-      },
-      error: (err) => console.log(err),
-    });
+    this.travelerService
+      .fetchTopTravelers()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (data: Traveler[]) => {
+          this.top_travelers = data;
+        },
+        error: (err) => console.log(err),
+      });
   }
 }

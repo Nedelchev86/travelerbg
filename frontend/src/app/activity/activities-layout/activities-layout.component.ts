@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   ActivatedRoute,
   Router,
@@ -6,12 +6,12 @@ import {
   RouterLinkActive,
   RouterOutlet,
 } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivityService } from '../../services/activity.service';
-import { ActivityCategory } from '../activities/activity-iterface';
+import { ActivityCategory } from '../activity-iterface';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-activities-layout',
@@ -26,9 +26,9 @@ import { ActivityCategory } from '../activities/activity-iterface';
   templateUrl: './activities-layout.component.html',
   styleUrl: './activities-layout.component.css',
 })
-export class ActivitiesLayoutComponent implements OnInit {
+export class ActivitiesLayoutComponent implements OnInit, OnDestroy {
   public max_price: number = 300;
-
+  private unsubscribe$ = new Subject<void>();
   public categories: any = Array<any>();
   public searchQuery: string = '';
 
@@ -45,13 +45,21 @@ export class ActivitiesLayoutComponent implements OnInit {
     this.fetchCategories();
   }
 
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   fetchCategories(): void {
-    this.activityService.fetchCategories().subscribe({
-      next: (data: ActivityCategory[]) => {
-        this.categories = data;
-      },
-      error: (err) => console.log(err),
-    });
+    this.activityService
+      .fetchCategories()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (data: ActivityCategory[]) => {
+          this.categories = data;
+        },
+        error: (err) => console.log(err),
+      });
   }
 
   onSearch(event: any): void {
