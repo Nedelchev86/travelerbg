@@ -27,6 +27,7 @@ export class EditBusinessProfileComponent implements OnInit, OnDestroy {
   public userId: number | null = null;
   public loading = false;
   public imagePreviews: { [key: string]: string } = {};
+  public submitting = false;
 
   constructor(
     private fb: FormBuilder,
@@ -65,19 +66,22 @@ export class EditBusinessProfileComponent implements OnInit, OnDestroy {
   }
 
   loadProfileData(): void {
-    this.businessService.getProfileData().pipe(takeUntil(this.unsubscribe$)).subscribe({
-      next: (data: any) => {
-        this.imagePreviews['image'] = data.user.image;
-        this.userId = data.user.user;
-        this.editProfileForm.patchValue(data.user);
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error('Failed to load profile data', err);
-        this.toast.error('Failed to load profile data');
-        this.loading = false;
-      },
-    });
+    this.businessService
+      .getProfileData()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (data: any) => {
+          this.imagePreviews['image'] = data.user.image;
+          this.userId = data.user.user;
+          this.editProfileForm.patchValue(data.user);
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Failed to load profile data', err);
+          this.toast.error('Failed to load profile data');
+          this.loading = false;
+        },
+      });
   }
 
   onFileChange(event: any, field: string): void {
@@ -127,17 +131,20 @@ export class EditBusinessProfileComponent implements OnInit, OnDestroy {
         formData.append(key, controlValue);
       }
     });
+    this.submitting = true;
 
-    this.businessService.updateProfileData(formData, this.userId!).subscribe(
-      (response) => {
+    this.businessService.updateProfileData(formData, this.userId!).subscribe({
+      next: (response) => {
+        this.submitting = false;
         this.authService.fetchUserData();
         this.toast.success('Profile updated successfully');
         this.router.navigate(['/profile']);
       },
-      (error) => {
+      error: (error) => {
+        this.submitting = false;
         console.error('Failed to update profile', error);
         this.toast.error('Failed to update profile');
-      }
-    );
+      },
+    });
   }
 }

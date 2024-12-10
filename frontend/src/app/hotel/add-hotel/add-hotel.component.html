@@ -48,7 +48,9 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="description">Description <span class="red">*</span></label>
+            <label for="description"
+              >Description <span class="red">*</span></label
+            >
             <!-- <textarea
               class="form-control"
               id="description"
@@ -137,7 +139,6 @@
                 }}</label>
               </div>
             </div>
-
           </div>
 
           <div class="form-group">
@@ -159,7 +160,6 @@
               Price is required.
             </div>
           </div>
-
 
           <div class="row">
             <div class="col-md-6 form-group">
@@ -313,7 +313,13 @@
               </div>
             </div>
           </div>
-          <button class="th-btn submit-btn" type="submit">Add Hotel</button>
+          <button
+            class="th-btn submit-btn"
+            type="submit"
+            [disabled]="submitting"
+          >
+            {{ submitting ? " Submitting..." : "Add Hotel" }}
+          </button>
           <div *ngIf="addHotelForm.invalid" class="text-danger">
             <small *ngIf="addHotelForm.invalid"
               >Please fill all required fields.

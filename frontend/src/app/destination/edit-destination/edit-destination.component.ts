@@ -21,7 +21,7 @@ import { DestinationService } from '../../services/destination.service';
 import { Destination } from '../destination-interface';
 import { FormUtilsService } from '../../services/form-utils.service';
 import { ToastrService } from 'ngx-toastr';
-import { LoaderComponent } from "../../shared/components/loader/loader.component";
+import { LoaderComponent } from '../../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-edit-destination',
@@ -32,8 +32,8 @@ import { LoaderComponent } from "../../shared/components/loader/loader.component
     CKEditorModule,
     GoogleMap,
     MapAdvancedMarker,
-    LoaderComponent
-],
+    LoaderComponent,
+  ],
   templateUrl: './edit-destination.component.html',
   styleUrl: './edit-destination.component.css',
 })
@@ -49,6 +49,7 @@ export class EditDestinationComponent implements OnInit {
   public Editor = this.ckEditorConfigService.Editor;
   public config = this.ckEditorConfigService.config;
   public loading = false;
+  public submitting = false;
 
   center: google.maps.LatLngLiteral = { lat: 42.504792, lng: 27.462636 };
   zoom = 15;
@@ -221,6 +222,7 @@ export class EditDestinationComponent implements OnInit {
       this.editDestinationForm.markAllAsTouched();
       return;
     }
+    this.submitting = true;
     const formData = this.formDataService.createFormData(
       this.editDestinationForm
     );
@@ -229,9 +231,13 @@ export class EditDestinationComponent implements OnInit {
       .updateDestination(formData, this.destinationId!)
       .subscribe({
         next: () => {
+          this.submitting = false;
           this.router.navigate(['/profile/my-destinations']);
         },
-        error: (err) => console.error('Failed to update destination', err),
+        error: (err) => {
+          console.error('Failed to update destination', err);
+          this.submitting = false;
+        },
       });
   }
 }

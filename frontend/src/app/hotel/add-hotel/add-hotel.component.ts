@@ -49,6 +49,7 @@ export class AddHotelComponent implements OnInit {
   public addHotelForm: FormGroup;
   public tags: FormArray;
   public highlights: Highlights[] = [];
+  public submitting = false;
   center: google.maps.LatLngLiteral = { lat: 42.504792, lng: 27.462636 };
   zoom = 15;
   markerPosition: google.maps.LatLngLiteral = {
@@ -122,22 +123,6 @@ export class AddHotelComponent implements OnInit {
       },
     });
   }
-  // fetchHighlights(): void {
-  //   this.http.get<Highlights[]>(`${this.API_URL}highlights/`).subscribe(
-  //     (response: Highlights[]) => {
-  //       this.highlights = response;
-  //       const highlightsFormArray = this.addHotelForm.get(
-  //         'highlights'
-  //       ) as FormArray;
-  //       this.highlights.forEach(() => {
-  //         highlightsFormArray.push(this.fb.control(false));
-  //       });
-  //     },
-  //     (error) => {
-  //       console.error('Error fetching highlights:', error);
-  //     }
-  //   );
-  // }
 
   addTag(tagName: string = ''): void {
     if (tagName && !this.tags.value.includes(tagName)) {
@@ -232,56 +217,17 @@ export class AddHotelComponent implements OnInit {
 
     const formData = this.formDataService.createFormData(this.addHotelForm);
 
-    // const formData = new FormData();
-    // Object.keys(this.addHotelForm.controls).forEach((key) => {
-    //   if (key === 'tags') {
-    //     const tags = this.tags.value;
-    //     tags.forEach((tag: string, index: number) => {
-    //       formData.append(`tags[${index}]`, tag);
-    //     });
-    //   } else if (key === 'highlights') {
-    //     const highlights = this.addHotelForm.get('highlights')?.value;
-    //     const selectedHighlights = highlights.filter(
-    //       (highlight: number | boolean) => highlight !== false
-    //     );
-    //     selectedHighlights.forEach((highlight: number, index: number) => {
-    //       formData.append(`highlights[${index}]`, highlight.toString());
-    //     });
-    //   } else if (key !== 'newTag') {
-    //     const controlValue = this.addHotelForm.get(key)?.value;
-    //     if (controlValue instanceof File) {
-    //       formData.append(key, controlValue);
-    //     } else {
-    //       formData.append(key, controlValue ?? '');
-    //     }
-    //   }
-    // });
-    //   onSubmit(): void {
-    //     if (this.addHotelForm.valid) {
-    //       const formData = new FormData();
-    //       Object.keys(this.addHotelForm.controls).forEach((key) => {
-    //         if (key === 'tags') {
-    //           const tags = this.tags.value;
-    //           tags.forEach((tag: string, index: number) => {
-    //             formData.append(`tags[${index}]`, tag);
-    //           });
-    //         } else {
-    //           const controlValue = this.addHotelForm.get(key)?.value;
-    //           if (controlValue instanceof File) {
-    //             formData.append(key, controlValue);
-    //           } else {
-    //             formData.append(key, controlValue ?? '');
-    //           }
-    //         }
-    //       });
+    this.submitting = true;
 
     this.hotelService.submitHotelForm(formData).subscribe({
       next: () => {
+        this.submitting = false;
         this.toast.success('Hotel added successfully');
         this.authSevices.fetchUserData();
         this.router.navigate(['/profile']);
       },
       error: (err) => {
+        this.submitting = false;
         console.error('Error submitting hotel form:', err);
         this.toast.error('Failed to add hotel');
       },

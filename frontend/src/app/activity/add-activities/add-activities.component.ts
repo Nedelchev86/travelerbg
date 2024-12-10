@@ -47,6 +47,7 @@ export class AddActivitiesComponent implements OnInit, OnDestroy {
   public imagePreviews: { [key: string]: string } = {};
   public Editor = this.ckEditorConfigService.Editor;
   public config = this.ckEditorConfigService.config;
+  public loading: boolean = false;
 
   center: google.maps.LatLngLiteral = { lat: 42.504792, lng: 27.462636 };
   zoom = 15;
@@ -72,7 +73,7 @@ export class AddActivitiesComponent implements OnInit, OnDestroy {
       title: ['', Validators.required],
       category: ['', Validators.required],
       description: ['', Validators.required],
-      highlight: ['', Validators.required],
+      highlight: [''],
       image: ['', Validators.required],
       image2: [''],
       image3: [''],
@@ -186,30 +187,17 @@ export class AddActivitiesComponent implements OnInit, OnDestroy {
       this.addActivitieForm.markAllAsTouched();
       return;
     }
+    this.loading = true;
     const formData = this.formDataService.createFormData(this.addActivitieForm);
-    // const formData = new FormData();
-    // Object.keys(this.addActivitieForm.controls).forEach((key) => {
-    //   if (key === 'tags') {
-    //     const tags = this.tags.value;
-    //     tags.forEach((tag: string, index: number) => {
-    //       formData.append(`tags[${index}]`, tag);
-    //     });
-    //   } else if (key !== 'newTag') {
-    //     const controlValue = this.addActivitieForm.get(key)?.value;
-    //     if (controlValue instanceof File) {
-    //       formData.append(key, controlValue);
-    //     } else {
-    //       formData.append(key, controlValue ?? '');
-    //     }
-    //   }
-    // });
 
     this.activityService.submitActivityForm(formData).subscribe({
       next: () => {
+        this.loading = false;
         this.toast.success('Activity added successfully');
-        this.router.navigate(['/activities']);
+        this.router.navigate(['/profile']);
       },
       error: (err) => {
+        this.loading = false;
         this.toast.error('Failed to add activity');
         console.error('Error submitting activity form:', err);
       },

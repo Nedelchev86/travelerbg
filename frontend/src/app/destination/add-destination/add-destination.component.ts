@@ -24,6 +24,7 @@ import { minLengthArray } from '../../validators/minLengthArray.validator';
 import { DestinationCategory } from '../destination-interface';
 import { FormUtilsService } from '../../services/form-utils.service';
 import { Subject, takeUntil } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-destination',
@@ -44,10 +45,11 @@ export class AddDestinationComponent implements OnInit, OnDestroy {
   public Editor = this.ckEditorConfigService.Editor;
   public config = this.ckEditorConfigService.config;
   public loading: boolean = true;
-  addDestinationForm: FormGroup;
-  categories: DestinationCategory[] = [];
-  tags: FormArray;
-  imagePreviews: { [key: string]: string } = {};
+  public addDestinationForm: FormGroup;
+  public categories: DestinationCategory[] = [];
+  public tags: FormArray;
+  public imagePreviews: { [key: string]: string } = {};
+  public submitting: boolean = false;
 
   center: google.maps.LatLngLiteral = { lat: 42.504792, lng: 27.462636 };
   zoom = 15;
@@ -67,7 +69,8 @@ export class AddDestinationComponent implements OnInit, OnDestroy {
     private destinationService: DestinationService,
     private formDataService: FormUtilsService,
     private geocoder: MapGeocoder,
-    private authService: AuthService
+    private authService: AuthService,
+    public toast: ToastrService
   ) {
     this.addDestinationForm = this.fb.group({
       title: ['', Validators.required],
@@ -188,16 +191,24 @@ export class AddDestinationComponent implements OnInit, OnDestroy {
       this.addDestinationForm.markAllAsTouched();
       return;
     }
+    this.submitting = true;
     const formData = this.formDataService.createFormData(
       this.addDestinationForm
     );
 
     this.destinationService.addDestination(formData).subscribe({
       next: () => {
+        this.submitting = false;
         this.authService.fetchUserData();
         this.router.navigate(['/profile']);
+        this.toast.success('Destination added successfully');
       },
-      error: (err) => console.error('Failed to add destination', err),
+      error: (err) => {
+
+        console.error('Failed to add destination', err);
+        this.submitting = false;
+        this.toast.error('Failed to add destination');},
+        
     });
   }
 }

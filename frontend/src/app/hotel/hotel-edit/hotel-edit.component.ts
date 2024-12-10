@@ -68,6 +68,7 @@ export class HotelEditComponent {
   private ckEditorConfigService = inject(CKEditorConfigService);
   public Editor = this.ckEditorConfigService.Editor;
   public config = this.ckEditorConfigService.config;
+  public submitting = false;
 
   constructor(
     private fb: FormBuilder,
@@ -117,37 +118,6 @@ export class HotelEditComponent {
       error: (err) => console.log(err),
     });
   }
-
-  // fetchHighlights(): void {
-  //   this.http
-  //     .get<Highlight[]>('http://127.0.0.1:8000/api/highlights/')
-  //     .subscribe(
-  //       (response: Highlight[]) => {
-  //         this.highlights = response;
-  //         const highlightsFormArray = this.editHotelForm.get(
-  //           'highlights'
-  //         ) as FormArray;
-  //         this.highlights.forEach(() => {
-  //           highlightsFormArray.push(this.fb.control(false));
-  //         });
-  //       },
-  //       (error) => {
-  //         console.error('Error fetching highlights:', error);
-  //       }
-  //     );
-  // }
-
-  // fetchHighlights(): void {
-  //   this.http.get(`${this.API_URL}highlights/`).subscribe(
-  //     (response: any) => {
-  //       this.highlights = response;
-  //       // If hotel data is already loaded, mark the checked highlights
-  //     },
-  //     (error) => {
-  //       console.error('Error fetching highlights:', error);
-  //     }
-  //   );
-  // }
 
   fetchHighlights(): void {
     this.hotelService.fetchHighlights().subscribe({
@@ -277,40 +247,7 @@ export class HotelEditComponent {
       );
     }
   }
-  // addTag(tagName: string = ''): void {
-  //   if (tagName && !this.tags.value.includes(tagName)) {
-  //     this.tags.push(this.fb.control(tagName, Validators.required));
-  //   }
-  // }
 
-  // removeTag(index: number): void {
-  //   this.tags.removeAt(index);
-  // }
-
-  // addNewTag(): void {
-  //   const newTag = this.editHotelForm.get('newTag')?.value;
-  //   if (newTag) {
-  //     this.addTag(newTag);
-  //     this.editHotelForm.get('newTag')?.reset();
-  //   }
-  // }
-
-  // onTagChange(event: any): void {
-  //   const tagId = parseInt(event.target.value, 10); // Ensure tagId is an integer
-  //   const tagsArray = this.editHotelForm.get('tags')?.value as number[];
-  //   if (event.target.checked) {
-  //     if (!tagsArray.includes(tagId)) {
-  //       tagsArray.push(tagId);
-  //     }
-  //   } else {
-  //     const index = tagsArray.indexOf(tagId);
-  //     if (index > -1) {
-  //       tagsArray.splice(index, 1);
-  //     }
-  //   }
-  //   console.log(tagsArray);
-  //   this.editHotelForm.patchValue({ tags: tagsArray });
-  // }
   removeTag(index: number): void {
     this.tags.removeAt(index);
   }
@@ -335,52 +272,20 @@ export class HotelEditComponent {
     }
 
     const formData = this.formDataService.createFormData(this.editHotelForm);
+    this.submitting = true;
 
     this.hotelService.updateHotelForm(formData, this.hotelId!).subscribe({
       next: () => {
+        this.submitting = false;
         this.toast.success('Hotel updated successfully');
         this.authSevices.fetchUserData();
         this.router.navigate(['/profile/my-hotels']);
       },
       error: (err) => {
+        this.submitting = false;
         console.error('Error submitting hotel form:', err);
         this.toast.error('Failed to updated hotel');
       },
     });
   }
-  //   if (this.editHotelForm.valid) {
-  //     const formData = new FormData();
-  //     Object.keys(this.editHotelForm.controls).forEach((key) => {
-  //       if (key === 'tags') {
-  //         const tags = this.tags.value;
-  //         tags.forEach((tag: string, index: number) => {
-  //           formData.append(`tags[${index}]`, tag);
-  //         });
-  //       } else if (key === 'highlights') {
-  //         const highlights = this.editHotelForm.get('highlights')?.value;
-  //         const selectedHighlights = highlights.filter(
-  //           (highlight: number | boolean) => highlight !== false
-  //         );
-  //         selectedHighlights.forEach((highlight: number, index: number) => {
-  //           formData.append(`highlights[${index}]`, highlight.toString());
-  //         });
-  //       } else if (key !== 'newTag') {
-  //         const controlValue = this.editHotelForm.get(key)?.value;
-  //         if (controlValue instanceof File) {
-  //           formData.append(key, controlValue);
-  //         } else {
-  //           formData.append(key, controlValue ?? '');
-  //         }
-  //       }
-  //     });
-
-  //     this.http
-  //       .put(`${this.API_URL}hotels/${this.hotelId}/`, formData)
-  //       .subscribe((response) => {
-  //         this.router.navigate(['/profile/my-hotels']);
-  //       });
-  //   } else {
-  //     this.editHotelForm.markAllAsTouched(); // Mark all fields as touched to show validation errors
-  //   }
-  // }
 }

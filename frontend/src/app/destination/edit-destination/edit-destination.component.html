@@ -28,24 +28,6 @@
               Title is required.
             </div>
           </div>
-          <!-- <div class="form-group">
-            <label for="tags">Tags</label>
-            <input
-              class="form-control"
-              id="tags"
-              formControlName="tags"
-              type="text"
-            />
-            <div
-              *ngIf="
-                editDestinationForm.get('tags')?.touched &&
-                editDestinationForm.get('tags')?.invalid
-              "
-              class="text-danger"
-            >
-              Tags are required.
-            </div>
-          </div> -->
 
           <div class="row">
             <div class="col-md-6 form-group">
@@ -288,24 +270,6 @@
               </div>
             </div>
           </div>
-          <!-- <div class="form-group">
-            <label for="location">Location</label>
-            <input
-              class="form-control"
-              id="location"
-              formControlName="location"
-              type="text"
-            />
-            <div
-              *ngIf="
-                editDestinationForm.get('location')?.touched &&
-                editDestinationForm.get('location')?.invalid
-              "
-              class="text-danger"
-            >
-              Location is required.
-            </div>
-          </div> -->
 
           <div class="form-group">
             <label for="location"
@@ -370,16 +334,9 @@
             </google-map>
           </div>
 
-          <!-- <div class="form-group">
-            <label for="is_published">Is Published</label>
-            <input
-              class="form-control"
-              id="is_published"
-              formControlName="is_published"
-              type="checkbox"
-            />
-          </div> -->
-          <button class="th-btn" type="submit">Update Destination</button>
+          <button class="th-btn" type="submit" [disabled]="submitting">
+            {{ submitting ? " Submitting..." : "Update Destination" }}
+          </button>
           <div *ngIf="editDestinationForm.invalid" class="text-danger">
             <small *ngIf="editDestinationForm.invalid"
               >Please fill all required fields.

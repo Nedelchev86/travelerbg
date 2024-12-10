@@ -227,40 +227,6 @@
               Price is required.
             </div>
           </div>
-          <!-- <div class="form-group">
-            <label>Tags</label>
-
-            <div class="added-tags">
-              <div
-                class="tag-box"
-                *ngFor="let tag of tags.controls; let i = index"
-              >
-                <button
-                  type="button"
-                  class="btn btn-danger btn-sm"
-                  (click)="removeTag(i)"
-                >
-                  {{ tag.value }}
-                  x
-                </button>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="newTag">Add New Tag</label>
-              <input
-                class="form-control"
-                id="newTag"
-                formControlName="newTag"
-                type="text"
-              />
-              <button type="button" class="th-btn style3" (click)="addNewTag()">
-                Add Tag
-              </button>
-            </div>
-            <div *ngIf="editHotelForm.get('tags')?.invalid" class="text-danger">
-              At least one tag is required.
-            </div>
-          </div> -->
 
           <div class="row">
             <div class="col-md-6 form-group">
@@ -375,9 +341,9 @@
           <button
             class="th-btn submit-btn"
             type="submit"
-            [disabled]="editHotelForm.invalid"
+            [disabled]="submitting"
           >
-            Update Hotel
+            {{ submitting ? " Submitting..." : "Update Hotel" }}
           </button>
           <div *ngIf="editHotelForm.invalid" class="text-danger">
             <small *ngIf="editHotelForm.invalid"

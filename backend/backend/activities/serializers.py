@@ -19,18 +19,16 @@ class ActivitiesSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         tags_data = validated_data.pop('tags', [])
 
-        hotel = Activities.objects.create(**validated_data)
-        hotel.tags.set(tags_data)
-        return hotel
+        activity = Activities.objects.create(**validated_data)
+        activity.tags.set(tags_data)
+        return activity
 
     def update(self, instance, validated_data):
         tags_data = validated_data.pop('tags', [])
         instance = super().update(instance, validated_data)
 
         instance.tags.clear()  # Clear existing tags
-        for tag_data in tags_data:
-            tag, created = Tag.objects.get_or_create(name=tag_data['name'])
-            instance.tags.add(tag)
+        instance.tags.set(tags_data)
         return instance
 
 class ActivityCategorySerializer(serializers.ModelSerializer):

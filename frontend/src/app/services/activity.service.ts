@@ -24,6 +24,10 @@ export class ActivityService {
     });
   }
 
+  updateActivity(formData: FormData, activityId: number): Observable<any> {
+    return this.http.put(`${this.API_URL}activities/${activityId}/`, formData);
+  }
+
   fetchCategories(): Observable<ActivityCategory[]> {
     return this.http.get<ActivityCategory[]>(
       `${this.API_URL}categories/activities/`

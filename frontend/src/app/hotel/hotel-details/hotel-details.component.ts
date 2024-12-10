@@ -68,7 +68,7 @@ interface Images {
 })
 export class HotelDetailsComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
-  public loading: boolean = true;
+  public loading: boolean = false;
   public hotel: Hotel = {} as Hotel; // Store hotel data
   public hotelId: number | null = null;
   public galleryData: Images[] = [];
@@ -82,7 +82,15 @@ export class HotelDetailsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    // this.hotelId = Number(this.route.snapshot.paramMap.get('hotelId'));
     this.hotelId = Number(this.route.snapshot.paramMap.get('hotelId'));
+
+    if (isNaN(this.hotelId)) {
+      this.toast.error('Invalid hotel ID');
+
+      return;
+    }
+
     if (this.hotelId) {
       this.fetchFavoriteStatus();
       // this.fetchComments();
@@ -104,6 +112,7 @@ export class HotelDetailsComponent implements OnInit, OnDestroy {
   }
 
   fetchHotelDetails(): void {
+    this.loading = true;
     this.hotelDetailsService
       .getHotelDetails(this.hotelId!)
       .pipe(takeUntil(this.unsubscribe$))
@@ -114,6 +123,7 @@ export class HotelDetailsComponent implements OnInit, OnDestroy {
           this.loading = false;
         },
         error: (err) => {
+          this.loading = false;
           console.error('Failed to fetch hotel details', err);
           this.toast.error('Failed to fetch hotel details');
         },

@@ -237,7 +237,9 @@
             </div>
           </div>
           <div class="form-group">
-            <button type="submit" class="th-btn">Update Profile</button>
+            <button type="submit" class="th-btn" [disabled]="submitting">
+              {{ submitting ? " Submitting..." : "Update Profile" }}
+            </button>
           </div>
 
           <div *ngIf="profileForm.invalid" class="text-danger">

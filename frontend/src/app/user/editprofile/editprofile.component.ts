@@ -32,6 +32,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   public loading = true;
   public profileForm: FormGroup;
   public imagePreviews: { [key: string]: string } = {};
+  public submitting = false;
 
   constructor(
     private fb: FormBuilder,
@@ -70,7 +71,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (data: any) => {
-          console.log(data);
+    
           this.profileForm.patchValue(data);
           this.imagePreviews['profile_picture'] = data.profile_picture;
           this.imagePreviews['cover'] = data.cover;
@@ -120,6 +121,8 @@ export class EditProfileComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.submitting = true;
+
     const formData = new FormData();
     Object.keys(this.profileForm.controls).forEach((key) => {
       let controlValue = this.profileForm.get(key)?.value;
@@ -142,11 +145,13 @@ export class EditProfileComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (response) => {
+          this.submitting = false;
           this.authService.fetchUserData();
           this.toast.success('Profile updated successfully');
           this.router.navigate(['/profile']);
         },
         error: (error: HttpErrorResponse) => {
+          this.submitting = false;
           if (error.status === 400 && error.error) {
             const errorMessage = this.extractErrorMessage(error.error);
             this.toast.error('Failed to update profile', errorMessage);

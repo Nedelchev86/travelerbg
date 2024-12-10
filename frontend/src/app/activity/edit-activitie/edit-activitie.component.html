@@ -1,1 +1,335 @@
-<p>edit-activitie works!</p>
+@if(loading){
+<app-loader></app-loader>
+}@else{
+<div class="th-checkout-wrapper space-extra-bottom">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <form
+          class="woocommerce-form-login"
+          [formGroup]="editActivityForm"
+          (ngSubmit)="onSubmit()"
+        >
+          <div class="form-group">
+            <label for="title">Title <span class="red">*</span></label>
+            <input
+              class="form-control"
+              id="title"
+              formControlName="title"
+              type="text"
+            />
+            <div
+              *ngIf="
+                editActivityForm.get('title')?.touched &&
+                editActivityForm.get('title')?.invalid
+              "
+              class="text-danger"
+            >
+              Title is required.
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <div class="form-group">
+                <label>Tags <span class="red">*</span></label>
+
+                <div class="form-group">
+                  <label for="newTag"></label>
+                  <input
+                    class="form-control"
+                    id="newTag"
+                    formControlName="newTag"
+                    type="text"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 form-group">
+              <button type="button" class="th-btn style3" (click)="addNewTag()">
+                Add Tag
+              </button>
+            </div>
+
+            <div
+              *ngIf="editActivityForm.get('tags')?.invalid"
+              class="text-danger"
+            >
+              At least one tag is required.
+            </div>
+            <div class="added-tags">
+              <div
+                class="tag-box"
+                *ngFor="let tag of tags.controls; let i = index"
+              >
+                <!-- <span>{{ tag.value }}</span> -->
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  (click)="removeTag(i)"
+                >
+                  {{ tag.value }}
+                  x
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="category">Category <span class="red">*</span></label>
+            <select
+              class="form-control"
+              id="category"
+              formControlName="category"
+            >
+              <option *ngFor="let category of categories" [value]="category.id">
+                {{ category.name }}
+              </option>
+            </select>
+            <div
+              *ngIf="
+                editActivityForm.get('category')?.touched &&
+                editActivityForm.get('category')?.invalid
+              "
+              class="text-danger"
+            >
+              Category is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="description"
+              >Description <span class="red">*</span></label
+            >
+            <ckeditor
+              formControlName="description"
+              [editor]="Editor"
+              [config]="config"
+              id="description"
+            ></ckeditor>
+            <div
+              *ngIf="
+                editActivityForm.get('description')?.touched &&
+                editActivityForm.get('description')?.invalid
+              "
+              class="text-danger"
+            >
+              Description is required.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="highlight">Highlights </label>
+            <ckeditor
+              formControlName="highlight"
+              [editor]="Editor"
+              [config]="config"
+              id="highlight"
+            ></ckeditor>
+          </div>
+          <div class="row">
+            <div class="col-md-4 form-group">
+              <div class="form-group">
+                <label for="duration"
+                  >Duration <span class="red">*</span></label
+                >
+                <input
+                  class="form-control"
+                  id="duration"
+                  formControlName="duration"
+                  type="number"
+                />
+              </div>
+              <div
+                *ngIf="
+                  editActivityForm.get('duration')?.touched &&
+                  editActivityForm.get('duration')?.invalid
+                "
+                class="text-danger"
+              >
+                Price is required.
+              </div>
+            </div>
+            <div class="col-md-4 form-group">
+              <div class="form-group">
+                <label for="price">Price <span class="red">*</span></label>
+                <input
+                  class="form-control"
+                  id="price"
+                  formControlName="price"
+                  type="number"
+                />
+              </div>
+              <div
+                *ngIf="
+                  editActivityForm.get('price')?.touched &&
+                  editActivityForm.get('price')?.invalid
+                "
+                class="text-danger"
+              >
+                Price is required.
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4 form-group">
+              <div class="form-group">
+                <label for="image">Image 1 <span class="red">*</span></label>
+                <input
+                  class="form-control th-btn style4"
+                  id="image"
+                  type="file"
+                  (change)="onFileChange($event, 'image')"
+                />
+
+                <div
+                  *ngIf="
+                    editActivityForm.get('image')?.touched &&
+                    editActivityForm.get('image')?.invalid
+                  "
+                  class="text-danger"
+                >
+                  Image is required.
+                </div>
+                <div *ngIf="imagePreviews['image']">
+                  <img
+                    [src]="imagePreviews['image']"
+                    alt="Image 1"
+                    style="width: 100px; height: auto"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-danger btn-sm"
+                    (click)="removeImage('image')"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 form-group">
+              <div class="form-group">
+                <label for="image2">Image 2</label>
+                <input
+                  class="form-control th-btn style4"
+                  id="image2"
+                  type="file"
+                  (change)="onFileChange($event, 'image2')"
+                />
+                <div *ngIf="imagePreviews['image2']">
+                  <img
+                    [src]="imagePreviews['image2']"
+                    alt="Image 2"
+                    style="width: 100px; height: auto"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-danger btn-sm"
+                    (click)="removeImage('image2')"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 form-group">
+              <div class="form-group">
+                <label for="image3">Image 3</label>
+                <input
+                  class="form-control th-btn style4"
+                  id="image3"
+                  type="file"
+                  (change)="onFileChange($event, 'image3')"
+                />
+                <div *ngIf="imagePreviews['image3']">
+                  <img
+                    [src]="imagePreviews['image3']"
+                    alt="Image 3"
+                    style="width: 100px; height: auto"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-danger btn-sm"
+                    (click)="removeImage('image3')"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="location"
+              >Location ( Write location or select on map )
+              <span class="red">*</span></label
+            >
+            <input
+              class="form-control"
+              id="location"
+              formControlName="location"
+              type="text"
+              (change)="onLocationChange()"
+            />
+            <div
+              *ngIf="
+                editActivityForm.get('location')?.touched &&
+                editActivityForm.get('location')?.invalid
+              "
+              class="text-danger"
+            >
+              Location is required.
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 form-group">
+              <div class="form-group">
+                <label for="lat">Latitude</label>
+                <input
+                  class="form-control"
+                  id="lat"
+                  formControlName="lat"
+                  type="text"
+                  readonly
+                />
+              </div>
+            </div>
+            <div class="col-md-6 form-group">
+              <div class="form-group">
+                <label for="lng">Longitude</label>
+                <input
+                  class="form-control"
+                  id="lng"
+                  formControlName="lng"
+                  type="text"
+                  readonly
+                />
+              </div>
+            </div>
+          </div>
+          <div style="height: 500px; width: 100%; margin-bottom: 60px">
+            <google-map
+              height="100%"
+              width="100%"
+              [center]="center"
+              [zoom]="zoom"
+              [options]="mapOptions"
+              (mapClick)="onMapClick($event)"
+            >
+              <map-advanced-marker
+                [position]="markerPosition"
+              ></map-advanced-marker>
+            </google-map>
+          </div>
+          <button class="th-btn" type="submit" [disabled]="submitting">
+            {{ submitting ? " Submitting..." : "Update Activity" }}
+          </button>
+          <div *ngIf="editActivityForm.invalid" class="text-danger">
+            <small *ngIf="editActivityForm.invalid"
+              >Please fill all required fields.
+            </small>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+}
