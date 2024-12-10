@@ -19,17 +19,17 @@
   - __Cloudinary:__ Cloud-based image and video management for uploading, storing, and delivering images efficiently.
   - __Swiper:__ A modern touch slider for creating responsive and customizable sliders .
 
-## Guards
+#### Guards
 
-### 1.  Destination ID Guard - This guard checks if the Destination is valid
-### 2.  Traveler ID Guard - This guard checks if the Traveler is valid
-### 3.  Hotel ID Guard - This guard checks if the Hotel is valid
-### 4.  Activity ID Guard - This guard checks if the Activity is valid
-### 5.  Destination ID Guard - This guard checks if the `destinationId` is valid
-### 6. The AuthGuard is a route guard that checks if the user is authenticated before allowing access to certain routes. If the user is not logged in, it displays an error message and redirects them to homepage. This guard helps protect sensitive routes and ensures that only authenticated users can access them.
-### 7. The AddHotelGuard is a route guard that checks if the current user has the BusinessProfile user type before allowing access to the route for adding a hotel. If the user is not authorized, it displays an error message and redirects them to the home page. This guard helps protect the route and ensures that only authorized users can access it.
-### 8. Is Activated Guard - Check if user is activated. User activation is automaticly true when fill his profile. If is not activated , can't post Destinations, Hotels or Activity, just can post comment and rate.
-### 9. Is owner gards and more ...
+ 1.  Destination ID Guard - This guard checks if the Destination is valid
+ 2.  Traveler ID Guard - This guard checks if the Traveler is valid
+ 3.  Hotel ID Guard - This guard checks if the Hotel is valid
+ 4.  Activity ID Guard - This guard checks if the Activity is valid
+ 5.  Destination ID Guard - This guard checks if the `destinationId` is valid
+ 6. The AuthGuard is a route guard that checks if the user is authenticated before allowing access to certain routes. If the user is not logged in, it displays an error message and redirects them to homepage. This guard helps protect sensitive routes and ensures that only authenticated users can access them.
+ 7. The AddHotelGuard is a route guard that checks if the current user has the BusinessProfile user type before allowing access to the route for adding a hotel. If the user is not authorized, it displays an error message and redirects them to the home page. This guard helps protect the route and ensures that only authorized users can access it.
+ 8. Is Activated Guard - Check if user is activated. User activation is automaticly true when fill his profile. If is not activated , can't post Destinations, Hotels or Activity, just can post comment and rate.
+ 9. Is owner gards and more ...
 
 
 
