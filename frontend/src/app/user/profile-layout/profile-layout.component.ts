@@ -54,7 +54,6 @@ export class ProfileLayoutComponent {
         this.router.navigate(['/']);
       },
       error: (error) => {
-        console.log(error);
         if (error.status === 0) {
           this.authService.logout();
           this.closeModal();
