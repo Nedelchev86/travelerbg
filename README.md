@@ -31,23 +31,23 @@
  8. Is Activated Guard - Check if user is activated. User activation is automaticly true when fill his profile. If is not activated , can't post Destinations, Hotels or Activity, just can post comment and rate.
  9. Is owner gards and more ...
 
-    How to start:
+   ## How to start:
 Using Angular CLI:
 
-Install Angular CLI (if not already installed):
+1. Install Angular CLI (if not already installed):
 `npm install -g @angular/cli`
 
-Clone the repository:
+2. Clone the repository:
 `git clone https://github.com/your-username/your-repository.git`
 
-Install dependencies:
+3. Install dependencies:
 `cd your-repository`
 `npm install`
 
-Run the application using Angular CLI:
+4. Run the application using Angular CLI:
 `ng serve`
 
-Navigate to the application in your browser:
+5. Navigate to the application in your browser:
 `http://localhost:4200`
 
 
