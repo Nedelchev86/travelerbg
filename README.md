@@ -35,20 +35,20 @@
 Using Angular CLI:
 
 1. Install Angular CLI (if not already installed):
-`npm install -g @angular/cli`
+```npm install -g @angular/cli```
 
 2. Clone the repository:
-`git clone https://github.com/your-username/your-repository.git`
+```git clone https://github.com/your-username/your-repository.git```
 
 3. Install dependencies:
-`cd your-repository`
-`npm install`
+```cd your-repository```
+```npm install```
 
 4. Run the application using Angular CLI:
-`ng serve`
+```ng serve```
 
 5. Navigate to the application in your browser:
-`http://localhost:4200`
+```http://localhost:4200```
 
 
 
