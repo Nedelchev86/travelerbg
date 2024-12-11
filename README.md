@@ -49,7 +49,7 @@ Using Angular CLI:
   ```  apiUrl: 'https://orca-app-x6eo8.ondigitalocean.app/api/' ```
 
 6. Run the application using Angular CLI:\
-```ng serve```\
+```ng serve```
 
 7. Navigate to the application in your browser:\
 ```http://localhost:4200```
