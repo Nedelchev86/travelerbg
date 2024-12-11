@@ -111,6 +111,15 @@
               (change)="onFileChange($event, 'image')"
               class="form-control th-btn style4"
             />
+            <div
+              *ngIf="
+                editProfileForm.get('image')?.touched &&
+                editProfileForm.get('image')?.invalid
+              "
+              class="text-danger"
+            >
+              Image is required.
+            </div>
             <div *ngIf="imagePreviews['image']">
               <img
                 [src]="imagePreviews['image']"

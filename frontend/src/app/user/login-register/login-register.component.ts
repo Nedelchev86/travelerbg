@@ -94,22 +94,6 @@ export class LoginRegisterComponent implements OnInit {
     });
   }
 
-  // onRegisterSubmit(): void {
-  //   if (this.registerForm.invalid) {
-  //     this.registerForm.markAllAsTouched();
-  //     return;
-  //   }
-
-  //   this.authService.register(
-  //     this.registerForm.value as {
-  //       email: string;
-  //       password: string;
-  //       confirm_password: string;
-  //       role: string;
-  //     }
-  //   );
-  // }
-
   onLoginSubmit(): void {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
@@ -130,15 +114,4 @@ export class LoginRegisterComponent implements OnInit {
       },
     });
   }
-
-  // onLoginSubmit(): void {
-  //   if (this.loginForm.invalid) {
-  //     this.loginForm.markAllAsTouched();
-  //     return;
-  //   }
-
-  //   this.authService.login(
-  //     this.loginForm.value as { email: string; password: string }
-  //   );
-  // }
 }
