@@ -45,7 +45,7 @@ Using Angular CLI:
 ```cd frontend```\
 ```npm install```
 
-4. Use my API in environment.development
+4. Use my API in environment.development\
   ```  apiUrl: 'https://orca-app-x6eo8.ondigitalocean.app/api/' ```
 
 6. Run the application using Angular CLI:\
