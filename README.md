@@ -3,6 +3,10 @@
 - Demo on DigitalOcean - <a href="https://travelerbg.eu/" target="_blank">travelerBG.eu</a>
 - Demo on Render / DB on aiven.io - <a href="https://travelerbg.onrender.com/" target="_blank">travelerbg.onrender.com</a>    (Free instance will spin down with inactivity, which can delay requests by 50 seconds or more)
 
+Traveler: traveler@abv.bg   password: test\
+Business Owner - b@abv.bg  password: test
+
+
 ### Technologies Used:
 - Angular 18 with StandAlone Components 
 - Server Python Django and Django REST framework
@@ -30,6 +34,29 @@
  7. The AddHotelGuard is a route guard that checks if the current user has the BusinessProfile user type before allowing access to the route for adding a hotel. If the user is not authorized, it displays an error message and redirects them to the home page. This guard helps protect the route and ensures that only authorized users can access it.
  8. Is Activated Guard - Check if user is activated. User activation is automaticly true when fill his profile. If is not activated , can't post Destinations, Hotels or Activity, just can post comment and rate.
  9. Is owner gards and more ...
+
+   ## How to start:
+Using Angular CLI:
+
+1. Install Angular CLI (if not already installed):\
+```npm install -g @angular/cli```
+
+2. Clone the repository:\
+```git clone https://github.com/Nedelchev86/travelerbg.git```
+
+3. Install dependencies:\
+```cd travelerbg```\
+```cd frontend```\
+```npm install```
+
+4. Use my API in environment.development\
+  ```  apiUrl: 'https://orca-app-x6eo8.ondigitalocean.app/api/' ```
+
+6. Run the application using Angular CLI:\
+```ng serve```
+
+7. Navigate to the application in your browser:\
+```http://localhost:4200```
 
 
 
