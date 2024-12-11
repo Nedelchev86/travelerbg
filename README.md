@@ -43,7 +43,7 @@ Using Angular CLI:
 3. Install dependencies:\
 ```cd travelerbg```\
 ```cd frontend```\
-```npm install```\
+```npm install```
 
 4. Use my API in environment.development
   ```  apiUrl: 'https://orca-app-x6eo8.ondigitalocean.app/api/' ```
