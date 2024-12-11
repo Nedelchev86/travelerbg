@@ -24,6 +24,7 @@ import { ActivityCategory } from '../activity-iterface';
 import { FormUtilsService } from '../../services/form-utils.service';
 import { ToastrService } from 'ngx-toastr';
 import { Subject, takeUntil } from 'rxjs';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-add-activities',
@@ -67,7 +68,8 @@ export class AddActivitiesComponent implements OnInit, OnDestroy {
     private cloudinaryuploadService: CloudinaryuploadService,
     private activityService: ActivityService,
     private formDataService: FormUtilsService,
-    private toast: ToastrService
+    private toast: ToastrService,
+    public authService: AuthService
   ) {
     this.addActivitieForm = this.fb.group({
       title: ['', Validators.required],
@@ -193,6 +195,7 @@ export class AddActivitiesComponent implements OnInit, OnDestroy {
     this.activityService.submitActivityForm(formData).subscribe({
       next: () => {
         this.loading = false;
+        this.authService.fetchUserData();
         this.toast.success('Activity added successfully');
         this.router.navigate(['/profile']);
       },
