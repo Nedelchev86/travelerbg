@@ -94,9 +94,9 @@ Add and Edit Forms with Google Map and CKEditor 5
 
 
 Traveler Dashboard: 
-  A dedicated dashboard for travelers to manage their travel-related activities.
-  Add and Edit Destinations: Travelers can easily add new destinations they have visited or plan to visit. They can also edit the details of existing destinations.
-  Add and Edit Activities: Travelers can add new activities they have experienced or plan to experience. They can also edit the details of existing activities.
+  A dedicated dashboard for travelers to manage their travel-related activities.\
+  Add and Edit Destinations: Travelers can easily add new destinations they have visited or plan to visit. They can also edit the details of existing destinations.\
+  Add and Edit Activities: Travelers can add new activities they have experienced or plan to experience. They can also edit the details of existing activities.\
   Profile Management: Travelers can update their personal information, profile picture, and cover photo.
 ![edit](https://github.com/user-attachments/assets/b5171331-860e-40a9-b0ae-35d2830efde6)
 
