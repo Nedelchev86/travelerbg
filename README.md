@@ -112,6 +112,8 @@ Traveler Dashboard:
 ![commentguest](https://github.com/user-attachments/assets/7e0842ee-fa5c-4195-909f-e4fd450c4830)
 ![commentreg](https://github.com/user-attachments/assets/1ba02579-b098-4614-8475-3f865a922af3)
 
+## Manage all bookmarks in one page
+![bookmar](https://github.com/user-attachments/assets/1d81aa7a-72eb-46ad-952a-191da4ad336f)
 
 
 ## User Types - Business owner:
@@ -121,5 +123,6 @@ Update information and images for their listings.
 View ratings and reviews left by travelers.
 Promote their services to a broader audience.
 
+![hotels](https://github.com/user-attachments/assets/0cc14c2b-457b-45cb-9ef1-978caa3e1e0c)
 
 
