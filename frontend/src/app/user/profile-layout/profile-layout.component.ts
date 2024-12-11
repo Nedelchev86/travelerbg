@@ -54,6 +54,14 @@ export class ProfileLayoutComponent {
         this.router.navigate(['/']);
       },
       error: (error) => {
+        console.log(error);
+        if (error.status === 0) {
+          this.authService.logout();
+          this.closeModal();
+          this.toast.success('Account deleted successfully');
+          this.router.navigate(['/']);
+          return;
+        }
         this.toast.error('Failed to delete Account');
       },
     });
