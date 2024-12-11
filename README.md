@@ -3,6 +3,10 @@
 - Demo on DigitalOcean - <a href="https://travelerbg.eu/" target="_blank">travelerBG.eu</a>
 - Demo on Render / DB on aiven.io - <a href="https://travelerbg.onrender.com/" target="_blank">travelerbg.onrender.com</a>    (Free instance will spin down with inactivity, which can delay requests by 50 seconds or more)
 
+Traveler: traveler@abv.bg   password: test
+Business Owner - b@abv.bg  password: test
+
+
 ### Technologies Used:
 - Angular 18 with StandAlone Components 
 - Server Python Django and Django REST framework
