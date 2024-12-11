@@ -38,16 +38,20 @@ Using Angular CLI:
 ```npm install -g @angular/cli```
 
 2. Clone the repository:\
-```git clone https://github.com/your-username/your-repository.git```
+```git clone https://github.com/Nedelchev86/travelerbg.git```
 
 3. Install dependencies:\
-```cd your-repository```\
+```cd travelerbg```\
+```cd frontend```\
 ```npm install```\
 
-4. Run the application using Angular CLI:\
+4. Use my API in environment.development
+  ```  apiUrl: 'https://orca-app-x6eo8.ondigitalocean.app/api/' ```
+
+6. Run the application using Angular CLI:\
 ```ng serve```\
 
-5. Navigate to the application in your browser:\
+7. Navigate to the application in your browser:\
 ```http://localhost:4200```
 
 
