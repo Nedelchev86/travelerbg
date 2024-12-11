@@ -59,8 +59,10 @@
                     <small *ngIf="loginForm.get('email')?.errors?.['required']"
                       >Email is required.</small
                     >
-                    <small *ngIf="loginForm.get('email')?.errors?.['email']"
-                      >Invalid email format.</small
+                    <small
+                      *ngIf="loginForm.get('email')?.errors?.['invalidEmail']"
+                    >
+                      Please enter a valid email address.</small
                     >
                   </div>
                 </div>
@@ -140,8 +142,10 @@
                   <small *ngIf="registerForm.get('email')?.errors?.['required']"
                     >Email is required.</small
                   >
-                  <small *ngIf="registerForm.get('email')?.errors?.['email']"
-                    >Invalid email format.</small
+                  <small
+                    *ngIf="registerForm.get('email')?.errors?.['invalidEmail']"
+                  >
+                    Please enter a valid email address.</small
                   >
                 </div>
               </div>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -11,6 +11,7 @@ import { passwordMatchValidator } from '../../validators/password-match.validato
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { emailValidator } from '../../validators/email.validator';
 
 @Component({
   selector: 'app-login-register',
@@ -35,13 +36,13 @@ export class LoginRegisterComponent implements OnInit {
     private router: Router
   ) {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, emailValidator]],
       password: ['', [Validators.required]],
     });
 
     this.registerForm = this.fb.group(
       {
-        email: ['', [Validators.required, Validators.email]],
+        email: ['', [Validators.required, emailValidator]],
         password: ['', [Validators.required]],
         confirm_password: ['', Validators.required],
         role: ['', Validators.required],
